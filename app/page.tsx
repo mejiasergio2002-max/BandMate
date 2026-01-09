@@ -5,7 +5,7 @@ import { Playfair_Display } from "next/font/google";
 
 const playfair = Playfair_Display({ 
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -17,54 +17,57 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <main className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Background image */}
+    <main className="relative min-h-screen w-full overflow-hidden bg-black text-white">
+      {/* Background Image - Local Asset */}
       <div 
-        className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2000ms] ease-out ${
+        className={`absolute inset-0 z-0 transition-opacity duration-[2000ms] ease-out ${
           isVisible ? "opacity-100" : "opacity-0"
         }`}
-        style={{
-          backgroundImage: "url('/landing.jpg')",
-        }}
-      />
-
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/65" />
-
-      {/* Content */}
-      <div className="relative z-10 flex h-full items-center justify-start px-16">
-        {/* Sign in panel */}
+      >
         <div 
-          className={`flex flex-col max-w-md transition-opacity duration-[1500ms] delay-500 ease-out ${
-            isVisible ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          {/* Brand */}
-          <div className="mb-12">
-            <h1 className={`${playfair.className} text-6xl text-white tracking-tight`}>
-              BandMate
-            </h1>
-            <p className="mt-4 text-gray-300 font-light text-lg tracking-wide opacity-80">
-              Experience music together.
-            </p>
-          </div>
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/landing.jpg')",
+          }}
+        />
+        {/* Dark Overlay (60-70% opacity) */}
+        <div className="absolute inset-0 bg-black/65" />
+      </div>
 
-          {/* Actions */}
-          <div className="flex gap-6">
-            <button className="px-6 py-2 bg-white text-black text-sm font-medium tracking-wide transition-opacity duration-300 hover:opacity-90">
-              Sign In
-            </button>
-            
-            <button className="px-6 py-2 bg-transparent border border-white/30 text-white text-sm font-medium tracking-wide transition-colors duration-300 hover:bg-white/10 hover:border-white/50">
-              Register
-            </button>
-          </div>
+      {/* Content Container */}
+      <div className="relative z-10 flex min-h-screen items-center">
+        <div className="w-full max-w-md ml-auto md:mr-24 lg:mr-32 px-8">
+          <div 
+            className={`space-y-10 transition-all duration-[1500ms] delay-300 ease-out ${
+              isVisible ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {/* Title Section */}
+            <div className="space-y-2">
+              <h1 className={`${playfair.className} text-7xl text-white font-medium tracking-tight`}>
+                BandMate
+              </h1>
+              <p className="text-gray-300 font-light text-xl tracking-wide opacity-80 pl-1">
+                Experience music together.
+              </p>
+            </div>
 
-          {/* Footer / Minimal text */}
-          <div className="mt-16">
-            <p className="text-white/40 text-xs tracking-widest uppercase">
-              Cinematic Live Sessions
-            </p>
+            {/* Action Buttons */}
+            <div className="space-y-5 pt-4">
+              <button className="group w-full py-4 px-6 bg-white text-black text-lg font-medium tracking-wide transition-all duration-300 hover:bg-gray-100 active:scale-[0.98]">
+                Sign In
+              </button>
+              <button className="group w-full py-4 px-6 bg-transparent border border-white/40 text-white text-lg font-medium tracking-wide transition-all duration-300 hover:bg-white/10 hover:border-white/60 active:scale-[0.98]">
+                Register
+              </button>
+            </div>
+
+            {/* Footer / Decorative */}
+            <div className="pt-12 border-t border-white/10">
+              <p className="text-white/30 text-xs tracking-[0.2em] uppercase font-light">
+                Cinematic Live Sessions
+              </p>
+            </div>
           </div>
         </div>
       </div>
