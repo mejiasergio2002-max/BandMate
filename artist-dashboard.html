@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Artist Dashboard</title>
+    <style>
+      :root { color-scheme: light dark; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.45; }
+      .shell { max-width: 1120px; margin: 32px auto; padding: 0 16px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #8b5cf6, #06b6d4); }
+      .title { font-size: 22px; font-weight: 700; }
+      .role { font-size: 13px; opacity: 0.7; }
+      .actions { display: flex; gap: 8px; }
+      button { padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: inherit; font-size: 14px; }
+      .grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; }
+      .col { display: grid; gap: 16px; }
+      .card { border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 16px; background: inherit; }
+      .card h2 { margin: 0 0 12px; font-size: 18px; }
+      .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .kpi { border: 1px dashed rgba(0,0,0,0.15); border-radius: 10px; padding: 12px; }
+      .kpi .label { font-size: 12px; opacity: 0.7; }
+      .kpi .value { font-size: 20px; font-weight: 700; margin-top: 4px; }
+      .list { display: grid; gap: 10px; }
+      .item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid rgba(0,0,0,0.08); }
+      .item:first-child { border-top: 0; }
+      .pill { font-size: 12px; border: 1px solid rgba(0,0,0,0.15); padding: 4px 8px; border-radius: 999px; }
+      .releases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .release { border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 12px; display: grid; grid-template-columns: 64px 1fr; gap: 12px; }
+      .cover { width: 64px; height: 64px; border-radius: 8px; background: linear-gradient(135deg, #22c55e, #3b82f6); }
+      .release h3 { margin: 0; font-size: 16px; }
+      .muted { font-size: 12px; opacity: 0.7; }
+      .inbox { display: grid; gap: 8px; }
+      .msg { border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 10px; display: grid; gap: 6px; }
+      .msg .from { font-weight: 600; font-size: 13px; }
+      .msg .time { font-size: 12px; opacity: 0.6; }
+      .filters { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+      select, input[type="date"] { padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: inherit; }
+      @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } .releases { grid-template-columns: 1fr; } .kpis { grid-template-columns: 1fr 1fr; } }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">
+          <div class="avatar"></div>
+          <div>
+            <div class="title" id="artist-name">Your Artist Name</div>
+            <div class="role">Artist</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="new-release">New Release</button>
+          <button id="new-event">New Event</button>
+          <button id="manage-profile">Manage Profile</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col">
+          <div class="card">
+            <h2>Overview</h2>
+            <div class="filters">
+              <label for="stat-range">Range</label>
+              <select id="stat-range">
+                <option value="7d">Last 7 days</option>
+                <option value="30d" selected>Last 30 days</option>
+                <option value="90d">Last 90 days</option>
+              </select>
+            </div>
+            <div class="kpis">
+              <div class="kpi">
+                <div class="label">Followers</div>
+                <div class="value" id="kpi-followers">0</div>
+              </div>
+              <div class="kpi">
+                <div class="label">Monthly listeners</div>
+                <div class="value" id="kpi-listeners">0</div>
+              </div>
+              <div class="kpi">
+                <div class="label">Total streams</div>
+                <div class="value" id="kpi-streams">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Upcoming Events</h2>
+            <div class="list" id="events-list"></div>
+          </div>
+
+          <div class="card">
+            <h2>Recent Releases</h2>
+            <div class="releases" id="releases-grid"></div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+            <h2>Fan Inbox</h2>
+            <div class="inbox" id="inbox"></div>
+          </div>
+          <div class="card">
+            <h2>Quick Actions</h2>
+            <div class="list">
+              <div class="item">
+                <div>Share latest release</div>
+                <button id="share-release">Share</button>
+              </div>
+              <div class="item">
+                <div>Announce new event</div>
+                <button id="announce-event">Announce</button>
+              </div>
+              <div class="item">
+                <div>Message fans</div>
+                <button id="message-fans">Compose</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const sample = {
+        artist: { name: 'Neon Echo' },
+        stats: {
+          '7d': { followers: 124, listeners: 860, streams: 4210 },
+          '30d': { followers: 980, listeners: 5320, streams: 28410 },
+          '90d': { followers: 3120, listeners: 14820, streams: 81250 }
+        },
+        events: [
+          { title: 'City Lights Tour', date: '2026-02-11', venue: 'Horizon Hall', city: 'LA', published: true },
+          { title: 'Acoustic Night', date: '2026-01-22', venue: 'Riverside', city: 'SF', published: false },
+          { title: 'Festival Set', date: '2026-03-05', venue: 'Sunset Grounds', city: 'NY', published: true }
+        ],
+        releases: [
+          { title: 'Midnight Drive', type: 'Single', date: '2025-12-01' },
+          { title: 'Glass Skies', type: 'EP', date: '2025-10-14' },
+          { title: 'Electric Bloom', type: 'Single', date: '2025-08-07' },
+          { title: 'Neon Tides', type: 'Album', date: '2025-06-18' }
+        ],
+        inbox: [
+          { from: 'Ava', time: '2h ago', text: 'Loved Midnight Drive! Can we get a live version?' },
+          { from: 'Liam', time: '5h ago', text: 'Any chance you visit Chicago on tour?' },
+          { from: 'Maya', time: '1d ago', text: 'The new EP is on repeat. Thank you!' }
+        ]
+      };
+      const artistNameEl = document.getElementById('artist-name');
+      const rangeEl = document.getElementById('stat-range');
+      const kFollowers = document.getElementById('kpi-followers');
+      const kListeners = document.getElementById('kpi-listeners');
+      const kStreams = document.getElementById('kpi-streams');
+      const eventsList = document.getElementById('events-list');
+      const releasesGrid = document.getElementById('releases-grid');
+      const inboxList = document.getElementById('inbox');
+      function renderStats() {
+        const r = sample.stats[rangeEl.value];
+        kFollowers.textContent = r.followers.toLocaleString();
+        kListeners.textContent = r.listeners.toLocaleString();
+        kStreams.textContent = r.streams.toLocaleString();
+      }
+      function renderEvents() {
+        eventsList.innerHTML = '';
+        for (const e of sample.events) {
+          const div = document.createElement('div');
+          div.className = 'item';
+          const left = document.createElement('div');
+          left.innerHTML = '<div>' + e.title + '</div><div class="muted">' + e.date + ' • ' + e.venue + ' • ' + e.city + '</div>';
+          const right = document.createElement('div');
+          right.style.display = 'flex';
+          right.style.gap = '8px';
+          const status = document.createElement('span');
+          status.className = 'pill';
+          status.textContent = e.published ? 'Published' : 'Draft';
+          const toggle = document.createElement('button');
+          toggle.textContent = e.published ? 'Unpublish' : 'Publish';
+          toggle.addEventListener('click', () => {
+            e.published = !e.published;
+            renderEvents();
+          });
+          right.appendChild(status);
+          right.appendChild(toggle);
+          div.appendChild(left);
+          div.appendChild(right);
+          eventsList.appendChild(div);
+        }
+      }
+      function renderReleases() {
+        releasesGrid.innerHTML = '';
+        for (const r of sample.releases) {
+          const card = document.createElement('div');
+          card.className = 'release';
+          const cover = document.createElement('div');
+          cover.className = 'cover';
+          const info = document.createElement('div');
+          const h3 = document.createElement('h3');
+          h3.textContent = r.title;
+          const meta = document.createElement('div');
+          meta.className = 'muted';
+          meta.textContent = r.type + ' • ' + r.date;
+          info.appendChild(h3);
+          info.appendChild(meta);
+          card.appendChild(cover);
+          card.appendChild(info);
+          releasesGrid.appendChild(card);
+        }
+      }
+      function renderInbox() {
+        inboxList.innerHTML = '';
+        for (const m of sample.inbox) {
+          const card = document.createElement('div');
+          card.className = 'msg';
+          const from = document.createElement('div');
+          from.className = 'from';
+          from.textContent = m.from;
+          const time = document.createElement('div');
+          time.className = 'time';
+          time.textContent = m.time;
+          const text = document.createElement('div');
+          text.textContent = m.text;
+          card.appendChild(from);
+          card.appendChild(time);
+          card.appendChild(text);
+          inboxList.appendChild(card);
+        }
+      }
+      function init() {
+        artistNameEl.textContent = sample.artist.name;
+        rangeEl.addEventListener('change', renderStats);
+        renderStats();
+        renderEvents();
+        renderReleases();
+        renderInbox();
+      }
+      init();
+    </script>
+  </body>
+</html>
+

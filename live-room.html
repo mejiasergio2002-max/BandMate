@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Live Room</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root { color-scheme: light dark; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.45; }
+      .shell { max-width: 1200px; margin: 24px auto; padding: 0 16px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #ef4444, #3b82f6); }
+      .title { font-size: 22px; font-weight: 700; }
+      .meta { display: flex; gap: 10px; align-items: center; }
+      .pill { font-size: 12px; border: 1px solid rgba(0,0,0,0.15); padding: 4px 8px; border-radius: 999px; }
+      .actions { display: flex; gap: 8px; }
+      button { padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: inherit; font-size: 14px; }
+      .grid { display: grid; grid-template-columns: 1.8fr 1fr; gap: 16px; }
+      .card { border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 12px; background: inherit; }
+      .video-wrap { position: relative; background: #111; border-radius: 12px; overflow: hidden; min-height: 420px; display: grid; place-items: center; }
+      video { width: 100%; height: 100%; object-fit: cover; background: #000; }
+      .overlay { position: absolute; top: 12px; left: 12px; display: flex; gap: 8px; align-items: center; }
+      .live { background: #ef4444; color: #fff; font-weight: 700; }
+      .status { background: rgba(0,0,0,0.5); color: #fff; }
+      .meter { position: absolute; bottom: 12px; left: 12px; width: 160px; height: 10px; border-radius: 999px; background: rgba(255,255,255,0.15); overflow: hidden; }
+      .meter-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #22c55e, #f59e0b); }
+      .controls { display: grid; grid-template-columns: auto auto 1fr; gap: 12px; align-items: center; margin-top: 12px; }
+      .group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+      select { padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: inherit; }
+      .sidebar { display: grid; gap: 12px; }
+      .chat { display: grid; grid-template-rows: auto 1fr auto; gap: 8px; height: 540px; }
+      .chat-header { display: flex; align-items: center; justify-content: space-between; }
+      .chat-list { border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 10px; overflow: auto; display: grid; gap: 8px; }
+      .msg { display: grid; gap: 3px; }
+      .msg .from { font-size: 12px; opacity: 0.7; }
+      .msg .text { font-size: 14px; }
+      .chat-input { display: flex; gap: 8px; }
+      .chat-input input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: inherit; }
+      .panel { display: grid; gap: 10px; }
+      .muted { font-size: 12px; opacity: 0.7; }
+      .reactions { display: flex; gap: 8px; align-items: center; }
+      .counter { min-width: 28px; text-align: center; font-size: 12px; border: 1px solid rgba(0,0,0,0.15); padding: 3px 6px; border-radius: 8px; }
+      @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } .chat { height: auto; } }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">
+          <div class="avatar"></div>
+          <div>
+            <div class="title">Live Room</div>
+            <div class="muted">BandMate Streaming</div>
+          </div>
+        </div>
+        <div class="meta">
+          <div class="pill" id="status-pill">Offline</div>
+          <div class="pill" id="viewers-pill">0 viewers</div>
+          <div class="pill" id="latency-pill">Low latency</div>
+        </div>
+        <div class="actions">
+          <button id="share">Share</button>
+          <button id="report">Report</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <div class="video-wrap">
+            <video id="player" playsinline autoplay muted></video>
+            <div class="overlay">
+              <div class="pill live" id="live-badge">OFFLINE</div>
+              <div class="pill status" id="net-status">Idle</div>
+            </div>
+            <div class="meter"><div class="meter-bar" id="meter-bar"></div></div>
+          </div>
+          <div class="md:hidden mt-3">
+            <div id="AdSlotMobile" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 p-4 shadow-sm">
+              <div class="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Advertisement</div>
+              <div class="mt-2 flex items-center gap-3">
+                <div class="w-24 h-16 sm:h-20 rounded-md overflow-hidden bg-gradient-to-br from-indigo-500 to-emerald-400"></div>
+                <div class="flex-1">
+                  <div class="text-sm font-medium">BandMate Premium</div>
+                  <div class="text-xs text-gray-600 dark:text-gray-400">Stream without interruptions</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="controls">
+            <div class="group">
+              <button id="go-live">Go Live</button>
+              <button id="end-live">End Live</button>
+              <button id="toggle-mic">Mute</button>
+              <button id="toggle-cam">Disable Cam</button>
+              <button id="screenshare">Share Screen</button>
+            </div>
+            <div class="group">
+              <label for="quality">Quality</label>
+              <select id="quality">
+                <option value="720p" selected>720p</option>
+                <option value="1080p">1080p</option>
+              </select>
+              <label for="chat-mode">Chat</label>
+              <select id="chat-mode">
+                <option value="all" selected>Everyone</option>
+                <option value="followers">Followers only</option>
+              </select>
+            </div>
+            <div class="group" style="justify-content:flex-end">
+              <div class="reactions">
+                <button id="like">👍</button><div class="counter" id="like-count">0</div>
+                <button id="heart">❤️</button><div class="counter" id="heart-count">0</div>
+                <button id="clap">👏</button><div class="counter" id="clap-count">0</div>
+                <button id="tip-5">$5</button>
+                <button id="tip-10">$10</button>
+                <button id="tip-20">$20</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="card">
+            <div class="chat">
+              <div class="chat-header">
+                <div class="title" style="font-size:18px">Chat</div>
+                <div class="muted" id="chat-mode-label">Everyone</div>
+              </div>
+              <div class="chat-list" id="chat-list"></div>
+              <div class="chat-input">
+                <input id="chat-input" placeholder="Send a message">
+                <button id="chat-send">Send</button>
+              </div>
+            </div>
+          </div>
+          <div class="hidden md:block">
+            <div id="AdSlot" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 p-4 shadow-sm">
+              <div class="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Advertisement</div>
+              <div class="mt-2 flex items-center gap-3">
+                <div class="w-20 h-20 rounded-md overflow-hidden bg-gradient-to-br from-indigo-500 to-emerald-400"></div>
+                <div class="flex-1">
+                  <div class="text-sm font-medium">BandMate Premium</div>
+                  <div class="text-xs text-gray-600 dark:text-gray-400">Stream without interruptions</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card panel">
+            <div class="title" style="font-size:18px">Room Info</div>
+            <div class="muted">Use Go Live to start your camera and mic. This simulates streaming locally without a server.</div>
+            <div class="muted">Reactions and tips update counters client-side.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const player = document.getElementById('player');
+      const statusPill = document.getElementById('status-pill');
+      const viewersPill = document.getElementById('viewers-pill');
+      const liveBadge = document.getElementById('live-badge');
+      const netStatus = document.getElementById('net-status');
+      const meterBar = document.getElementById('meter-bar');
+      const goLiveBtn = document.getElementById('go-live');
+      const endLiveBtn = document.getElementById('end-live');
+      const toggleMicBtn = document.getElementById('toggle-mic');
+      const toggleCamBtn = document.getElementById('toggle-cam');
+      const screenshareBtn = document.getElementById('screenshare');
+      const qualityEl = document.getElementById('quality');
+      const chatModeEl = document.getElementById('chat-mode');
+      const chatModeLabel = document.getElementById('chat-mode-label');
+      const chatList = document.getElementById('chat-list');
+      const chatInput = document.getElementById('chat-input');
+      const chatSend = document.getElementById('chat-send');
+      const likeBtn = document.getElementById('like');
+      const heartBtn = document.getElementById('heart');
+      const clapBtn = document.getElementById('clap');
+      const likeCount = document.getElementById('like-count');
+      const heartCount = document.getElementById('heart-count');
+      const clapCount = document.getElementById('clap-count');
+      const tip5 = document.getElementById('tip-5');
+      const tip10 = document.getElementById('tip-10');
+      const tip20 = document.getElementById('tip-20');
+      let isLive = false;
+      let stream = null;
+      let audioTrack = null;
+      let videoTrack = null;
+      let analyser = null;
+      let audioRAF = null;
+      let viewers = 0;
+      function setStatus(s) {
+        statusPill.textContent = s ? 'Live' : 'Offline';
+        liveBadge.textContent = s ? 'LIVE' : 'OFFLINE';
+      }
+      function setViewers(n) {
+        viewers = n;
+        viewersPill.textContent = n + ' viewers';
+      }
+      function appendMsg(from, text) {
+        const m = document.createElement('div');
+        m.className = 'msg';
+        const f = document.createElement('div');
+        f.className = 'from';
+        f.textContent = from;
+        const t = document.createElement('div');
+        t.className = 'text';
+        t.textContent = text;
+        m.appendChild(f);
+        m.appendChild(t);
+        chatList.appendChild(m);
+        chatList.scrollTop = chatList.scrollHeight;
+      }
+      function startAudioMeter(stream) {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const src = ctx.createMediaStreamSource(stream);
+          analyser = ctx.createAnalyser();
+          analyser.fftSize = 256;
+          src.connect(analyser);
+          const data = new Uint8Array(analyser.frequencyBinCount);
+          function loop() {
+            analyser.getByteFrequencyData(data);
+            let sum = 0;
+            for (let i = 0; i < data.length; i++) sum += data[i];
+            const level = Math.min(100, Math.round((sum / data.length) / 2));
+            meterBar.style.width = level + '%';
+            audioRAF = requestAnimationFrame(loop);
+          }
+          loop();
+        } catch {}
+      }
+      async function goLive() {
+        if (isLive) return;
+        netStatus.textContent = 'Connecting';
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          player.srcObject = stream;
+          const tracks = stream.getTracks();
+          audioTrack = tracks.find(t => t.kind === 'audio') || null;
+          videoTrack = tracks.find(t => t.kind === 'video') || null;
+          startAudioMeter(stream);
+          isLive = true;
+          setStatus(true);
+          netStatus.textContent = 'Connected';
+          setViewers(Math.max(viewers, 1));
+          appendMsg('System', 'Stream started');
+        } catch (e) {
+          netStatus.textContent = 'Failed';
+          setStatus(false);
+          appendMsg('System', 'Could not access camera or mic');
+        }
+      }
+      function endLive() {
+        if (!isLive) return;
+        if (audioRAF) cancelAnimationFrame(audioRAF);
+        if (stream) {
+          for (const t of stream.getTracks()) t.stop();
+          player.srcObject = null;
+        }
+        isLive = false;
+        setStatus(false);
+        netStatus.textContent = 'Idle';
+        appendMsg('System', 'Stream ended');
+      }
+      function toggleMic() {
+        if (!audioTrack) return;
+        audioTrack.enabled = !audioTrack.enabled;
+        toggleMicBtn.textContent = audioTrack.enabled ? 'Mute' : 'Unmute';
+      }
+      function toggleCam() {
+        if (!videoTrack) return;
+        videoTrack.enabled = !videoTrack.enabled;
+        toggleCamBtn.textContent = videoTrack.enabled ? 'Disable Cam' : 'Enable Cam';
+      }
+      async function shareScreen() {
+        try {
+          const sc = await navigator.mediaDevices.getDisplayMedia({ video: true });
+          const vT = sc.getVideoTracks()[0];
+          if (player.srcObject) {
+            const sender = null;
+            videoTrack = vT;
+            player.srcObject = new MediaStream([vT, ...(audioTrack ? [audioTrack] : [])]);
+          } else {
+            player.srcObject = sc;
+            videoTrack = vT;
+          }
+          sc.getVideoTracks()[0].addEventListener('ended', () => {
+            if (stream) player.srcObject = stream;
+          });
+        } catch {}
+      }
+      function setupReactions() {
+        function bump(btn, countEl) {
+          const v = Number(countEl.textContent) + 1;
+          countEl.textContent = String(v);
+          btn.style.transform = 'scale(1.15)';
+          setTimeout(() => btn.style.transform = 'scale(1)', 120);
+        }
+        likeBtn.addEventListener('click', () => bump(likeBtn, likeCount));
+        heartBtn.addEventListener('click', () => bump(heartBtn, heartCount));
+        clapBtn.addEventListener('click', () => bump(clapBtn, clapCount));
+        function tip(amount, btn) {
+          appendMsg('Tip', '$' + amount + ' sent');
+          btn.textContent = 'Sent';
+          setTimeout(() => btn.textContent = '$' + amount, 1200);
+        }
+        tip5.addEventListener('click', () => tip(5, tip5));
+        tip10.addEventListener('click', () => tip(10, tip10));
+        tip20.addEventListener('click', () => tip(20, tip20));
+      }
+      function setupChat() {
+        chatSend.addEventListener('click', () => {
+          const text = chatInput.value.trim();
+          if (!text) return;
+          appendMsg('You', text);
+          chatInput.value = '';
+        });
+        chatInput.addEventListener('keydown', e => {
+          if (e.key === 'Enter') chatSend.click();
+        });
+        appendMsg('System', 'Welcome to the live room');
+      }
+      function setupMeta() {
+        qualityEl.addEventListener('change', () => {
+          appendMsg('System', 'Quality set to ' + qualityEl.value);
+        });
+        chatModeEl.addEventListener('change', () => {
+          chatModeLabel.textContent = chatModeEl.value === 'all' ? 'Everyone' : 'Followers';
+          appendMsg('System', 'Chat mode: ' + chatModeLabel.textContent);
+        });
+        setViewers(0);
+      }
+      function simulateViewers() {
+        setInterval(() => {
+          if (!isLive) return;
+          const delta = Math.floor(Math.random() * 4) - 1;
+          setViewers(Math.max(1, viewers + delta));
+        }, 1500);
+      }
+      goLiveBtn.addEventListener('click', goLive);
+      endLiveBtn.addEventListener('click', endLive);
+      toggleMicBtn.addEventListener('click', toggleMic);
+      toggleCamBtn.addEventListener('click', toggleCam);
+      screenshareBtn.addEventListener('click', shareScreen);
+      setupReactions();
+      setupChat();
+      setupMeta();
+      simulateViewers();
+    </script>
+  </body>
+</html>

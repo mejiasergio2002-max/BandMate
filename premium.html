@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Premium Access</title>
+    <style>
+      :root { color-scheme: light dark; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.45; }
+      .shell { max-width: 880px; margin: 32px auto; padding: 0 16px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #6366f1); }
+      .title { font-size: 22px; font-weight: 700; }
+      .pill { font-size: 12px; border: 1px solid rgba(0,0,0,0.15); padding: 4px 8px; border-radius: 999px; }
+      .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+      .card { border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 16px; background: inherit; }
+      .card h2 { margin: 0 0 12px; font-size: 18px; }
+      .muted { font-size: 12px; opacity: 0.7; }
+      .content { border: 1px dashed rgba(0,0,0,0.2); border-radius: 12px; height: 280px; display: grid; place-items: center; background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(34,197,94,0.12)); }
+      .blur { filter: blur(4px); pointer-events: none; }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .inputs { display: grid; gap: 10px; }
+      label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+      select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: inherit; font-size: 14px; }
+      button { padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: inherit; font-size: 14px; }
+      .total { font-size: 16px; font-weight: 700; }
+      .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+      .notice { border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 10px; display: grid; gap: 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">
+          <div class="avatar"></div>
+          <div>
+            <div class="title">Premium</div>
+            <div class="muted">Exclusive pay-to-view content</div>
+          </div>
+        </div>
+        <div class="pill" id="access-pill">Locked</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Premium Content</h2>
+          <div class="content" id="premium-content"><div class="muted">Locked preview</div></div>
+        </div>
+
+        <div class="card">
+          <h2>Get Access</h2>
+          <div class="row">
+            <div class="inputs">
+              <div>
+                <label for="plan">Plan</label>
+                <select id="plan">
+                  <option value="monthly" selected>Monthly • $4.99</option>
+                  <option value="annual">Annual • $49.99</option>
+                </select>
+              </div>
+              <div>
+                <label for="promo">Promo code</label>
+                <input id="promo" placeholder="Enter promo code">
+              </div>
+              <div class="total" id="total">Total: $4.99</div>
+            </div>
+            <div class="inputs">
+              <div class="notice">
+                <div>Payments are simulated for development.</div>
+                <div class="muted">No real charges will occur.</div>
+              </div>
+              <div class="actions">
+                <button id="pay">Unlock Now</button>
+                <button id="redeem">Redeem Access Code</button>
+                <button id="revoke">Revoke Access</button>
+              </div>
+              <input id="access-code" placeholder="Enter access code">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const contentEl = document.getElementById('premium-content');
+      const accessPill = document.getElementById('access-pill');
+      const planEl = document.getElementById('plan');
+      const promoEl = document.getElementById('promo');
+      const totalEl = document.getElementById('total');
+      const payBtn = document.getElementById('pay');
+      const redeemBtn = document.getElementById('redeem');
+      const revokeBtn = document.getElementById('revoke');
+      const accessCodeEl = document.getElementById('access-code');
+      const PRICES = { monthly: 4.99, annual: 49.99 };
+      const PROMOS = { BANDMATE10: 0.10, FREEPASS: 1.0 };
+      function hasAccess() {
+        return localStorage.getItem('premiumAccess') === 'true';
+      }
+      function setAccess(v) {
+        localStorage.setItem('premiumAccess', v ? 'true' : 'false');
+      }
+      function renderAccess() {
+        if (hasAccess()) {
+          contentEl.classList.remove('blur');
+          contentEl.innerHTML = '<div style="text-align:center"><div style="font-size:18px;font-weight:700;margin-bottom:6px">Unlocked Premium Content</div><div class="muted">Exclusive video, behind-the-scenes, and early releases</div></div>';
+          accessPill.textContent = 'Unlocked';
+        } else {
+          contentEl.classList.add('blur');
+          contentEl.innerHTML = '<div class="muted">Locked preview</div>';
+          accessPill.textContent = 'Locked';
+        }
+      }
+      function computeTotal() {
+        const plan = planEl.value;
+        const base = PRICES[plan];
+        const code = promoEl.value.trim().toUpperCase();
+        const disc = PROMOS[code] || 0;
+        const final = Math.max(0, base * (1 - disc));
+        totalEl.textContent = 'Total: $' + final.toFixed(2);
+        return final;
+      }
+      planEl.addEventListener('change', computeTotal);
+      promoEl.addEventListener('input', computeTotal);
+      payBtn.addEventListener('click', () => {
+        const amount = computeTotal();
+        if (amount === 0) {
+          setAccess(true);
+          renderAccess();
+          payBtn.textContent = 'Unlocked';
+          setTimeout(() => payBtn.textContent = 'Unlock Now', 1200);
+          return;
+        }
+        setTimeout(() => {
+          setAccess(true);
+          renderAccess();
+          payBtn.textContent = 'Unlocked';
+          setTimeout(() => payBtn.textContent = 'Unlock Now', 1200);
+        }, 600);
+      });
+      redeemBtn.addEventListener('click', () => {
+        const code = accessCodeEl.value.trim().toUpperCase();
+        if (!code) return;
+        if (code === 'ACCESS-2026' || code === 'VIP-ALPHA') {
+          setAccess(true);
+          renderAccess();
+          redeemBtn.textContent = 'Redeemed';
+          setTimeout(() => redeemBtn.textContent = 'Redeem Access Code', 1200);
+        } else {
+          redeemBtn.textContent = 'Invalid';
+          setTimeout(() => redeemBtn.textContent = 'Redeem Access Code', 1200);
+        }
+      });
+      revokeBtn.addEventListener('click', () => {
+        setAccess(false);
+        renderAccess();
+        revokeBtn.textContent = 'Revoked';
+        setTimeout(() => revokeBtn.textContent = 'Revoke Access', 1200);
+      });
+      computeTotal();
+      renderAccess();
+    </script>
+  </body>
+</html>
+

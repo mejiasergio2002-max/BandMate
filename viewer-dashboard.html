@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Viewer Dashboard</title>
+    <style>
+      :root { color-scheme: light dark; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.45; }
+      .shell { max-width: 1120px; margin: 32px auto; padding: 0 16px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #ef4444, #22c55e); }
+      .title { font-size: 22px; font-weight: 700; }
+      .role { font-size: 13px; opacity: 0.7; }
+      .actions { display: flex; gap: 8px; }
+      button { padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: inherit; font-size: 14px; }
+      .grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; }
+      .col { display: grid; gap: 16px; }
+      .card { border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 16px; background: inherit; }
+      .card h2 { margin: 0 0 12px; font-size: 18px; }
+      .filters { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+      select, input[type="number"], input[type="date"] { padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: inherit; }
+      .list { display: grid; gap: 10px; }
+      .item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid rgba(0,0,0,0.08); }
+      .item:first-child { border-top: 0; }
+      .pill { font-size: 12px; border: 1px solid rgba(0,0,0,0.15); padding: 4px 8px; border-radius: 999px; }
+      .feed { display: grid; gap: 12px; }
+      .post { border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 12px; display: grid; gap: 6px; }
+      .post .meta { font-size: 12px; opacity: 0.7; }
+      .releases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .release { border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 12px; display: grid; grid-template-columns: 64px 1fr; gap: 12px; }
+      .cover { width: 64px; height: 64px; border-radius: 8px; background: linear-gradient(135deg, #3b82f6, #a855f7); }
+      .release h3 { margin: 0; font-size: 16px; }
+      .muted { font-size: 12px; opacity: 0.7; }
+      @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } .releases { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">
+          <div class="avatar"></div>
+          <div>
+            <div class="title" id="viewer-name">Viewer</div>
+            <div class="role">Viewer</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="manage-subscriptions">Manage Subscriptions</button>
+          <button id="set-location">Set Location</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col">
+          <div class="card">
+            <h2>Feed</h2>
+            <div class="feed" id="feed"></div>
+          </div>
+
+          <div class="card">
+            <h2>Upcoming Events Near You</h2>
+            <div class="filters">
+              <label for="distance">Within</label>
+              <input id="distance" type="number" min="1" value="25"> <span class="muted">miles</span>
+              <label for="date-from">From</label>
+              <input id="date-from" type="date">
+              <label for="date-to">To</label>
+              <input id="date-to" type="date">
+              <button id="apply-events-filter">Apply</button>
+            </div>
+            <div class="list" id="nearby-events"></div>
+          </div>
+
+          <div class="card">
+            <h2>Recommended Releases</h2>
+            <div class="releases" id="recommended-releases"></div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+            <h2>Following</h2>
+            <div class="list" id="following-list"></div>
+          </div>
+          <div class="card">
+            <h2>Notifications</h2>
+            <div class="list" id="notifications"></div>
+          </div>
+          <div class="card">
+            <h2>Quick Actions</h2>
+            <div class="list">
+              <div class="item">
+                <div>Update location</div>
+                <button id="qa-update-location">Update</button>
+              </div>
+              <div class="item">
+                <div>Discover new artists</div>
+                <button id="qa-discover-artists">Discover</button>
+              </div>
+              <div class="item">
+                <div>Manage subscriptions</div>
+                <button id="qa-manage-subscriptions">Manage</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const sample = {
+        viewer: { name: 'Alex Rivera', location: { city: 'San Francisco', lat: 37.7749, lng: -122.4194 } },
+        following: [
+          { name: 'Neon Echo', since: '2025-08-10' },
+          { name: 'Amber Lines', since: '2025-11-02' },
+          { name: 'Blue Nova', since: '2026-01-01' }
+        ],
+        feed: [
+          { artist: 'Neon Echo', title: 'Tour Update', time: '1h ago', text: 'Added a second show in LA — see you there!' },
+          { artist: 'Amber Lines', title: 'New Single', time: '5h ago', text: 'Dropping “Starlit” this Friday. Pre-save now!' },
+          { artist: 'Blue Nova', title: 'Behind the Scenes', time: '1d ago', text: 'Studio diaries from the upcoming EP.' }
+        ],
+        releases: [
+          { artist: 'Neon Echo', title: 'Midnight Drive', type: 'Single', date: '2025-12-01' },
+          { artist: 'Amber Lines', title: 'Glass Skies', type: 'EP', date: '2025-10-14' },
+          { artist: 'Blue Nova', title: 'Electric Bloom', type: 'Single', date: '2025-08-07' },
+          { artist: 'Sky Harbor', title: 'Neon Tides', type: 'Album', date: '2025-06-18' }
+        ],
+        nearbyEvents: [
+          { title: 'City Lights Tour', date: '2026-02-11', venue: 'Horizon Hall', city: 'San Francisco', distance: 4 },
+          { title: 'Acoustic Night', date: '2026-01-22', venue: 'Riverside', city: 'Oakland', distance: 12 },
+          { title: 'Festival Set', date: '2026-03-05', venue: 'Sunset Grounds', city: 'San Jose', distance: 48 }
+        ],
+        notifications: [
+          { text: 'Neon Echo announced a new tour date near you', time: '2h ago' },
+          { text: 'Amber Lines posted a new studio clip', time: '6h ago' },
+          { text: 'Blue Nova release moved to next week', time: '1d ago' }
+        ]
+      };
+      const viewerNameEl = document.getElementById('viewer-name');
+      const feedEl = document.getElementById('feed');
+      const followingEl = document.getElementById('following-list');
+      const releasesEl = document.getElementById('recommended-releases');
+      const eventsEl = document.getElementById('nearby-events');
+      const notificationsEl = document.getElementById('notifications');
+      const distanceEl = document.getElementById('distance');
+      const dateFromEl = document.getElementById('date-from');
+      const dateToEl = document.getElementById('date-to');
+      const applyEventsFilterBtn = document.getElementById('apply-events-filter');
+      function renderViewer() {
+        viewerNameEl.textContent = sample.viewer.name;
+      }
+      function renderFeed() {
+        feedEl.innerHTML = '';
+        for (const p of sample.feed) {
+          const post = document.createElement('div');
+          post.className = 'post';
+          const title = document.createElement('div');
+          title.textContent = p.title + ' • ' + p.artist;
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.textContent = p.time;
+          const text = document.createElement('div');
+          text.textContent = p.text;
+          post.appendChild(title);
+          post.appendChild(meta);
+          post.appendChild(text);
+          feedEl.appendChild(post);
+        }
+      }
+      function renderFollowing() {
+        followingEl.innerHTML = '';
+        for (const f of sample.following) {
+          const row = document.createElement('div');
+          row.className = 'item';
+          const left = document.createElement('div');
+          left.innerHTML = '<div>' + f.name + '</div><div class="muted">Following since ' + f.since + '</div>';
+          const right = document.createElement('div');
+          const btn = document.createElement('button');
+          btn.textContent = 'Unfollow';
+          btn.addEventListener('click', () => {
+            sample.following = sample.following.filter(x => x.name !== f.name);
+            renderFollowing();
+          });
+          right.appendChild(btn);
+          row.appendChild(left);
+          row.appendChild(right);
+          followingEl.appendChild(row);
+        }
+      }
+      function renderReleases() {
+        releasesEl.innerHTML = '';
+        for (const r of sample.releases) {
+          const card = document.createElement('div');
+          card.className = 'release';
+          const cover = document.createElement('div');
+          cover.className = 'cover';
+          const info = document.createElement('div');
+          const h3 = document.createElement('h3');
+          h3.textContent = r.title;
+          const meta = document.createElement('div');
+          meta.className = 'muted';
+          meta.textContent = r.artist + ' • ' + r.type + ' • ' + r.date;
+          info.appendChild(h3);
+          info.appendChild(meta);
+          card.appendChild(cover);
+          card.appendChild(info);
+          releasesEl.appendChild(card);
+        }
+      }
+      function renderEvents() {
+        eventsEl.innerHTML = '';
+        const maxMiles = Number(distanceEl.value) || 25;
+        const from = dateFromEl.value ? new Date(dateFromEl.value) : null;
+        const to = dateToEl.value ? new Date(dateToEl.value) : null;
+        for (const e of sample.nearbyEvents) {
+          const d = new Date(e.date);
+          if (e.distance > maxMiles) continue;
+          if (from && d < from) continue;
+          if (to && d > to) continue;
+          const row = document.createElement('div');
+          row.className = 'item';
+          const left = document.createElement('div');
+          left.innerHTML = '<div>' + e.title + '</div><div class="muted">' + e.date + ' • ' + e.venue + ' • ' + e.city + ' • ' + e.distance + ' mi</div>';
+          const right = document.createElement('div');
+          const btn = document.createElement('button');
+          btn.textContent = 'Save';
+          btn.addEventListener('click', () => {
+            btn.textContent = 'Saved';
+            setTimeout(() => btn.textContent = 'Save', 1200);
+          });
+          right.appendChild(btn);
+          row.appendChild(left);
+          row.appendChild(right);
+          eventsEl.appendChild(row);
+        }
+      }
+      function renderNotifications() {
+        notificationsEl.innerHTML = '';
+        for (const n of sample.notifications) {
+          const row = document.createElement('div');
+          row.className = 'item';
+          const left = document.createElement('div');
+          left.innerHTML = '<div>' + n.text + '</div><div class="muted">' + n.time + '</div>';
+          const right = document.createElement('div');
+          const btn = document.createElement('button');
+          btn.textContent = 'Dismiss';
+          btn.addEventListener('click', () => {
+            sample.notifications = sample.notifications.filter(x => x !== n);
+            renderNotifications();
+          });
+          right.appendChild(btn);
+          row.appendChild(left);
+          row.appendChild(right);
+          notificationsEl.appendChild(row);
+        }
+      }
+      function init() {
+        renderViewer();
+        renderFeed();
+        renderFollowing();
+        renderReleases();
+        renderEvents();
+        renderNotifications();
+        applyEventsFilterBtn.addEventListener('click', renderEvents);
+      }
+      init();
+    </script>
+  </body>
+</html>
+
