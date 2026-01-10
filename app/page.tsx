@@ -17,7 +17,7 @@ const inter = Inter({
 
 export default function LandingPage() {
   const [activeTab, setActiveTab] = useState("signup");
-  const [selectedRole, setSelectedRole] = useState("guitarist");
+  const [selectedRole, setSelectedRole] = useState("viewer");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -27,18 +27,18 @@ export default function LandingPage() {
   return (
     <main className={`relative min-h-screen w-full overflow-hidden bg-black text-white ${inter.className}`}>
       
-      {/* 1. Full-Screen Background */}
-      <div className="absolute inset-0 z-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105"
-          style={{
-            backgroundImage: "url('/landing.jpg')",
-          }}
-        />
-        {/* Dark Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
-      </div>
+      {/* 1. Full-Screen Background - Restored Structure */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transform scale-105"
+        style={{
+          backgroundImage: "url('/landing.jpg')",
+        }}
+      />
+      {/* Dark Overlay (60% opacity) */}
+      <div className="absolute inset-0 z-0 bg-black/60" />
+      
+      {/* Optional Gradient for extra readability */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-transparent to-black/40" />
 
       {/* Main Container */}
       <div className="relative z-10 min-h-screen flex flex-col justify-center px-6 lg:px-12 max-w-[1400px] mx-auto">
@@ -115,7 +115,7 @@ export default function LandingPage() {
                     Start jamming in under a minute.
                   </h3>
                   <p className="text-xs text-gray-400 uppercase tracking-widest">
-                    Create your artist profile
+                    Create your profile
                   </p>
                 </div>
 
@@ -149,23 +149,32 @@ export default function LandingPage() {
                     />
                   </div>
 
-                  {/* Role Selection */}
+                  {/* Role Selection - Simplified */}
                   <div className="space-y-2">
-                    <label className="text-xs text-gray-400 font-medium ml-1">I am a...</label>
-                    <div className="grid grid-cols-4 gap-2">
-                      {["Guitarist", "Vocalist", "Drummer", "Producer"].map((role) => (
-                        <button
-                          key={role}
-                          onClick={() => setSelectedRole(role.toLowerCase())}
-                          className={`py-2 px-1 text-[11px] font-medium rounded-lg border transition-all ${
-                            selectedRole === role.toLowerCase()
-                              ? "bg-white text-black border-white shadow-lg shadow-white/10"
-                              : "bg-transparent border-white/20 text-gray-400 hover:border-white/40 hover:text-white"
-                          }`}
-                        >
-                          {role}
-                        </button>
-                      ))}
+                    <label className="text-xs text-gray-400 font-medium ml-1">I want to...</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        onClick={() => setSelectedRole("viewer")}
+                        className={`py-3 px-4 text-sm font-medium rounded-lg border transition-all flex items-center justify-center gap-2 ${
+                          selectedRole === "viewer"
+                            ? "bg-white text-black border-white shadow-lg shadow-white/10"
+                            : "bg-transparent border-white/20 text-gray-400 hover:border-white/40 hover:text-white"
+                        }`}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                        Watch
+                      </button>
+                      <button
+                        onClick={() => setSelectedRole("artist")}
+                        className={`py-3 px-4 text-sm font-medium rounded-lg border transition-all flex items-center justify-center gap-2 ${
+                          selectedRole === "artist"
+                            ? "bg-white text-black border-white shadow-lg shadow-white/10"
+                            : "bg-transparent border-white/20 text-gray-400 hover:border-white/40 hover:text-white"
+                        }`}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                        Perform
+                      </button>
                     </div>
                   </div>
                 </div>
