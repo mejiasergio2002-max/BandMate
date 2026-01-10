@@ -31,7 +31,7 @@ export default function LandingPage() {
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transform scale-105"
         style={{
-          backgroundImage: "url('/images/hero.jpg')",
+          backgroundImage: "url('/landing.jpg')",
         }}
       />
       {/* Dark Overlay (60% opacity) */}
