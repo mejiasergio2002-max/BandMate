@@ -1,145 +1,178 @@
 "use client";
 
-// Mock Data - Exactly 3 profiles
-const MOCK_FEED = [
-  {
-    id: "1",
-    artist: {
-      name: "Marcus Miller",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
-    },
-    title: "Funk Bass Workshop 🎸",
-    viewers: "1.2K",
-    timeAgo: "LIVE",
+import { useState, useEffect } from "react";
+
+// Mock Data
+const LIVE_SESSION = {
+  artist: {
+    name: "Marcus Miller",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
+    followers: "1.2M"
   },
-  {
-    id: "2",
-    artist: {
-      name: "Sarah Keys",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-    },
-    title: "Late Night Jazz Piano",
-    viewers: "856",
-    timeAgo: "LIVE",
-  },
-  {
-    id: "3",
-    artist: {
-      name: "The Garage Band",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Garage",
-    },
-    title: "Indie Rock Rehearsal",
-    viewers: "432",
-    timeAgo: "LIVE",
-  },
+  title: "Late Night Funk Session 🎸",
+  viewers: "12.4K",
+  description: "Jamming with the new bass setup. Request songs in chat!",
+};
+
+const CHAT_MESSAGES = [
+  { id: 1, user: "BassLover99", text: "That tone is absolutely killer! 🔥", type: "regular" },
+  { id: 2, user: "StudioPro", text: "Can you show the pedalboard settings?", type: "vip" },
+  { id: 3, user: "JazzCat", text: "Groove is unmatched.", type: "regular" },
+  { id: 4, user: "FunkyTown", text: "Play Run for Cover! 🎶", type: "regular" },
+  { id: 5, user: "SarahKeys", text: "Sending love from NY ❤️", type: "regular" },
 ];
 
 export default function FeedPage() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <main className="min-h-screen bg-[#18191a] text-gray-100 flex justify-center py-6">
-      {/* Feed Container */}
-      <div className="w-full max-w-[680px] space-y-4 px-0 md:px-4">
+    <main className="min-h-screen bg-[#0a0a0a] text-white flex flex-col md:flex-row overflow-hidden">
+      
+      {/* Main Content Area (Video) */}
+      <div className="flex-1 relative flex flex-col h-[50vh] md:h-screen">
         
-        {MOCK_FEED.map((item) => (
-          <article 
-            key={item.id} 
-            className="bg-[#242526] md:rounded-xl shadow-sm border-b md:border border-[#3e4042] overflow-hidden"
-          >
-            {/* Header: Profile + Name + Live Dot */}
-            <div className="px-4 py-3 flex items-center gap-3">
-              <div className="relative h-10 w-10 shrink-0">
-                {/* Profile Photo */}
-                <img 
-                  src={item.artist.avatar} 
-                  alt={item.artist.name}
-                  className="rounded-full object-cover w-full h-full border border-white/10"
-                />
-              </div>
-              
-              <div className="flex flex-col justify-center">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-white text-[15px] leading-tight hover:underline cursor-pointer">
-                    {item.artist.name}
-                  </h3>
-                  {/* Live Indicator: Red Dot */}
-                  <div className="flex items-center gap-1">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
-                    </span>
-                    <span className="text-[#f02849] text-[13px] font-semibold tracking-wide hidden sm:block">
-                      LIVE
-                    </span>
-                  </div>
+        {/* Cinematic Video Container */}
+        <div className="relative w-full h-full bg-black group overflow-hidden">
+          {/* Background Image Simulating Video */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-80"
+            style={{ 
+              backgroundImage: "url('https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=2070&auto=format&fit=crop')",
+            }}
+          />
+          
+          {/* Dark Gradient Overlay for UI Readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
+
+          {/* Top Header Overlay */}
+          <div className="absolute top-0 left-0 right-0 p-6 flex items-start justify-between z-20">
+            <div className="flex items-center gap-4">
+              {/* Artist Avatar */}
+              <div className="relative">
+                <div className="w-12 h-12 rounded-full p-[2px] bg-gradient-to-tr from-red-500 to-orange-500">
+                  <img 
+                    src={LIVE_SESSION.artist.avatar} 
+                    alt={LIVE_SESSION.artist.name} 
+                    className="rounded-full w-full h-full object-cover border-2 border-black"
+                  />
                 </div>
-                <div className="flex items-center text-gray-400 text-[13px] gap-1">
-                  <span>{item.timeAgo}</span>
-                  <span>•</span>
+                <div className="absolute -bottom-1 -right-1 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-black">
+                  LIVE
+                </div>
+              </div>
+
+              {/* Info */}
+              <div>
+                <h2 className="text-lg font-bold tracking-tight shadow-black drop-shadow-md">
+                  {LIVE_SESSION.artist.name}
+                </h2>
+                <div className="flex items-center gap-2 text-sm text-white/80">
                   <span className="flex items-center gap-1">
-                    <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                    {item.viewers}
+                    <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                    {LIVE_SESSION.viewers} Viewers
                   </span>
                 </div>
               </div>
-              
-              {/* More Options Ellipsis (Visual Only) */}
-              <div className="ml-auto text-gray-400 hover:bg-[#3a3b3c] p-2 rounded-full cursor-pointer transition-colors">
-                <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-              </div>
+
+              {/* Follow Button */}
+              <button className="ml-4 px-4 py-1.5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full text-sm font-medium transition-all">
+                Follow
+              </button>
             </div>
 
-            {/* Post Caption */}
-            <div className="px-4 pb-2">
-              <p className="text-[15px] text-white/90 leading-normal">
-                {item.title}
+            {/* Top Right Tools */}
+            <div className="flex gap-3">
+              <button className="p-2 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur text-white/80 hover:text-white transition-colors">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Bottom Controls & Info */}
+          <div className="absolute bottom-0 left-0 right-0 p-8 z-20 flex items-end justify-between">
+            <div className="max-w-2xl">
+              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-lg">
+                {LIVE_SESSION.title}
+              </h1>
+              <p className="text-white/70 line-clamp-2 text-sm md:text-base max-w-lg">
+                {LIVE_SESSION.description}
               </p>
             </div>
 
-            {/* Video / Live Preview Area */}
-            <div className="w-full aspect-video bg-black relative group cursor-pointer">
-              {/* Video Placeholder Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40"></div>
+            {/* Reactions & Gifts */}
+            <div className="flex flex-col items-end gap-4">
+              {/* Floating Reactions (Static Visual) */}
+              <div className="flex flex-col gap-3 pb-4 items-center">
+                <span className="text-2xl animate-bounce delay-100 opacity-80">❤️</span>
+                <span className="text-2xl animate-bounce delay-300 opacity-60">🔥</span>
+                <span className="text-2xl animate-bounce delay-75 opacity-90">🎸</span>
+              </div>
               
-              {/* Play Button Overlay */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full bg-black/40 backdrop-blur-sm border-2 border-white/80 flex items-center justify-center transition-transform group-hover:scale-110">
-                  <svg className="w-8 h-8 text-white fill-current ml-1" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
+              <div className="flex items-center gap-3">
+                 <button className="flex items-center gap-2 px-4 py-2 bg-[#f02849] hover:bg-[#d01835] text-white rounded-full font-bold shadow-lg shadow-red-900/20 transition-all transform hover:scale-105 active:scale-95">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
                   </svg>
-                </div>
-              </div>
-
-              {/* LIVE Badge on Video */}
-              <div className="absolute top-4 left-4 bg-[#f02849] px-2 py-1 rounded-[4px] flex items-center gap-1">
-                <span className="text-white text-xs font-bold uppercase tracking-wide">LIVE</span>
-              </div>
-
-              {/* Viewers on Video */}
-              <div className="absolute bottom-4 left-4 bg-black/60 px-2 py-1 rounded flex items-center gap-1">
-                <svg className="w-4 h-4 text-white fill-current" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                <span className="text-white text-xs font-semibold">{item.viewers}</span>
-              </div>
-            </div>
-
-            {/* Action Buttons (Like/Comment/Share - Visual Only) */}
-            <div className="px-2 py-1">
-              <div className="flex items-center justify-between border-t border-[#3e4042] pt-1 mt-1">
-                <button className="flex-1 flex items-center justify-center gap-2 py-2 hover:bg-[#3a3b3c] rounded transition-colors group">
-                  <svg className="w-5 h-5 text-gray-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
-                  <span className="text-gray-400 font-medium text-[14px] group-hover:text-white">Like</span>
-                </button>
-                <button className="flex-1 flex items-center justify-center gap-2 py-2 hover:bg-[#3a3b3c] rounded transition-colors group">
-                  <svg className="w-5 h-5 text-gray-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
-                  <span className="text-gray-400 font-medium text-[14px] group-hover:text-white">Comment</span>
-                </button>
-                <button className="flex-1 flex items-center justify-center gap-2 py-2 hover:bg-[#3a3b3c] rounded transition-colors group">
-                  <svg className="w-5 h-5 text-gray-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
-                  <span className="text-gray-400 font-medium text-[14px] group-hover:text-white">Share</span>
+                  Send Gift
                 </button>
               </div>
             </div>
-          </article>
-        ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Right Sidebar - Live Chat */}
+      <div className="w-full md:w-[350px] bg-[#121212] border-l border-white/5 flex flex-col h-[50vh] md:h-screen">
+        <div className="p-4 border-b border-white/5 bg-[#181818]">
+          <h3 className="font-semibold text-white/90 tracking-wide">Live Chat</h3>
+        </div>
+
+        {/* Messages Area */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {CHAT_MESSAGES.map((msg) => (
+            <div key={msg.id} className="flex items-start gap-2 text-sm animate-in slide-in-from-bottom-2 duration-300">
+              <div className={`font-bold ${msg.type === 'vip' ? 'text-yellow-400' : 'text-gray-400'}`}>
+                {msg.user}:
+              </div>
+              <div className="text-white/90 leading-relaxed">
+                {msg.text}
+              </div>
+            </div>
+          ))}
+          <div className="text-white/20 text-xs italic pt-2">
+            Welcome to the chat room!
+          </div>
+        </div>
+
+        {/* Chat Input Area */}
+        <div className="p-4 bg-[#181818] border-t border-white/5">
+          <div className="relative">
+            <input 
+              type="text" 
+              placeholder="Say something..." 
+              className="w-full bg-[#2a2a2a] text-white placeholder-gray-500 rounded-full py-2.5 px-4 pr-10 text-sm focus:outline-none focus:ring-1 focus:ring-white/20"
+            />
+            <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-white">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+          </div>
+          <div className="flex justify-between items-center mt-3 px-1">
+             <div className="flex gap-2 text-xl cursor-pointer opacity-70 hover:opacity-100">
+                <span>❤️</span>
+                <span>🔥</span>
+                <span>👏</span>
+             </div>
+             <span className="text-xs text-gray-500">200/200</span>
+          </div>
+        </div>
       </div>
     </main>
   );
