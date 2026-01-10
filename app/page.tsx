@@ -1,4 +1,6 @@
-export default function Page() {
+// DEPLOY TEST — DO NOT REMOVE
+
+export default function HomePage() {
   return (
     <div
       style={{
@@ -6,41 +8,49 @@ export default function Page() {
         backgroundImage: "url('/landing.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        padding: "4rem",
+        position: "relative",
       }}
     >
+      {/* Dark overlay */}
       <div
         style={{
-          background: "rgba(0,0,0,0.65)",
-          padding: "2.5rem",
-          borderRadius: "12px",
-          color: "white",
-          width: "360px",
+          position: "absolute",
+          inset: 0,
+          background: "rgba(0,0,0,0.45)",
+        }}
+      />
+
+      {/* Centered Card */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          background: "rgba(255,255,255,0.95)",
+          padding: "32px",
+          borderRadius: "16px",
+          width: "100%",
+          maxWidth: "420px",
+          textAlign: "center",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
         }}
       >
-        <h1 style={{ fontFamily: "serif", fontSize: "32px" }}>
-          BandMate
-        </h1>
-
-        <p style={{ marginBottom: "1.5rem", opacity: 0.85 }}>
+        <h1 style={{ fontSize: "28px", marginBottom: "8px" }}>BandMate</h1>
+        <p style={{ marginBottom: "24px" }}>
           Find your band. Play with your people.
         </p>
 
-        <button style={buttonStyle}>Sign In</button>
-        <button style={{ ...buttonStyle, marginTop: 12 }}>
-          Register
-        </button>
+        <button style={btnStyle}>Sign In</button>
+        <button style={{ ...btnStyle, marginTop: "12px" }}>Register</button>
       </div>
     </div>
   );
 }
 
-const buttonStyle = {
+const btnStyle = {
   width: "100%",
-  padding: "12px",
+  padding: "14px",
   fontSize: "16px",
   borderRadius: "8px",
   border: "none",
