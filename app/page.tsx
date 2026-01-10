@@ -25,28 +25,21 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <main className={`relative min-h-screen w-full overflow-hidden bg-black text-white ${inter.className}`}>
-      
-      {/* 1. Full-Screen Background - Restored Structure */}
+    <main className={`relative min-h-screen w-full ${inter.className}`}>
+      {/* Option A: CSS Background */}
       <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transform scale-105"
-        style={{
-          backgroundImage: "url('/landing.jpg')",
-        }}
+        className="absolute inset-0 bg-cover bg-center" 
+        style={{ backgroundImage: "url('/landing.jpg')" }} 
       />
-      {/* Dark Overlay (60% opacity) */}
-      <div className="absolute inset-0 z-0 bg-black/60" />
+      <div className="absolute inset-0 bg-black/60" />
       
-      {/* Optional Gradient for extra readability */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-transparent to-black/40" />
-
-      {/* Main Container */}
-      <div className="relative z-10 min-h-screen flex flex-col justify-center px-6 lg:px-12 max-w-[1400px] mx-auto">
+      {/* Landing Content */}
+      <div className="relative z-10 min-h-screen flex flex-col justify-center px-6 lg:px-12 max-w-[1400px] mx-auto text-white">
         
         {/* Grid Layout: Text Left, Card Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* 2. Left Branding Text */}
+          {/* Left Branding Text */}
           <div className={`lg:col-span-7 space-y-8 transition-all duration-1000 ease-out transform ${mounted ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}>
             
             {/* App Name */}
@@ -54,13 +47,13 @@ export default function LandingPage() {
               <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
                 <span className="text-lg">🎵</span>
               </div>
-              <span className={`${playfair.className} text-2xl tracking-wide font-bold text-white`}>
+              <span className={`${playfair.className} text-2xl tracking-wide font-bold`}>
                 BandMate
               </span>
             </div>
 
             {/* Headline */}
-            <h1 className={`${playfair.className} text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight text-white drop-shadow-lg`}>
+            <h1 className={`${playfair.className} text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight drop-shadow-lg`}>
               Find Your Band.<br />
               <span className="text-white/80">Play With Your People.</span>
             </h1>
@@ -80,7 +73,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* 3. Centered Auth Card (Right side on desktop, stacked on mobile) */}
+          {/* Centered Auth Card */}
           <div className={`lg:col-span-5 flex justify-center lg:justify-end transition-all duration-1000 delay-300 ease-out transform ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
             
             <div className="w-full max-w-[480px] backdrop-blur-xl bg-black/40 border border-white/10 rounded-3xl shadow-2xl overflow-hidden ring-1 ring-white/5">
@@ -149,7 +142,7 @@ export default function LandingPage() {
                     />
                   </div>
 
-                  {/* Role Selection - Simplified */}
+                  {/* Role Selection - Simplified: Viewer / Artist */}
                   <div className="space-y-2">
                     <label className="text-xs text-gray-400 font-medium ml-1">I want to...</label>
                     <div className="grid grid-cols-2 gap-3">
@@ -162,7 +155,7 @@ export default function LandingPage() {
                         }`}
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                        Watch
+                        Viewer
                       </button>
                       <button
                         onClick={() => setSelectedRole("artist")}
@@ -173,7 +166,7 @@ export default function LandingPage() {
                         }`}
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
-                        Perform
+                        Artist
                       </button>
                     </div>
                   </div>
@@ -181,7 +174,7 @@ export default function LandingPage() {
 
                 {/* Primary CTA */}
                 <button className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-400 hover:to-pink-400 text-white font-bold py-3.5 rounded-lg shadow-lg shadow-purple-900/30 transition-all transform hover:scale-[1.01] active:scale-[0.99]">
-                  Create Account
+                  {activeTab === 'signup' ? 'Create Account' : 'Sign In'}
                 </button>
 
                 {/* Divider */}
@@ -207,7 +200,7 @@ export default function LandingPage() {
                 {/* Footer Text */}
                 <div className="text-center pt-2">
                   <p className="text-sm text-gray-400">
-                    Already have an account? <span className="text-white font-medium cursor-pointer hover:underline">Sign In</span>
+                    {activeTab === 'signup' ? 'Already have an account?' : "Don't have an account?"} <span className="text-white font-medium cursor-pointer hover:underline" onClick={() => setActiveTab(activeTab === 'signup' ? 'signin' : 'signup')}>{activeTab === 'signup' ? 'Sign In' : 'Sign Up'}</span>
                   </p>
                 </div>
 
