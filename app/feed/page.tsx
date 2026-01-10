@@ -2,20 +2,20 @@ export default function FeedPage() {
   const posts = [
     {
       id: 1,
-      name: "Lia Carter",
+      name: "theBeebs",
       viewers: "25.4K",
       image: "/feed/artist1.jpg",
     },
     {
       id: 2,
-      name: "Marcus Lane",
-      viewers: "12.1K",
+      name: "Gaga",
+      viewers: "8.1K",
       image: "/feed/artist2.jpg",
     },
     {
       id: 3,
-      name: "Echo Bloom",
-      viewers: "8.7K",
+      name: "Unc Snoop",
+      viewers: "12.9K",
       image: "/feed/artist3.jpg",
     },
   ];
@@ -26,72 +26,68 @@ export default function FeedPage() {
         background: "#f0f2f5",
         minHeight: "100vh",
         padding: "32px",
-        display: "flex",
-        justifyContent: "center",
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+        gap: "24px",
       }}
     >
-      <div style={{ width: "600px" }}>
-        {posts.map((post) => (
-          <div
-            key={post.id}
-            style={{
-              background: "white",
-              borderRadius: "12px",
-              marginBottom: "24px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-              overflow: "hidden",
-            }}
-          >
-            {/* Header */}
-            <div
-              style={{
-                padding: "12px 16px",
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-              }}
-            >
-              <span
-                style={{
-                  width: "10px",
-                  height: "10px",
-                  background: "red",
-                  borderRadius: "50%",
-                }}
-              />
-              <strong>{post.name}</strong>
-              <span style={{ marginLeft: "auto", fontSize: "13px", color: "#666" }}>
-                {post.viewers} watching
-              </span>
-            </div>
-
-            {/* Image */}
+      {posts.map((post) => (
+        <div
+          key={post.id}
+          style={{
+            background: "white",
+            borderRadius: "12px",
+            overflow: "hidden",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          }}
+        >
+          {/* IMAGE */}
+          <div style={{ position: "relative" }}>
             <img
               src={post.image}
               alt={post.name}
               style={{
                 width: "100%",
-                height: "340px",
+                height: "220px",
                 objectFit: "cover",
               }}
             />
 
-            {/* Actions */}
+            {/* LIVE BADGE */}
             <div
               style={{
-                padding: "12px 16px",
-                display: "flex",
-                gap: "16px",
-                fontSize: "14px",
+                position: "absolute",
+                top: 12,
+                left: 12,
+                background: "red",
+                color: "white",
+                padding: "4px 10px",
+                borderRadius: "999px",
+                fontSize: "12px",
+                fontWeight: "bold",
               }}
             >
-              ❤️ Like
-              💬 Comment
-              🎁 Tip
+              ● LIVE
             </div>
           </div>
-        ))}
-      </div>
+
+          {/* INFO */}
+          <div style={{ padding: "16px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <strong>{post.name}</strong>
+              <span style={{ fontSize: "13px", color: "#555" }}>
+                {post.viewers} watching
+              </span>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
