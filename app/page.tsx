@@ -8,57 +8,42 @@ export default function Page() {
         backgroundPosition: "center",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-end",
+        padding: "4rem",
       }}
     >
       <div
         style={{
           background: "rgba(0,0,0,0.65)",
-          padding: "48px",
-          borderRadius: "16px",
+          padding: "2.5rem",
+          borderRadius: "12px",
           color: "white",
-          width: "380px",
-          textAlign: "center",
-          fontFamily: "serif",
+          width: "360px",
         }}
       >
-        <h1 style={{ fontSize: "36px", marginBottom: "12px" }}>
+        <h1 style={{ fontFamily: "serif", fontSize: "32px" }}>
           BandMate
         </h1>
 
-        <p style={{ opacity: 0.9, marginBottom: "28px" }}>
+        <p style={{ marginBottom: "1.5rem", opacity: 0.85 }}>
           Find your band. Play with your people.
         </p>
 
-        <button
-          style={{
-            width: "100%",
-            padding: "14px",
-            marginBottom: "12px",
-            fontSize: "16px",
-            borderRadius: "8px",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Sign Up
-        </button>
-
-        <button
-          style={{
-            width: "100%",
-            padding: "14px",
-            fontSize: "16px",
-            borderRadius: "8px",
-            border: "1px solid white",
-            background: "transparent",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          Sign In
+        <button style={buttonStyle}>Sign In</button>
+        <button style={{ ...buttonStyle, marginTop: 12 }}>
+          Register
         </button>
       </div>
     </div>
   );
 }
+
+const buttonStyle = {
+  width: "100%",
+  padding: "12px",
+  fontSize: "16px",
+  borderRadius: "8px",
+  border: "none",
+  cursor: "pointer",
+};
+
