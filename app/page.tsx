@@ -1,36 +1,9 @@
-// redeploy-ui
+// LANDING PAGE FIX
 
 
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
-
-export default function Page() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const signIn = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) return setError(error.message);
-    router.push('/feed');
-  };
-
-  const register = async () => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) return setError(error.message);
-    router.push('/feed');
-  };
-
+export default function LandingPage() {
   return (
     <div
       style={{
@@ -43,54 +16,68 @@ export default function Page() {
         justifyContent: 'center',
       }}
     >
-      {/* dark overlay */}
+      {/* Overlay */}
       <div
         style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundColor: 'rgba(0,0,0,0.6)',
-        }}
-      />
-
-      {/* auth card */}
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          width: 320,
-          padding: 24,
-          background: 'rgba(0,0,0,0.65)',
-          borderRadius: 12,
+          background: 'rgba(0,0,0,0.55)',
+          padding: '40px',
+          borderRadius: '16px',
+          width: '100%',
+          maxWidth: '360px',
+          textAlign: 'center',
           color: 'white',
+          backdropFilter: 'blur(6px)',
         }}
       >
-        <h1 style={{ textAlign: 'center', marginBottom: 16 }}>BandMate</h1>
+        <h1
+          style={{
+            fontSize: '28px',
+            marginBottom: '8px',
+            fontFamily: 'serif',
+          }}
+        >
+          BandMate
+        </h1>
 
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ width: '100%', marginBottom: 8 }}
-        />
+        <p
+          style={{
+            fontSize: '14px',
+            opacity: 0.9,
+            marginBottom: '24px',
+          }}
+        >
+          Find your band. Play with your people.
+        </p>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: '100%', marginBottom: 8 }}
-        />
-
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-
-        <button onClick={signIn} style={{ width: '100%', marginBottom: 8 }}>
+        <button
+          style={{
+            width: '100%',
+            padding: '12px',
+            borderRadius: '10px',
+            border: 'none',
+            marginBottom: '12px',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+          onClick={() => (window.location.href = '/feed')}
+        >
           Sign In
         </button>
 
-        <button onClick={register} style={{ width: '100%' }}>
+        <button
+          style={{
+            width: '100%',
+            padding: '12px',
+            borderRadius: '10px',
+            border: 'none',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+          onClick={() => (window.location.href = '/feed')}
+        >
           Register
         </button>
       </div>
     </div>
-  );
+  )
 }
