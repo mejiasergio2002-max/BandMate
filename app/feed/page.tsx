@@ -1,7 +1,33 @@
-// FORCE FEED DEPLOY
+'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '../../lib/supabase';
 
 export default function FeedPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/');
+      } else {
+        setLoading(false);
+      }
+    };
+    checkUser();
+  }, [router]);
+
+  if (loading) {
+    return (
+      <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f2f5' }}>
+        Loading...
+      </div>
+    );
+  }
+
   const posts = [
     {
       id: 1,
@@ -98,24 +124,9 @@ export default function FeedPage() {
                 filter: post.locked ? "grayscale(100%)" : "none",
               }}
             />
-
-            {/* FOOTER */}
-            <div
-              style={{
-                padding: "12px 16px",
-                fontSize: "14px",
-                color: "#444",
-              }}
-            >
-              {post.locked
-                ? "🔒 Locked room"
-                : "❤️ Like   💬 Comment   🎁 Tip"}
-            </div>
           </div>
         ))}
       </div>
     </div>
   );
 }
-// FORCE COMMIT FROM TERMINAL
-// FORCE COMMIT FROM TERMINAL
