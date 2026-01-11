@@ -1,23 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { supabase } from '../../lib/supabase';
 
 export default function FeedPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+    const checkAuth = async () => {
+      const { data } = await supabase.auth.getUser();
+
+      if (!data.user) {
         router.push('/');
-      } else {
-        setLoading(false);
+        return;
       }
+
+      setLoading(false);
     };
-    checkUser();
+
+    checkAuth();
   }, [router]);
 
   if (loading) {
