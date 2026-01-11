@@ -1,20 +1,9 @@
 import './globals.css';
 
-export const metadata = {
-  title: 'BandMate',
-  description: 'Find your band. Play with your people.',
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
