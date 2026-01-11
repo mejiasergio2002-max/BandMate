@@ -1,8 +1,5 @@
 // LANDING PAGE FIX
 
-
-'use client'
-
 export default function LandingPage() {
   return (
     <div
