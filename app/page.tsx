@@ -1,80 +1,65 @@
-// LANDING PAGE FIX
+import Link from "next/link";
 
-export default function LandingPage() {
+export default function Page() {
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: "100vh",
         backgroundImage: "url('/landing.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      {/* Overlay */}
       <div
         style={{
-          background: 'rgba(0,0,0,0.55)',
-          padding: '40px',
-          borderRadius: '16px',
-          width: '100%',
-          maxWidth: '360px',
-          textAlign: 'center',
-          color: 'white',
-          backdropFilter: 'blur(6px)',
+          background: "rgba(0,0,0,0.55)",
+          padding: "32px",
+          borderRadius: "16px",
+          width: "320px",
+          textAlign: "center",
+          color: "white",
+          backdropFilter: "blur(8px)",
         }}
       >
-        <h1
-          style={{
-            fontSize: '28px',
-            marginBottom: '8px',
-            fontFamily: 'serif',
-          }}
-        >
-          BandMate
-        </h1>
-
-        <p
-          style={{
-            fontSize: '14px',
-            opacity: 0.9,
-            marginBottom: '24px',
-          }}
-        >
+        <h1 style={{ fontSize: "28px", marginBottom: "8px" }}>BandMate</h1>
+        <p style={{ opacity: 0.85, marginBottom: "24px" }}>
           Find your band. Play with your people.
         </p>
 
-        <button
-          style={{
-            width: '100%',
-            padding: '12px',
-            borderRadius: '10px',
-            border: 'none',
-            marginBottom: '12px',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
-          onClick={() => (window.location.href = '/feed')}
-        >
-          Sign In
-        </button>
+        <Link href="/feed">
+          <button
+            style={{
+              width: "100%",
+              padding: "12px",
+              marginBottom: "12px",
+              borderRadius: "10px",
+              border: "none",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Sign In
+          </button>
+        </Link>
 
-        <button
-          style={{
-            width: '100%',
-            padding: '12px',
-            borderRadius: '10px',
-            border: 'none',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
-          onClick={() => (window.location.href = '/feed')}
-        >
-          Register
-        </button>
+        <Link href="/feed">
+          <button
+            style={{
+              width: "100%",
+              padding: "12px",
+              borderRadius: "10px",
+              border: "none",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Register
+          </button>
+        </Link>
       </div>
     </div>
-  )
+  );
 }
