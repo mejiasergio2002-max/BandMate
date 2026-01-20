@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 export default function FeedPage() {
   const artists = [
@@ -45,11 +45,18 @@ export default function FeedPage() {
 
 function FeedCard({ artist }: any) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const [playing, setPlaying] = useState(false)
 
-  const playVideo = () => {
-    if (videoRef.current) {
+  const togglePlay = () => {
+    if (!videoRef.current) return
+
+    if (playing) {
+      videoRef.current.pause()
+      setPlaying(false)
+    } else {
       videoRef.current.play()
-      videoRef.current.controls = true
+      setPlaying(true)
+      videoRef.current.controls = false
     }
   }
 
@@ -72,6 +79,7 @@ function FeedCard({ artist }: any) {
               src={artist.video}
               playsInline
               preload="metadata"
+              onEnded={() => setPlaying(false)}
               style={{
                 width: '100%',
                 height: 320,
@@ -81,9 +89,9 @@ function FeedCard({ artist }: any) {
               }}
             />
 
-            {/* PLAY BUTTON */}
+            {/* PLAY / PAUSE BUTTON */}
             <div
-              onClick={playVideo}
+              onClick={togglePlay}
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -91,7 +99,9 @@ function FeedCard({ artist }: any) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                background: 'rgba(0,0,0,0.35)',
+                background: playing
+                  ? 'rgba(0,0,0,0.15)'
+                  : 'rgba(0,0,0,0.35)',
               }}
             >
               <div
@@ -103,11 +113,11 @@ function FeedCard({ artist }: any) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 28,
+                  fontSize: 26,
                   fontWeight: 700,
                 }}
               >
-                ▶
+                {playing ? '⏸' : '▶'}
               </div>
             </div>
           </>
@@ -150,9 +160,10 @@ function FeedCard({ artist }: any) {
         <strong style={{ fontSize: 16 }}>{artist.name}</strong>
 
         <div style={{ marginTop: 6, opacity: 0.7 }}>
-          {artist.locked ? 'Premium session' : 'Tap to play'}
+          {artist.locked ? 'Premium session' : playing ? 'Playing' : 'Paused'}
         </div>
       </div>
     </div>
   )
 }
+
