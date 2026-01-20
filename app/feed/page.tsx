@@ -23,85 +23,113 @@ export default function FeedPage() {
     <div
       style={{
         display: 'flex',
-        justifyContent: 'center',
-        background: '#f6f6f6',
         minHeight: '100vh',
+        background: '#f6f6f6',
         fontFamily: 'system-ui, -apple-system',
       }}
     >
-      {/* LEFT AD */}
-      <aside style={adColumn}>
-        <AdBanner src="/ads/ad-left.jpg" />
-      </aside>
+      {/* LEFT SIDEBAR */}
+      <aside
+        style={{
+          width: 240,
+          background: '#fff',
+          borderRight: '1px solid #eee',
+          padding: 20,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* TOP */}
+        <div>
+          <div
+            onClick={() => router.push('/feed')}
+            style={{
+              fontSize: 22,
+              fontWeight: 800,
+              marginBottom: 32,
+              cursor: 'pointer',
+            }}
+          >
+            🎵 BandMate
+          </div>
 
-      {/* MAIN CONTENT */}
-      <div style={centerColumn}>
-        {/* HEADER */}
-        <div
-          onClick={() => router.push('/feed')}
-          style={{
-            fontSize: 22,
-            fontWeight: 800,
-            marginBottom: 24,
-            cursor: 'pointer',
-          }}
-        >
-          🎵 BandMate
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <NavItem label="📻 Radio Feed" />
+            <NavItem label="🔥 Live Now" />
+            <NavItem label="⭐ Favorites" />
+            <NavItem label="💸 Top Tipped" />
+          </nav>
         </div>
 
-        {/* FEED */}
+        {/* LEFT AD (BOTTOM ONLY) */}
+        <AdImage src="/ads/ad-left.jpg" />
+      </aside>
+
+      {/* CENTER FEED */}
+      <main
+        style={{
+          flex: 1,
+          padding: '32px 24px',
+          maxWidth: 720,
+          margin: '0 auto',
+        }}
+      >
         {artists.map((artist, index) => (
           <FeedCard key={index} artist={artist} />
         ))}
-      </div>
+      </main>
 
-      {/* RIGHT COLUMN */}
-      <aside style={rightColumn}>
-        <div style={{ marginBottom: 24 }}>
-          <strong>🔴 LIVE WITH ME NOW</strong>
+      {/* RIGHT SIDEBAR */}
+      <aside
+        style={{
+          width: 280,
+          background: '#fff',
+          borderLeft: '1px solid #eee',
+          padding: 24,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* TOP */}
+        <div>
+          <div style={{ fontWeight: 800, marginBottom: 16 }}>
+            🔴 LIVE WITH ME NOW
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {liveNow.map((user, index) => (
+              <LiveProfile key={index} user={user} />
+            ))}
+          </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {liveNow.map((user, index) => (
-            <LiveProfile key={index} user={user} />
-          ))}
-        </div>
-
-        <div style={{ marginTop: 'auto' }}>
-          <AdBanner src="/ads/ad-right.jpg" />
-        </div>
+        {/* RIGHT AD (BOTTOM ONLY) */}
+        <AdImage src="/ads/ad-right.jpg" />
       </aside>
     </div>
   )
 }
 
-/* ---------- STYLES ---------- */
-
-const adColumn: React.CSSProperties = {
-  width: 200,
-  padding: 16,
-  display: 'flex',
-  justifyContent: 'center',
-}
-
-const centerColumn: React.CSSProperties = {
-  width: '100%',
-  maxWidth: 720,
-  padding: '24px 16px',
-}
-
-const rightColumn: React.CSSProperties = {
-  width: 260,
-  padding: 16,
-  background: '#fff',
-  borderLeft: '1px solid #eee',
-  display: 'flex',
-  flexDirection: 'column',
-}
-
 /* ---------- COMPONENTS ---------- */
 
-function AdBanner({ src }: { src: string }) {
+function NavItem({ label }: { label: string }) {
+  return (
+    <div
+      style={{
+        padding: '10px 12px',
+        borderRadius: 10,
+        cursor: 'pointer',
+        fontWeight: 600,
+      }}
+    >
+      {label}
+    </div>
+  )
+}
+
+function AdImage({ src }: { src: string }) {
   return (
     <img
       src={src}
