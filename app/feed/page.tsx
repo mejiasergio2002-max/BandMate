@@ -29,28 +29,39 @@ export default function FeedPage() {
     },
   ]
 
+  const liveNow = [
+    {
+      name: 'Drake',
+      avatar: '/feed/drake.jpg',
+    },
+    {
+      name: 'Billie',
+      avatar: '/feed/billie.jpg',
+    },
+    {
+      name: 'Posty',
+      avatar: '/feed/posty.jpg',
+    },
+  ]
+
   return (
     <div
       style={{
         display: 'flex',
         minHeight: '100vh',
-        fontFamily: 'system-ui, -apple-system',
         background: '#f6f6f6',
+        fontFamily: 'system-ui, -apple-system',
       }}
     >
-      {/* SIDEBAR */}
+      {/* LEFT SIDEBAR */}
       <aside
         style={{
           width: 220,
           background: '#fff',
           borderRight: '1px solid #eee',
           padding: 20,
-          position: 'sticky',
-          top: 0,
-          height: '100vh',
         }}
       >
-        {/* LOGO / RADIO HOME */}
         <div
           onClick={() => router.push('/feed')}
           style={{
@@ -63,7 +74,6 @@ export default function FeedPage() {
           🎵 BandMate
         </div>
 
-        {/* NAV */}
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <NavItem label="📻 Radio Feed" />
           <NavItem label="🔥 Live Now" />
@@ -72,7 +82,7 @@ export default function FeedPage() {
         </nav>
       </aside>
 
-      {/* FEED */}
+      {/* MAIN FEED */}
       <main
         style={{
           flex: 1,
@@ -85,6 +95,26 @@ export default function FeedPage() {
           <FeedCard key={index} artist={artist} />
         ))}
       </main>
+
+      {/* RIGHT SIDEBAR */}
+      <aside
+        style={{
+          width: 260,
+          background: '#fff',
+          borderLeft: '1px solid #eee',
+          padding: 24,
+        }}
+      >
+        <div style={{ fontWeight: 800, marginBottom: 16 }}>
+          🔴 LIVE WITH ME NOW
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {liveNow.map((user, index) => (
+            <LiveProfile key={index} user={user} />
+          ))}
+        </div>
+      </aside>
     </div>
   )
 }
@@ -97,10 +127,51 @@ function NavItem({ label }: { label: string }) {
         borderRadius: 10,
         cursor: 'pointer',
         fontWeight: 600,
-        color: '#333',
       }}
     >
       {label}
+    </div>
+  )
+}
+
+function LiveProfile({ user }: any) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        cursor: 'pointer',
+      }}
+    >
+      <div style={{ position: 'relative' }}>
+        <img
+          src={user.avatar}
+          alt={user.name}
+          style={{
+            width: 52,
+            height: 52,
+            borderRadius: '50%',
+            objectFit: 'cover',
+          }}
+        />
+
+        {/* LIVE DOT */}
+        <span
+          style={{
+            position: 'absolute',
+            top: 2,
+            right: 2,
+            width: 12,
+            height: 12,
+            background: 'red',
+            borderRadius: '50%',
+            border: '2px solid #fff',
+          }}
+        />
+      </div>
+
+      <div style={{ fontWeight: 600 }}>{user.name}</div>
     </div>
   )
 }
@@ -112,14 +183,8 @@ function FeedCard({ artist }: any) {
 
   const togglePlay = () => {
     if (!videoRef.current) return
-
-    if (playing) {
-      videoRef.current.pause()
-      setPlaying(false)
-    } else {
-      videoRef.current.play()
-      setPlaying(true)
-    }
+    playing ? videoRef.current.pause() : videoRef.current.play()
+    setPlaying(!playing)
   }
 
   const tips = [10, 20, 50, 100]
@@ -134,7 +199,6 @@ function FeedCard({ artist }: any) {
         boxShadow: '0 12px 30px rgba(0,0,0,0.08)',
       }}
     >
-      {/* MEDIA */}
       <div style={{ position: 'relative' }}>
         {!artist.locked ? (
           <>
@@ -143,7 +207,6 @@ function FeedCard({ artist }: any) {
               src={artist.video}
               playsInline
               preload="metadata"
-              onEnded={() => setPlaying(false)}
               style={{
                 width: '100%',
                 height: 320,
@@ -152,7 +215,6 @@ function FeedCard({ artist }: any) {
               }}
             />
 
-            {/* PLAY / PAUSE */}
             <div
               onClick={togglePlay}
               style={{
@@ -185,89 +247,46 @@ function FeedCard({ artist }: any) {
             </div>
           </>
         ) : (
-          <>
-            <img
-              src={artist.image}
-              alt={artist.name}
-              style={{
-                width: '100%',
-                height: 320,
-                objectFit: 'cover',
-                filter: 'grayscale(100%)',
-              }}
-            />
-
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'rgba(0,0,0,0.6)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontSize: 18,
-                fontWeight: 600,
-              }}
-            >
-              🔒 Locked Room
-            </div>
-          </>
+          <img
+            src={artist.image}
+            alt={artist.name}
+            style={{
+              width: '100%',
+              height: 320,
+              objectFit: 'cover',
+              filter: 'grayscale(100%)',
+            }}
+          />
         )}
       </div>
 
-      {/* INFO + TIP JAR */}
       <div style={{ padding: 18 }}>
-        <strong style={{ fontSize: 16 }}>{artist.name}</strong>
-
-        <div style={{ marginTop: 6, opacity: 0.7 }}>
-          {artist.locked ? 'Premium session' : playing ? 'Playing' : 'Paused'}
-        </div>
+        <strong>{artist.name}</strong>
 
         {!artist.locked && (
-          <div style={{ marginTop: 18 }}>
-            <div style={{ marginBottom: 8, fontSize: 14, opacity: 0.7 }}>
-              Tip the artist
-            </div>
-
-            <div style={{ display: 'flex', gap: 10 }}>
-              {tips.map((amount) => (
-                <button
-                  key={amount}
-                  onClick={() => setTipped(amount)}
-                  style={{
-                    flex: 1,
-                    padding: '8px 0',
-                    borderRadius: 10,
-                    border:
-                      tipped === amount
-                        ? '2px solid #000'
-                        : '1px solid #ddd',
-                    background:
-                      tipped === amount ? '#000' : '#fff',
-                    color:
-                      tipped === amount ? '#fff' : '#000',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                  }}
-                >
-                  ${amount}
-                </button>
-              ))}
-            </div>
-
-            {tipped && (
-              <div
+          <div style={{ marginTop: 14, display: 'flex', gap: 10 }}>
+            {tips.map((amount) => (
+              <button
+                key={amount}
+                onClick={() => setTipped(amount)}
                 style={{
-                  marginTop: 10,
-                  fontSize: 14,
-                  color: '#0a7',
+                  flex: 1,
+                  padding: '8px 0',
+                  borderRadius: 10,
+                  border:
+                    tipped === amount
+                      ? '2px solid #000'
+                      : '1px solid #ddd',
+                  background:
+                    tipped === amount ? '#000' : '#fff',
+                  color:
+                    tipped === amount ? '#fff' : '#000',
                   fontWeight: 600,
                 }}
               >
-                💛 Thanks for the ${tipped} tip!
-              </div>
-            )}
+                ${amount}
+              </button>
+            ))}
           </div>
         )}
       </div>
