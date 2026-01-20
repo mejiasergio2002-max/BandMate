@@ -46,6 +46,7 @@ export default function FeedPage() {
 function FeedCard({ artist }: any) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [playing, setPlaying] = useState(false)
+  const [tipped, setTipped] = useState<number | null>(null)
 
   const togglePlay = () => {
     if (!videoRef.current) return
@@ -56,9 +57,10 @@ function FeedCard({ artist }: any) {
     } else {
       videoRef.current.play()
       setPlaying(true)
-      videoRef.current.controls = false
     }
   }
+
+  const tips = [10, 20, 50, 100]
 
   return (
     <div
@@ -89,7 +91,7 @@ function FeedCard({ artist }: any) {
               }}
             />
 
-            {/* PLAY / PAUSE BUTTON */}
+            {/* PLAY / PAUSE */}
             <div
               onClick={togglePlay}
               style={{
@@ -135,7 +137,6 @@ function FeedCard({ artist }: any) {
               }}
             />
 
-            {/* LOCK OVERLAY */}
             <div
               style={{
                 position: 'absolute',
@@ -162,8 +163,55 @@ function FeedCard({ artist }: any) {
         <div style={{ marginTop: 6, opacity: 0.7 }}>
           {artist.locked ? 'Premium session' : playing ? 'Playing' : 'Paused'}
         </div>
+
+        {/* TIP JAR */}
+        {!artist.locked && (
+          <div style={{ marginTop: 16 }}>
+            <div style={{ marginBottom: 8, fontSize: 14, opacity: 0.7 }}>
+              Tip the artist
+            </div>
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              {tips.map((amount) => (
+                <button
+                  key={amount}
+                  onClick={() => setTipped(amount)}
+                  style={{
+                    flex: 1,
+                    padding: '8px 0',
+                    borderRadius: 10,
+                    border:
+                      tipped === amount
+                        ? '2px solid #000'
+                        : '1px solid #ddd',
+                    background:
+                      tipped === amount ? '#000' : '#fff',
+                    color:
+                      tipped === amount ? '#fff' : '#000',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  ${amount}
+                </button>
+              ))}
+            </div>
+
+            {tipped && (
+              <div
+                style={{
+                  marginTop: 10,
+                  fontSize: 14,
+                  color: '#0a7',
+                  fontWeight: 600,
+                }}
+              >
+                💛 Thanks for the ${tipped} tip!
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
 }
-
