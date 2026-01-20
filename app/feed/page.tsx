@@ -1,58 +1,133 @@
 'use client'
 
-const artists = [
-  { name: 'theBeebs', image: '/feed/artist1.jpg', locked: false },
-  { name: 'Gaga', image: '/feed/artist2.jpg', locked: false },
-  { name: 'Unc Snoop', image: '/feed/artist3.jpg', locked: true },
-  { name: 'Bob Marley', image: '/feed/artist4.jpg', locked: true },
-]
-
 export default function FeedPage() {
+  const artists = [
+    {
+      name: 'theBeebs',
+      video: '/feed/thebeebs.mp4',
+      locked: false,
+    },
+    {
+      name: 'Gaga',
+      video: '/feed/gaga.mp4',
+      locked: false,
+    },
+    {
+      name: 'Unc Snoop',
+      video: '/feed/snoop.mp4',
+      locked: false,
+    },
+    {
+      name: 'Bob Marley',
+      image: '/feed/artist4.jpg',
+      locked: true,
+    },
+  ]
+
   return (
     <div
       style={{
-        maxWidth: 600,
+        maxWidth: 640,
         margin: '40px auto',
-        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont',
+        fontFamily: 'system-ui, -apple-system',
       }}
     >
       <h2 style={{ marginBottom: 24 }}>BandMate Feed</h2>
 
-      {artists.map((artist, i) => (
+      {artists.map((artist, index) => (
         <div
-          key={i}
+          key={index}
           style={{
             background: '#fff',
-            borderRadius: 14,
-            marginBottom: 24,
+            borderRadius: 16,
+            marginBottom: 28,
             overflow: 'hidden',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+            boxShadow: '0 12px 30px rgba(0,0,0,0.1)',
           }}
         >
-          {/* IMAGE */}
-          <img
-            src={artist.image}
-            alt={artist.name}
-            style={{
-              width: '100%',
-              height: 280,
-              objectFit: 'cover',
-            }}
-          />
+          {/* MEDIA */}
+          <div style={{ position: 'relative' }}>
+            {!artist.locked ? (
+              <>
+                <video
+                  src={artist.video}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  style={{
+                    width: '100%',
+                    height: 320,
+                    objectFit: 'cover',
+                    display: 'block',
+                  }}
+                />
 
-          {/* CONTENT */}
+                {/* LIVE BADGE */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 12,
+                    left: 12,
+                    background: 'red',
+                    color: 'white',
+                    padding: '4px 10px',
+                    borderRadius: 8,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: 0.5,
+                  }}
+                >
+                  LIVE
+                </div>
+              </>
+            ) : (
+              <>
+                <img
+                  src={artist.image}
+                  alt={artist.name}
+                  style={{
+                    width: '100%',
+                    height: 320,
+                    objectFit: 'cover',
+                    filter: 'grayscale(100%)',
+                    display: 'block',
+                  }}
+                />
+
+                {/* LOCK OVERLAY */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'rgba(0,0,0,0.6)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: 18,
+                    fontWeight: 600,
+                  }}
+                >
+                  🔒 Locked Room
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* INFO */}
           <div style={{ padding: 16 }}>
             <strong style={{ fontSize: 16 }}>{artist.name}</strong>
 
-            <div style={{ marginTop: 8, opacity: 0.7 }}>
-              {artist.locked ? '🔒 Locked room' : '🎤 Live now'}
+            <div style={{ marginTop: 6, opacity: 0.7 }}>
+              {artist.locked ? 'Premium session' : 'Live performance'}
             </div>
 
             <div
               style={{
                 marginTop: 12,
                 display: 'flex',
-                gap: 16,
+                gap: 18,
                 fontSize: 14,
                 opacity: 0.6,
               }}
