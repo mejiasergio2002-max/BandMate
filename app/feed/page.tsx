@@ -1,8 +1,11 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function FeedPage() {
+  const router = useRouter()
+
   const artists = [
     {
       name: 'theBeebs',
@@ -29,16 +32,75 @@ export default function FeedPage() {
   return (
     <div
       style={{
-        maxWidth: 640,
-        margin: '40px auto',
+        display: 'flex',
+        minHeight: '100vh',
         fontFamily: 'system-ui, -apple-system',
+        background: '#f6f6f6',
       }}
     >
-      <h2 style={{ marginBottom: 24 }}>BandMate Feed</h2>
+      {/* SIDEBAR */}
+      <aside
+        style={{
+          width: 220,
+          background: '#fff',
+          borderRight: '1px solid #eee',
+          padding: 20,
+          position: 'sticky',
+          top: 0,
+          height: '100vh',
+        }}
+      >
+        {/* LOGO / RADIO HOME */}
+        <div
+          onClick={() => router.push('/feed')}
+          style={{
+            fontSize: 22,
+            fontWeight: 800,
+            marginBottom: 32,
+            cursor: 'pointer',
+          }}
+        >
+          🎵 BandMate
+        </div>
 
-      {artists.map((artist, index) => (
-        <FeedCard key={index} artist={artist} />
-      ))}
+        {/* NAV */}
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <NavItem label="📻 Radio Feed" />
+          <NavItem label="🔥 Live Now" />
+          <NavItem label="⭐ Favorites" />
+          <NavItem label="💸 Top Tipped" />
+        </nav>
+      </aside>
+
+      {/* FEED */}
+      <main
+        style={{
+          flex: 1,
+          padding: '32px 24px',
+          maxWidth: 720,
+          margin: '0 auto',
+        }}
+      >
+        {artists.map((artist, index) => (
+          <FeedCard key={index} artist={artist} />
+        ))}
+      </main>
+    </div>
+  )
+}
+
+function NavItem({ label }: { label: string }) {
+  return (
+    <div
+      style={{
+        padding: '10px 12px',
+        borderRadius: 10,
+        cursor: 'pointer',
+        fontWeight: 600,
+        color: '#333',
+      }}
+    >
+      {label}
     </div>
   )
 }
@@ -67,9 +129,9 @@ function FeedCard({ artist }: any) {
       style={{
         background: '#fff',
         borderRadius: 16,
-        marginBottom: 28,
+        marginBottom: 32,
         overflow: 'hidden',
-        boxShadow: '0 12px 30px rgba(0,0,0,0.1)',
+        boxShadow: '0 12px 30px rgba(0,0,0,0.08)',
       }}
     >
       {/* MEDIA */}
@@ -86,7 +148,6 @@ function FeedCard({ artist }: any) {
                 width: '100%',
                 height: 320,
                 objectFit: 'cover',
-                display: 'block',
                 background: '#000',
               }}
             />
@@ -133,7 +194,6 @@ function FeedCard({ artist }: any) {
                 height: 320,
                 objectFit: 'cover',
                 filter: 'grayscale(100%)',
-                display: 'block',
               }}
             />
 
@@ -145,7 +205,7 @@ function FeedCard({ artist }: any) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'white',
+                color: '#fff',
                 fontSize: 18,
                 fontWeight: 600,
               }}
@@ -156,17 +216,16 @@ function FeedCard({ artist }: any) {
         )}
       </div>
 
-      {/* INFO */}
-      <div style={{ padding: 16 }}>
+      {/* INFO + TIP JAR */}
+      <div style={{ padding: 18 }}>
         <strong style={{ fontSize: 16 }}>{artist.name}</strong>
 
         <div style={{ marginTop: 6, opacity: 0.7 }}>
           {artist.locked ? 'Premium session' : playing ? 'Playing' : 'Paused'}
         </div>
 
-        {/* TIP JAR */}
         {!artist.locked && (
-          <div style={{ marginTop: 16 }}>
+          <div style={{ marginTop: 18 }}>
             <div style={{ marginBottom: 8, fontSize: 14, opacity: 0.7 }}>
               Tip the artist
             </div>
@@ -215,3 +274,4 @@ function FeedCard({ artist }: any) {
     </div>
   )
 }
+
