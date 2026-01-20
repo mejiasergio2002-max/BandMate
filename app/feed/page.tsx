@@ -37,10 +37,9 @@ export default function FeedPage() {
           padding: 20,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
         }}
       >
-        {/* TOP */}
+        {/* TOP CONTENT */}
         <div>
           <div
             onClick={() => router.push('/feed')}
@@ -62,8 +61,11 @@ export default function FeedPage() {
           </nav>
         </div>
 
-        {/* LEFT AD (BOTTOM ONLY) */}
-        <AdImage src="/ads/ad-left.jpg" />
+        {/* FILLER */}
+        <div style={{ flex: 1 }} />
+
+        {/* LEFT AD (BOTTOM-FILL) */}
+        <AdGif src="/ads/ad-left.gif" />
       </aside>
 
       {/* CENTER FEED */}
@@ -89,10 +91,9 @@ export default function FeedPage() {
           padding: 24,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
         }}
       >
-        {/* TOP */}
+        {/* TOP CONTENT */}
         <div>
           <div style={{ fontWeight: 800, marginBottom: 16 }}>
             🔴 LIVE WITH ME NOW
@@ -105,8 +106,11 @@ export default function FeedPage() {
           </div>
         </div>
 
-        {/* RIGHT AD (BOTTOM ONLY) */}
-        <AdImage src="/ads/ad-right.jpg" />
+        {/* FILLER */}
+        <div style={{ flex: 1 }} />
+
+        {/* RIGHT AD (BOTTOM-FILL) */}
+        <AdGif src="/ads/ad-right.gif" />
       </aside>
     </div>
   )
@@ -129,13 +133,15 @@ function NavItem({ label }: { label: string }) {
   )
 }
 
-function AdImage({ src }: { src: string }) {
+function AdGif({ src }: { src: string }) {
   return (
     <img
       src={src}
       alt="Advertisement"
       style={{
         width: '100%',
+        height: '100%',
+        maxHeight: 320,
         borderRadius: 12,
         objectFit: 'cover',
       }}
