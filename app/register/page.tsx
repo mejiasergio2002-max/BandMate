@@ -1,9 +1,13 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function RegisterPage() {
   const router = useRouter()
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   return (
     <div
@@ -17,33 +21,42 @@ export default function RegisterPage() {
     >
       <div
         style={{
-          width: 320,
-          padding: 24,
-          borderRadius: 12,
+          width: 360,
+          padding: 28,
+          borderRadius: 14,
           background: '#fff',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-          textAlign: 'center',
+          boxShadow: '0 12px 30px rgba(0,0,0,0.2)',
         }}
       >
-        <h2 style={{ marginBottom: 16 }}>Register</h2>
+        <h2 style={{ marginBottom: 16 }}>Create Account</h2>
 
-        <input placeholder="Email" style={inputStyle} />
-        <input placeholder="Password" type="password" style={inputStyle} />
+        <input
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          style={inputStyle}
+        />
+
+        <input
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={inputStyle}
+        />
+
+        <input
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={inputStyle}
+        />
 
         <button
           onClick={() => router.push('/feed')}
-          style={{
-            width: '100%',
-            padding: '12px',
-            borderRadius: 8,
-            border: 'none',
-            background: '#000',
-            color: '#fff',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
+          style={buttonStyle}
         >
-          Create Account
+          Register
         </button>
       </div>
     </div>
@@ -52,8 +65,19 @@ export default function RegisterPage() {
 
 const inputStyle = {
   width: '100%',
-  padding: '10px',
+  padding: '12px',
   marginBottom: 12,
   borderRadius: 8,
   border: '1px solid #ddd',
+}
+
+const buttonStyle = {
+  width: '100%',
+  padding: '12px',
+  borderRadius: 8,
+  border: 'none',
+  background: '#000',
+  color: '#fff',
+  fontWeight: 600,
+  cursor: 'pointer',
 }
