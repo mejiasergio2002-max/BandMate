@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 /* ===== AD SLOT SIZE (ONE SOURCE OF TRUTH) ===== */
-const AD_SLOT_HEIGHT = 260
+const AD_SLOT_HEIGHT = 360 // 👈 bigger, more readable posters
 
 export default function FeedPage() {
   const router = useRouter()
@@ -101,20 +101,38 @@ function SidebarTopRight({ liveNow }: any) {
         🔴 LIVE WITH ME NOW
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 12,
+        }}
+      >
         {liveNow.map((user: any, index: number) => (
-          <LiveProfile key={index} user={user} />
+          <img
+            key={index}
+            src={user.avatar}
+            alt={user.name}
+            title={user.name}
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: '50%',
+              objectFit: 'cover',
+              border: '3px solid #ff2d2d',
+            }}
+          />
         ))}
       </div>
     </div>
   )
 }
 
-/* ===== AD SYSTEM (FIXED) ===== */
+/* ===== AD SYSTEM (IMPROVED READABILITY) ===== */
 
 function AdStack({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       {children}
     </div>
   )
@@ -126,12 +144,13 @@ function AdSlot({ src }: { src: string }) {
       style={{
         width: '100%',
         height: AD_SLOT_HEIGHT,
-        borderRadius: 12,
-        background: '#000',
+        borderRadius: 16,
+        background: '#111',
+        padding: 12,                 // 👈 makes posters feel larger
+        boxSizing: 'border-box',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        overflow: 'hidden',
       }}
     >
       <img
@@ -140,7 +159,8 @@ function AdSlot({ src }: { src: string }) {
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'contain', // ✅ NO CROPPING
+          objectFit: 'contain',      // ✅ no cropping
+          borderRadius: 12,
         }}
       />
     </div>
@@ -157,73 +177,16 @@ function NavItem({ label }: { label: string }) {
   )
 }
 
-function LiveProfile({ user }: any) {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 12,
-        padding: '6px 0',
-      }}
-    >
-      <div style={{ position: 'relative', width: 48, height: 48 }}>
-        <img
-          src={user.avatar}
-          alt={user.name}
-          style={{
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-            objectFit: 'cover',
-            border: '2px solid #fff',
-          }}
-        />
-        <span
-          style={{
-            position: 'absolute',
-            top: -1,
-            right: -1,
-            width: 12,
-            height: 12,
-            backgroundColor: '#ff2d2d',
-            borderRadius: '50%',
-            border: '2px solid white',
-          }}
-        />
-      </div>
-
-      <div
-        style={{
-          fontSize: 14,
-          fontWeight: 600,
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {user.name}
-      </div>
-    </div>
-  )
-}
-
 /* ===== FEED CARD ===== */
 
 function FeedCard({ artist }: any) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [playing, setPlaying] = useState(false)
-  const [tip, setTip] = useState<number | null>(null)
 
   const togglePlay = () => {
     if (!videoRef.current) return
     playing ? videoRef.current.pause() : videoRef.current.play()
     setPlaying(!playing)
-  }
-
-  const handleTip = (amount: number) => {
-    setTip(amount)
-    setTimeout(() => setTip(null), 3000)
   }
 
   return (
@@ -241,32 +204,6 @@ function FeedCard({ artist }: any) {
 
       <div style={{ padding: 18 }}>
         <strong>{artist.name}</strong>
-
-        {!artist.locked && (
-          <div style={{ marginTop: 14 }}>
-            <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 8 }}>
-              Tip the artist
-            </div>
-
-            <div style={{ display: 'flex', gap: 10 }}>
-              {[10, 20, 50, 100].map((amount) => (
-                <button
-                  key={amount}
-                  onClick={() => handleTip(amount)}
-                  style={tipButtonStyle}
-                >
-                  ${amount}
-                </button>
-              ))}
-            </div>
-
-            {tip && (
-              <div style={tipThanksStyle}>
-                💛 Thanks for tipping ${tip}!
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   )
@@ -335,19 +272,3 @@ const playButtonStyle = {
   fontSize: 26,
 }
 
-const tipButtonStyle = {
-  flex: 1,
-  padding: '8px 0',
-  borderRadius: 10,
-  border: '1px solid #ddd',
-  background: '#fff',
-  fontWeight: 600,
-  cursor: 'pointer',
-}
-
-const tipThanksStyle = {
-  marginTop: 10,
-  fontSize: 14,
-  fontWeight: 600,
-  color: '#0a7',
-}
