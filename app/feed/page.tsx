@@ -107,20 +107,9 @@ function SidebarTopRight({ liveNow }: any) {
         {liveNow.map((user: any, index: number) => (
           <div
             key={index}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-            }}
+            style={{ display: 'flex', alignItems: 'center', gap: 12 }}
           >
-            <div
-              style={{
-                position: 'relative',
-                width: 48,
-                height: 48,
-                flexShrink: 0,
-              }}
-            >
+            <div style={{ position: 'relative', width: 48, height: 48 }}>
               <img
                 src={user.avatar}
                 alt={user.name}
@@ -132,7 +121,6 @@ function SidebarTopRight({ liveNow }: any) {
                   border: '2px solid #fff',
                 }}
               />
-
               <span
                 style={{
                   position: 'absolute',
@@ -147,15 +135,7 @@ function SidebarTopRight({ liveNow }: any) {
               />
             </div>
 
-            <div
-              style={{
-                fontSize: 14,
-                fontWeight: 600,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
+            <div style={{ fontSize: 14, fontWeight: 600 }}>
               {user.name}
             </div>
           </div>
@@ -277,6 +257,9 @@ const sidebarStyle = (side: 'left' | 'right') => ({
   padding: side === 'left' ? 20 : 24,
   display: 'flex',
   flexDirection: 'column' as const,
+  position: 'sticky',
+  top: 0,
+  height: '100vh',
 })
 
 const feedStyle = {
@@ -354,4 +337,3 @@ function NavItem({ label }: { label: string }) {
     </div>
   )
 }
-
