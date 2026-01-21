@@ -101,32 +101,69 @@ function SidebarTopRight({ liveNow }: any) {
         🔴 LIVE WITH ME NOW
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 12,
-        }}
-      >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {liveNow.map((user: any, index: number) => (
-          <img
+          <div
             key={index}
-            src={user.avatar}
-            alt={user.name}
-            title={user.name}
             style={{
-              width: 64,
-              height: 64,
-              borderRadius: '50%',
-              objectFit: 'cover',
-              border: '3px solid #ff2d2d',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
             }}
-          />
+          >
+            <div
+              style={{
+                position: 'relative',
+                width: 48,
+                height: 48,
+                flexShrink: 0,
+              }}
+            >
+              <img
+                src={user.avatar}
+                alt={user.name}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid #fff',
+                }}
+              />
+
+              {/* LIVE DOT */}
+              <span
+                style={{
+                  position: 'absolute',
+                  top: -1,
+                  right: -1,
+                  width: 12,
+                  height: 12,
+                  backgroundColor: '#ff2d2d',
+                  borderRadius: '50%',
+                  border: '2px solid white',
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                fontSize: 14,
+                fontWeight: 600,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {user.name}
+            </div>
+          </div>
         ))}
       </div>
     </div>
   )
 }
+
 
 /* ===== AD SYSTEM (IMPROVED READABILITY) ===== */
 
