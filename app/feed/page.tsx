@@ -3,8 +3,8 @@
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-/* ===== AD SLOT SIZE (ONE SOURCE OF TRUTH) ===== */
-const AD_SLOT_HEIGHT = 360 // 👈 bigger, more readable posters
+/* ===== AD SLOT SIZE ===== */
+const AD_SLOT_HEIGHT = 360
 
 export default function FeedPage() {
   const router = useRouter()
@@ -67,7 +67,7 @@ export default function FeedPage() {
   )
 }
 
-/* ===== SIDEBAR CONTENT ===== */
+/* ===== LEFT SIDEBAR ===== */
 
 function SidebarTopLeft({ router }: any) {
   return (
@@ -85,14 +85,16 @@ function SidebarTopLeft({ router }: any) {
       </div>
 
       <nav style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <NavItem label="📻 Radio Feed" />
-        <NavItem label="🔥 Live Now" />
-        <NavItem label="⭐ Favorites" />
-        <NavItem label="💸 Top Tipped" />
+        <NavItem label="🏠 Home" />
+        <NavItem label="💰 My Wallet" />
+        <NavItem label="⚙️ Settings" />
+        <NavItem label="🚪 Log out" />
       </nav>
     </div>
   )
 }
+
+/* ===== RIGHT SIDEBAR ===== */
 
 function SidebarTopRight({ liveNow }: any) {
   return (
@@ -131,7 +133,6 @@ function SidebarTopRight({ liveNow }: any) {
                 }}
               />
 
-              {/* LIVE DOT */}
               <span
                 style={{
                   position: 'absolute',
@@ -164,8 +165,7 @@ function SidebarTopRight({ liveNow }: any) {
   )
 }
 
-
-/* ===== AD SYSTEM (IMPROVED READABILITY) ===== */
+/* ===== ADS ===== */
 
 function AdStack({ children }: { children: React.ReactNode }) {
   return (
@@ -183,8 +183,7 @@ function AdSlot({ src }: { src: string }) {
         height: AD_SLOT_HEIGHT,
         borderRadius: 16,
         background: '#111',
-        padding: 12,                 // 👈 makes posters feel larger
-        boxSizing: 'border-box',
+        padding: 12,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -196,7 +195,7 @@ function AdSlot({ src }: { src: string }) {
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'contain',      // ✅ no cropping
+          objectFit: 'contain',
           borderRadius: 12,
         }}
       />
@@ -204,26 +203,22 @@ function AdSlot({ src }: { src: string }) {
   )
 }
 
-/* ===== UI PIECES ===== */
-
-function NavItem({ label }: { label: string }) {
-  return (
-    <div style={{ padding: '10px 12px', borderRadius: 10, fontWeight: 600 }}>
-      {label}
-    </div>
-  )
-}
-
-/* ===== FEED CARD ===== */
+/* ===== FEED CARD (TIP JAR WORKING) ===== */
 
 function FeedCard({ artist }: any) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [playing, setPlaying] = useState(false)
+  const [tip, setTip] = useState<number | null>(null)
 
   const togglePlay = () => {
     if (!videoRef.current) return
     playing ? videoRef.current.pause() : videoRef.current.play()
     setPlaying(!playing)
+  }
+
+  const handleTip = (amount: number) => {
+    setTip(amount)
+    setTimeout(() => setTip(null), 3000)
   }
 
   return (
@@ -241,6 +236,32 @@ function FeedCard({ artist }: any) {
 
       <div style={{ padding: 18 }}>
         <strong>{artist.name}</strong>
+
+        {!artist.locked && (
+          <div style={{ marginTop: 14 }}>
+            <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 8 }}>
+              Tip the artist
+            </div>
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              {[10, 20, 50, 100].map((amount) => (
+                <button
+                  key={amount}
+                  onClick={() => handleTip(amount)}
+                  style={tipButtonStyle}
+                >
+                  ${amount}
+                </button>
+              ))}
+            </div>
+
+            {tip && (
+              <div style={tipThanksStyle}>
+                💛 Thanks for tipping ${tip}!
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -307,5 +328,30 @@ const playButtonStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   fontSize: 26,
+}
+
+const tipButtonStyle = {
+  flex: 1,
+  padding: '8px 0',
+  borderRadius: 10,
+  border: '1px solid #ddd',
+  background: '#fff',
+  fontWeight: 600,
+  cursor: 'pointer',
+}
+
+const tipThanksStyle = {
+  marginTop: 10,
+  fontSize: 14,
+  fontWeight: 600,
+  color: '#0a7',
+}
+
+function NavItem({ label }: { label: string }) {
+  return (
+    <div style={{ padding: '10px 12px', borderRadius: 10, fontWeight: 600 }}>
+      {label}
+    </div>
+  )
 }
 
