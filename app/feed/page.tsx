@@ -40,9 +40,7 @@ export default function FeedPage() {
       {/* LEFT SIDEBAR */}
       <aside style={sidebarStyle('left')}>
         <SidebarTopLeft router={router} />
-
         <div style={{ flex: 1 }} />
-
         <AdStack>
           <AdSlot src="/ads/ad-left-1.jpg" />
           <AdSlot src="/ads/ad-left-2.jpg" />
@@ -59,9 +57,7 @@ export default function FeedPage() {
       {/* RIGHT SIDEBAR */}
       <aside style={sidebarStyle('right')}>
         <SidebarTopRight liveNow={liveNow} />
-
         <div style={{ flex: 1 }} />
-
         <AdStack>
           <AdSlot src="/ads/ad-right-1.jpg" />
           <AdSlot src="/ads/ad-right-2.jpg" />
@@ -114,7 +110,7 @@ function SidebarTopRight({ liveNow }: any) {
   )
 }
 
-/* ===== AD SYSTEM ===== */
+/* ===== AD SYSTEM (FIXED) ===== */
 
 function AdStack({ children }: { children: React.ReactNode }) {
   return (
@@ -131,8 +127,11 @@ function AdSlot({ src }: { src: string }) {
         width: '100%',
         height: AD_SLOT_HEIGHT,
         borderRadius: 12,
+        background: '#000',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         overflow: 'hidden',
-        background: '#f0f0f0',
       }}
     >
       <img
@@ -141,7 +140,7 @@ function AdSlot({ src }: { src: string }) {
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
+          objectFit: 'contain', // ✅ NO CROPPING
         }}
       />
     </div>
@@ -168,15 +167,7 @@ function LiveProfile({ user }: any) {
         padding: '6px 0',
       }}
     >
-      {/* Avatar */}
-      <div
-        style={{
-          position: 'relative',
-          width: 48,
-          height: 48,
-          flexShrink: 0,
-        }}
-      >
+      <div style={{ position: 'relative', width: 48, height: 48 }}>
         <img
           src={user.avatar}
           alt={user.name}
@@ -188,8 +179,6 @@ function LiveProfile({ user }: any) {
             border: '2px solid #fff',
           }}
         />
-
-        {/* LIVE DOT */}
         <span
           style={{
             position: 'absolute',
@@ -204,7 +193,6 @@ function LiveProfile({ user }: any) {
         />
       </div>
 
-      {/* Name */}
       <div
         style={{
           fontSize: 14,
@@ -220,7 +208,7 @@ function LiveProfile({ user }: any) {
   )
 }
 
-/* ===== FEED CARD (UNCHANGED) ===== */
+/* ===== FEED CARD ===== */
 
 function FeedCard({ artist }: any) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -272,7 +260,11 @@ function FeedCard({ artist }: any) {
               ))}
             </div>
 
-            {tip && <div style={tipThanksStyle}>💛 Thanks for tipping ${tip}!</div>}
+            {tip && (
+              <div style={tipThanksStyle}>
+                💛 Thanks for tipping ${tip}!
+              </div>
+            )}
           </div>
         )}
       </div>
