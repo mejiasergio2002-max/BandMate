@@ -1,18 +1,12 @@
-
 'use client'
 
 import { useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import LeftSidebar from '../components/sidebar/LeftSidebar'
-
-
 
 /* ===== AD SLOT SIZE ===== */
 const AD_SLOT_HEIGHT = 360
 
 export default function FeedPage() {
-  const router = useRouter()
-
   const artists = [
     { name: 'theBeebs', video: '/feed/thebeebs.mp4', locked: false },
     { name: 'Gaga', video: '/feed/gaga.mp4', locked: false },
@@ -42,14 +36,7 @@ export default function FeedPage() {
       }}
     >
       {/* LEFT SIDEBAR */}
-      <aside style={sidebarStyle('left')}>
-        <SidebarTopLeft router={router} />
-        <div style={{ flex: 1 }} />
-        <AdStack>
-          <AdSlot src="/ads/ad-left-1.jpg" />
-          <AdSlot src="/ads/ad-left-2.jpg" />
-        </AdStack>
-      </aside>
+      <LeftSidebar />
 
       {/* CENTER FEED */}
       <main style={feedStyle}>
@@ -59,105 +46,59 @@ export default function FeedPage() {
       </main>
 
       {/* RIGHT SIDEBAR */}
-      <aside style={sidebarStyle('right')}>
-        <SidebarTopRight liveNow={liveNow} />
+      <aside style={rightSidebarStyle}>
+        <div style={{ fontWeight: 800, marginBottom: 16 }}>
+          🔴 LIVE WITH ME NOW
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {liveNow.map((user, index) => (
+            <div
+              key={index}
+              style={{ display: 'flex', alignItems: 'center', gap: 12 }}
+            >
+              <div style={{ position: 'relative', width: 48, height: 48 }}>
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                  }}
+                />
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: -1,
+                    right: -1,
+                    width: 12,
+                    height: 12,
+                    backgroundColor: '#ff2d2d',
+                    borderRadius: '50%',
+                    border: '2px solid white',
+                  }}
+                />
+              </div>
+
+              <div style={{ fontSize: 14, fontWeight: 600 }}>
+                {user.name}
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div style={{ flex: 1 }} />
-        <AdStack>
-          <AdSlot src="/ads/ad-right-1.jpg" />
-          <AdSlot src="/ads/ad-right-2.jpg" />
-        </AdStack>
+
+        <AdSlot src="/ads/ad-right-1.jpg" />
+        <AdSlot src="/ads/ad-right-2.jpg" />
       </aside>
     </div>
   )
 }
 
-/* ===== LEFT SIDEBAR ===== */
-
-function SidebarTopLeft({ router }: any) {
-  return (
-    <div>
-      <div
-        onClick={() => router.push('/feed')}
-        style={{
-          fontSize: 22,
-          fontWeight: 800,
-          marginBottom: 24,
-          cursor: 'pointer',
-        }}
-      >
-        🎵 BandMate
-      </div>
-
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <NavItem label="🏠 Home" />
-        <NavItem label="💰 My Wallet" />
-        <NavItem label="⚙️ Settings" />
-        <NavItem label="🚪 Log out" />
-      </nav>
-    </div>
-  )
-}
-
-/* ===== RIGHT SIDEBAR ===== */
-
-function SidebarTopRight({ liveNow }: any) {
-  return (
-    <div>
-      <div style={{ fontWeight: 800, marginBottom: 16 }}>
-        🔴 LIVE WITH ME NOW
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {liveNow.map((user: any, index: number) => (
-          <div
-            key={index}
-            style={{ display: 'flex', alignItems: 'center', gap: 12 }}
-          >
-            <div style={{ position: 'relative', width: 48, height: 48 }}>
-              <img
-                src={user.avatar}
-                alt={user.name}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '2px solid #fff',
-                }}
-              />
-              <span
-                style={{
-                  position: 'absolute',
-                  top: -1,
-                  right: -1,
-                  width: 12,
-                  height: 12,
-                  backgroundColor: '#ff2d2d',
-                  borderRadius: '50%',
-                  border: '2px solid white',
-                }}
-              />
-            </div>
-
-            <div style={{ fontSize: 14, fontWeight: 600 }}>
-              {user.name}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 /* ===== ADS ===== */
-
-function AdStack({ children }: any) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-      {children}
-    </div>
-  )
-}
 
 function AdSlot({ src }: { src: string }) {
   return (
@@ -168,6 +109,7 @@ function AdSlot({ src }: { src: string }) {
         borderRadius: 16,
         background: '#111',
         padding: 12,
+        marginTop: 18,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -211,7 +153,9 @@ function FeedCard({ artist }: any) {
         {!artist.locked ? (
           <>
             <video ref={videoRef} src={artist.video} style={videoStyle} />
-            <PlayOverlay playing={playing} onClick={togglePlay} />
+            <div onClick={togglePlay} style={overlayStyle}>
+              {playing ? '⏸' : '▶'}
+            </div>
           </>
         ) : (
           <img src={artist.image} alt={artist.name} style={videoStyle} />
@@ -222,12 +166,12 @@ function FeedCard({ artist }: any) {
         <strong>{artist.name}</strong>
 
         {!artist.locked && (
-          <div style={{ marginTop: 14 }}>
-            <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 8 }}>
+          <>
+            <div style={{ fontSize: 13, opacity: 0.7, marginTop: 12 }}>
               Tip the artist
             </div>
 
-            <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
               {[10, 20, 50, 100].map((amount) => (
                 <button
                   key={amount}
@@ -244,7 +188,7 @@ function FeedCard({ artist }: any) {
                 💛 Thanks for tipping ${tip}!
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>
@@ -253,21 +197,20 @@ function FeedCard({ artist }: any) {
 
 /* ===== STYLES ===== */
 
-const sidebarStyle = (side: 'left' | 'right') => ({
-  width: side === 'left' ? 260 : 300,
-  background: '#fff',
-  borderRight: side === 'left' ? '1px solid #eee' : undefined,
-  borderLeft: side === 'right' ? '1px solid #eee' : undefined,
-  padding: side === 'left' ? 20 : 24,
-  display: 'flex',
-  flexDirection: 'column' as const,
-})
-
 const feedStyle = {
   flex: 1,
   padding: '32px 24px',
   maxWidth: 720,
   margin: '0 auto',
+}
+
+const rightSidebarStyle = {
+  width: 300,
+  background: '#fff',
+  borderLeft: '1px solid #eee',
+  padding: 24,
+  display: 'flex',
+  flexDirection: 'column' as const,
 }
 
 const feedCardStyle = {
@@ -285,33 +228,16 @@ const videoStyle = {
   background: '#000',
 }
 
-function PlayOverlay({ playing, onClick }: any) {
-  return (
-    <div onClick={onClick} style={overlayStyle(playing)}>
-      <div style={playButtonStyle}>{playing ? '⏸' : '▶'}</div>
-    </div>
-  )
-}
-
-const overlayStyle = (playing: boolean) => ({
+const overlayStyle = {
   position: 'absolute' as const,
   inset: 0,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  fontSize: 32,
+  color: '#fff',
   cursor: 'pointer',
-  background: playing ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.35)',
-})
-
-const playButtonStyle = {
-  width: 64,
-  height: 64,
-  borderRadius: '50%',
-  background: 'rgba(255,255,255,0.9)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: 26,
+  background: 'rgba(0,0,0,0.3)',
 }
 
 const tipButtonStyle = {
@@ -329,13 +255,5 @@ const tipThanksStyle = {
   fontSize: 14,
   fontWeight: 600,
   color: '#0a7',
-}
-
-function NavItem({ label }: { label: string }) {
-  return (
-    <div style={{ padding: '10px 12px', borderRadius: 10, fontWeight: 600 }}>
-      {label}
-    </div>
-  )
 }
 
