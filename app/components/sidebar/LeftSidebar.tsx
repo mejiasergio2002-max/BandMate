@@ -21,18 +21,36 @@ export default function LeftSidebar() {
       }}
     >
       {/* LOGO */}
-      <div
-        onClick={() => router.push('/feed')}
-        style={{
-          fontSize: 22,
-          fontWeight: 800,
-          marginBottom: 32,
-          cursor: 'pointer',
-          userSelect: 'none',
-        }}
-      >
-        🎵 BandMate
-      </div>
+    <div
+  onClick={() => router.push('/feed')}
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 32,
+    cursor: 'pointer',
+    userSelect: 'none',
+  }}
+>
+  <img
+    src="/logo.png"
+    alt="BandMate"
+    style={{
+      width: 32,
+      height: 32,
+      objectFit: 'contain',
+    }}
+  />
+  <span
+    style={{
+      fontSize: 22,
+      fontWeight: 800,
+    }}
+  >
+    BandMate
+  </span>
+</div>
+
 
       {/* NAVIGATION */}
       <nav
