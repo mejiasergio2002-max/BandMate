@@ -3,6 +3,9 @@
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+/* ===== AD SLOT SIZE (ONE SOURCE OF TRUTH) ===== */
+const AD_SLOT_HEIGHT = 260
+
 export default function FeedPage() {
   const router = useRouter()
 
@@ -17,7 +20,6 @@ export default function FeedPage() {
     { name: 'Drake', avatar: '/feed/drake.jpg' },
     { name: 'Billie', avatar: '/feed/billie.jpg' },
     { name: 'Posty', avatar: '/feed/posty.jpg' },
-
     { name: 'The Weeknd', avatar: '/feed/weeknd.jpg' },
     { name: 'Doja Cat', avatar: '/feed/doja.jpg' },
     { name: 'Bruno Mars', avatar: '/feed/bruno.jpg' },
@@ -36,131 +38,123 @@ export default function FeedPage() {
       }}
     >
       {/* LEFT SIDEBAR */}
-      <aside
-        style={{
-          width: 260,
-          background: '#fff',
-          borderRight: '1px solid #eee',
-          padding: 20,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <div>
-          <div
-            onClick={() => router.push('/feed')}
-            style={{
-              fontSize: 22,
-              fontWeight: 800,
-              marginBottom: 24,
-              cursor: 'pointer',
-            }}
-          >
-            🎵 BandMate
-          </div>
-
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <NavItem label="📻 Radio Feed" />
-            <NavItem label="🔥 Live Now" />
-            <NavItem label="⭐ Favorites" />
-            <NavItem label="💸 Top Tipped" />
-          </nav>
-        </div>
+      <aside style={sidebarStyle('left')}>
+        <SidebarTopLeft router={router} />
 
         <div style={{ flex: 1 }} />
 
-        {/* LEFT STACKED ADS */}
         <AdStack>
-          <VerticalAd src="/ads/ad-left-1.jpg" />
-          <VerticalAd src="/ads/ad-left-2.jpg" />
+          <AdSlot src="/ads/ad-left-1.jpg" />
+          <AdSlot src="/ads/ad-left-2.jpg" />
         </AdStack>
       </aside>
 
       {/* CENTER FEED */}
-      <main
-        style={{
-          flex: 1,
-          padding: '32px 24px',
-          maxWidth: 720,
-          margin: '0 auto',
-        }}
-      >
+      <main style={feedStyle}>
         {artists.map((artist, index) => (
           <FeedCard key={index} artist={artist} />
         ))}
       </main>
 
       {/* RIGHT SIDEBAR */}
-      <aside
-        style={{
-          width: 300,
-          background: '#fff',
-          borderLeft: '1px solid #eee',
-          padding: 24,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <div>
-          <div style={{ fontWeight: 800, marginBottom: 16 }}>
-            🔴 LIVE WITH ME NOW
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {liveNow.map((user, index) => (
-              <LiveProfile key={index} user={user} />
-            ))}
-          </div>
-        </div>
+      <aside style={sidebarStyle('right')}>
+        <SidebarTopRight liveNow={liveNow} />
 
         <div style={{ flex: 1 }} />
 
-        {/* RIGHT STACKED ADS */}
         <AdStack>
-          <VerticalAd src="/ads/ad-right-1.jpg" />
-          <VerticalAd src="/ads/ad-right-2.jpg" />
+          <AdSlot src="/ads/ad-right-1.jpg" />
+          <AdSlot src="/ads/ad-right-2.jpg" />
         </AdStack>
       </aside>
     </div>
   )
 }
 
-/* ---------- COMPONENTS ---------- */
+/* ===== SIDEBAR CONTENT ===== */
 
-function NavItem({ label }: { label: string }) {
+function SidebarTopLeft({ router }: any) {
   return (
-    <div
-      style={{
-        padding: '10px 12px',
-        borderRadius: 10,
-        cursor: 'pointer',
-        fontWeight: 600,
-      }}
-    >
-      {label}
+    <div>
+      <div
+        onClick={() => router.push('/feed')}
+        style={{
+          fontSize: 22,
+          fontWeight: 800,
+          marginBottom: 24,
+          cursor: 'pointer',
+        }}
+      >
+        🎵 BandMate
+      </div>
+
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <NavItem label="📻 Radio Feed" />
+        <NavItem label="🔥 Live Now" />
+        <NavItem label="⭐ Favorites" />
+        <NavItem label="💸 Top Tipped" />
+      </nav>
     </div>
   )
 }
 
+function SidebarTopRight({ liveNow }: any) {
+  return (
+    <div>
+      <div style={{ fontWeight: 800, marginBottom: 16 }}>
+        🔴 LIVE WITH ME NOW
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {liveNow.map((user: any, index: number) => (
+          <LiveProfile key={index} user={user} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ===== AD SYSTEM ===== */
+
 function AdStack({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       {children}
     </div>
   )
 }
 
-function VerticalAd({ src }: { src: string }) {
+function AdSlot({ src }: { src: string }) {
   return (
-    <img
-      src={src}
-      alt="Advertisement"
+    <div
       style={{
         width: '100%',
+        height: AD_SLOT_HEIGHT,
         borderRadius: 12,
-        objectFit: 'cover',
+        overflow: 'hidden',
+        background: '#f0f0f0',
       }}
-    />
+    >
+      <img
+        src={src}
+        alt="Advertisement"
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+      />
+    </div>
+  )
+}
+
+/* ===== UI PIECES ===== */
+
+function NavItem({ label }: { label: string }) {
+  return (
+    <div style={{ padding: '10px 12px', borderRadius: 10, fontWeight: 600 }}>
+      {label}
+    </div>
   )
 }
 
@@ -196,6 +190,8 @@ function LiveProfile({ user }: any) {
   )
 }
 
+/* ===== FEED CARD (UNCHANGED) ===== */
+
 function FeedCard({ artist }: any) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [playing, setPlaying] = useState(false)
@@ -213,71 +209,15 @@ function FeedCard({ artist }: any) {
   }
 
   return (
-    <div
-      style={{
-        background: '#fff',
-        borderRadius: 16,
-        marginBottom: 32,
-        overflow: 'hidden',
-        boxShadow: '0 12px 30px rgba(0,0,0,0.08)',
-      }}
-    >
+    <div style={feedCardStyle}>
       <div style={{ position: 'relative' }}>
         {!artist.locked ? (
           <>
-            <video
-              ref={videoRef}
-              src={artist.video}
-              playsInline
-              preload="metadata"
-              style={{
-                width: '100%',
-                height: 320,
-                objectFit: 'cover',
-                background: '#000',
-              }}
-            />
-            <div
-              onClick={togglePlay}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                background: playing
-                  ? 'rgba(0,0,0,0.15)'
-                  : 'rgba(0,0,0,0.35)',
-              }}
-            >
-              <div
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.9)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 26,
-                }}
-              >
-                {playing ? '⏸' : '▶'}
-              </div>
-            </div>
+            <video ref={videoRef} src={artist.video} style={videoStyle} />
+            <PlayOverlay playing={playing} onClick={togglePlay} />
           </>
         ) : (
-          <img
-            src={artist.image}
-            alt={artist.name}
-            style={{
-              width: '100%',
-              height: 320,
-              objectFit: 'cover',
-              filter: 'grayscale(100%)',
-            }}
-          />
+          <img src={artist.image} alt={artist.name} style={videoStyle} />
         )}
       </div>
 
@@ -295,33 +235,14 @@ function FeedCard({ artist }: any) {
                 <button
                   key={amount}
                   onClick={() => handleTip(amount)}
-                  style={{
-                    flex: 1,
-                    padding: '8px 0',
-                    borderRadius: 10,
-                    border: '1px solid #ddd',
-                    background: '#fff',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                  }}
+                  style={tipButtonStyle}
                 >
                   ${amount}
                 </button>
               ))}
             </div>
 
-            {tip && (
-              <div
-                style={{
-                  marginTop: 10,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: '#0a7',
-                }}
-              >
-                💛 Thanks for tipping ${tip}!
-              </div>
-            )}
+            {tip && <div style={tipThanksStyle}>💛 Thanks for tipping ${tip}!</div>}
           </div>
         )}
       </div>
@@ -329,3 +250,82 @@ function FeedCard({ artist }: any) {
   )
 }
 
+/* ===== STYLES ===== */
+
+const sidebarStyle = (side: 'left' | 'right') => ({
+  width: side === 'left' ? 260 : 300,
+  background: '#fff',
+  borderRight: side === 'left' ? '1px solid #eee' : undefined,
+  borderLeft: side === 'right' ? '1px solid #eee' : undefined,
+  padding: side === 'left' ? 20 : 24,
+  display: 'flex',
+  flexDirection: 'column' as const,
+})
+
+const feedStyle = {
+  flex: 1,
+  padding: '32px 24px',
+  maxWidth: 720,
+  margin: '0 auto',
+}
+
+const feedCardStyle = {
+  background: '#fff',
+  borderRadius: 16,
+  marginBottom: 32,
+  overflow: 'hidden',
+  boxShadow: '0 12px 30px rgba(0,0,0,0.08)',
+}
+
+const videoStyle = {
+  width: '100%',
+  height: 320,
+  objectFit: 'cover' as const,
+  background: '#000',
+}
+
+function PlayOverlay({ playing, onClick }: any) {
+  return (
+    <div onClick={onClick} style={overlayStyle(playing)}>
+      <div style={playButtonStyle}>{playing ? '⏸' : '▶'}</div>
+    </div>
+  )
+}
+
+const overlayStyle = (playing: boolean) => ({
+  position: 'absolute' as const,
+  inset: 0,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+  background: playing ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.35)',
+})
+
+const playButtonStyle = {
+  width: 64,
+  height: 64,
+  borderRadius: '50%',
+  background: 'rgba(255,255,255,0.9)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: 26,
+}
+
+const tipButtonStyle = {
+  flex: 1,
+  padding: '8px 0',
+  borderRadius: 10,
+  border: '1px solid #ddd',
+  background: '#fff',
+  fontWeight: 600,
+  cursor: 'pointer',
+}
+
+const tipThanksStyle = {
+  marginTop: 10,
+  fontSize: 14,
+  fontWeight: 600,
+  color: '#0a7',
+}
