@@ -35,11 +35,12 @@ export default function LeftSidebar() {
   src="/logo.png"
   alt="BandMate"
   style={{
-    height: 99,   // ✅ half of 132
+    height: 99,   // ✅ 3/4 of the 3x size
     width: 'auto',
     objectFit: 'contain',
   }}
 />
+
 
 </div>
 
