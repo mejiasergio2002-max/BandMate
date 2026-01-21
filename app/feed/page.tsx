@@ -37,8 +37,12 @@ export default function FeedPage() {
           padding: 20,
           display: 'flex',
           flexDirection: 'column',
+          gap: 20,
         }}
       >
+        {/* TOP AD */}
+        <VerticalAd src="/ads/ad-left-top.jpg" />
+
         {/* NAV */}
         <div>
           <div
@@ -46,7 +50,7 @@ export default function FeedPage() {
             style={{
               fontSize: 22,
               fontWeight: 800,
-              marginBottom: 32,
+              marginBottom: 24,
               cursor: 'pointer',
             }}
           >
@@ -61,11 +65,10 @@ export default function FeedPage() {
           </nav>
         </div>
 
-        {/* SPACER */}
         <div style={{ flex: 1 }} />
 
-        {/* LEFT AD BANNER */}
-        <VerticalAd src="/ads/ad-left-vertical.jpg" />
+        {/* BOTTOM AD */}
+        <VerticalAd src="/ads/ad-left-bottom.jpg" />
       </aside>
 
       {/* CENTER FEED */}
@@ -91,8 +94,12 @@ export default function FeedPage() {
           padding: 24,
           display: 'flex',
           flexDirection: 'column',
+          gap: 20,
         }}
       >
+        {/* TOP AD */}
+        <VerticalAd src="/ads/ad-right-top.jpg" />
+
         {/* LIVE LIST */}
         <div>
           <div style={{ fontWeight: 800, marginBottom: 16 }}>
@@ -106,11 +113,10 @@ export default function FeedPage() {
           </div>
         </div>
 
-        {/* SPACER */}
         <div style={{ flex: 1 }} />
 
-        {/* RIGHT AD BANNER */}
-        <VerticalAd src="/ads/ad-right-vertical.jpg" />
+        {/* BOTTOM AD */}
+        <VerticalAd src="/ads/ad-right-bottom.jpg" />
       </aside>
     </div>
   )
@@ -140,8 +146,6 @@ function VerticalAd({ src }: { src: string }) {
       alt="Advertisement"
       style={{
         width: '100%',
-        maxWidth: 260,
-        height: 'auto',
         borderRadius: 12,
         objectFit: 'cover',
       }}
@@ -266,7 +270,6 @@ function FeedCard({ artist }: any) {
         )}
       </div>
 
-      {/* INFO + TIPS */}
       <div style={{ padding: 18 }}>
         <strong>{artist.name}</strong>
 
