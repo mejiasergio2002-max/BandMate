@@ -21,7 +21,7 @@ export default function LeftSidebar() {
       }}
     >
       {/* LOGO */}
-  <div
+<div
   onClick={() => router.push('/feed')}
   style={{
     marginBottom: 32,
@@ -35,12 +35,13 @@ export default function LeftSidebar() {
     src="/logo.png"
     alt="BandMate"
     style={{
-      height: 22,   // matches old text height
+      height: 44,   // matches old BandMate text visual size
       width: 'auto',
       objectFit: 'contain',
     }}
   />
 </div>
+
 
 
 
