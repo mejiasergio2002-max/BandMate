@@ -39,7 +39,6 @@ export default function FeedPage() {
           flexDirection: 'column',
         }}
       >
-        {/* TOP CONTENT */}
         <div>
           <div
             onClick={() => router.push('/feed')}
@@ -61,10 +60,9 @@ export default function FeedPage() {
           </nav>
         </div>
 
-        {/* FILLER */}
         <div style={{ flex: 1 }} />
 
-        {/* LEFT AD (BOTTOM-FILL) */}
+        {/* LEFT AD */}
         <AdGif src="/ads/ad-left.gif" />
       </aside>
 
@@ -93,7 +91,6 @@ export default function FeedPage() {
           flexDirection: 'column',
         }}
       >
-        {/* TOP CONTENT */}
         <div>
           <div style={{ fontWeight: 800, marginBottom: 16 }}>
             🔴 LIVE WITH ME NOW
@@ -106,10 +103,9 @@ export default function FeedPage() {
           </div>
         </div>
 
-        {/* FILLER */}
         <div style={{ flex: 1 }} />
 
-        {/* RIGHT AD (BOTTOM-FILL) */}
+        {/* RIGHT AD */}
         <AdGif src="/ads/ad-right.gif" />
       </aside>
     </div>
@@ -140,7 +136,6 @@ function AdGif({ src }: { src: string }) {
       alt="Advertisement"
       style={{
         width: '100%',
-        height: '100%',
         maxHeight: 320,
         borderRadius: 12,
         objectFit: 'cover',
@@ -261,8 +256,43 @@ function FeedCard({ artist }: any) {
         )}
       </div>
 
+      {/* INFO + TIPS */}
       <div style={{ padding: 18 }}>
         <strong>{artist.name}</strong>
+
+        {!artist.locked && (
+          <div style={{ marginTop: 14 }}>
+            <div
+              style={{
+                fontSize: 13,
+                opacity: 0.7,
+                marginBottom: 8,
+              }}
+            >
+              Tip the artist
+            </div>
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              {[10, 20, 50, 100].map((amount) => (
+                <button
+                  key={amount}
+                  onClick={() => alert(`Tipped $${amount}`)}
+                  style={{
+                    flex: 1,
+                    padding: '8px 0',
+                    borderRadius: 10,
+                    border: '1px solid #ddd',
+                    background: '#fff',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  ${amount}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
