@@ -147,7 +147,7 @@ function SidebarTopRight({ liveNow }: any) {
 
 /* ===== ADS ===== */
 
-function AdStack({ children }: { children: React.ReactNode }) {
+function AdStack({ children }: any) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       {children}
@@ -257,9 +257,6 @@ const sidebarStyle = (side: 'left' | 'right') => ({
   padding: side === 'left' ? 20 : 24,
   display: 'flex',
   flexDirection: 'column' as const,
-  position: 'sticky',
-  top: 0,
-  height: '100vh',
 })
 
 const feedStyle = {
@@ -337,3 +334,4 @@ function NavItem({ label }: { label: string }) {
     </div>
   )
 }
+
