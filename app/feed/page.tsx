@@ -160,32 +160,62 @@ function NavItem({ label }: { label: string }) {
 
 function LiveProfile({ user }: any) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <div style={{ position: 'relative' }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        padding: '6px 0',
+      }}
+    >
+      {/* Avatar */}
+      <div
+        style={{
+          position: 'relative',
+          width: 48,
+          height: 48,
+          flexShrink: 0,
+        }}
+      >
         <img
           src={user.avatar}
           alt={user.name}
           style={{
-            width: 52,
-            height: 52,
+            width: '100%',
+            height: '100%',
             borderRadius: '50%',
             objectFit: 'cover',
-          }}
-        />
-        <span
-          style={{
-            position: 'absolute',
-            top: 2,
-            right: 2,
-            width: 12,
-            height: 12,
-            background: 'red',
-            borderRadius: '50%',
             border: '2px solid #fff',
           }}
         />
+
+        {/* LIVE DOT */}
+        <span
+          style={{
+            position: 'absolute',
+            top: -1,
+            right: -1,
+            width: 12,
+            height: 12,
+            backgroundColor: '#ff2d2d',
+            borderRadius: '50%',
+            border: '2px solid white',
+          }}
+        />
       </div>
-      <strong>{user.name}</strong>
+
+      {/* Name */}
+      <div
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        }}
+      >
+        {user.name}
+      </div>
     </div>
   )
 }
