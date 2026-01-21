@@ -56,10 +56,7 @@ export default function LeftSidebar() {
 
         <NavItem
           label="🚪 Log out"
-          onClick={() => {
-            // placeholder for logout logic
-            console.log('Logging out...')
-          }}
+          onClick={() => router.push('/')}
         />
       </nav>
     </aside>
@@ -94,3 +91,4 @@ function NavItem({
     </div>
   )
 }
+
