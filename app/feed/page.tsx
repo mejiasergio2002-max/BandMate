@@ -17,6 +17,13 @@ export default function FeedPage() {
     { name: 'Drake', avatar: '/feed/drake.jpg' },
     { name: 'Billie', avatar: '/feed/billie.jpg' },
     { name: 'Posty', avatar: '/feed/posty.jpg' },
+
+    { name: 'The Weeknd', avatar: '/feed/weeknd.jpg' },
+    { name: 'Doja Cat', avatar: '/feed/doja.jpg' },
+    { name: 'Bruno Mars', avatar: '/feed/bruno.jpg' },
+    { name: 'Ariana', avatar: '/feed/ariana.jpg' },
+    { name: 'Ed Sheeran', avatar: '/feed/ed.jpg' },
+    { name: 'Rihanna', avatar: '/feed/rihanna.jpg' },
   ]
 
   return (
@@ -39,7 +46,6 @@ export default function FeedPage() {
           flexDirection: 'column',
         }}
       >
-        {/* TOP CONTENT */}
         <div>
           <div
             onClick={() => router.push('/feed')}
@@ -61,10 +67,9 @@ export default function FeedPage() {
           </nav>
         </div>
 
-        {/* PUSH ADS TO BOTTOM */}
         <div style={{ flex: 1 }} />
 
-        {/* STACKED LEFT ADS */}
+        {/* LEFT STACKED ADS */}
         <AdStack>
           <VerticalAd src="/ads/ad-left-1.jpg" />
           <VerticalAd src="/ads/ad-left-2.jpg" />
@@ -96,7 +101,6 @@ export default function FeedPage() {
           flexDirection: 'column',
         }}
       >
-        {/* TOP CONTENT */}
         <div>
           <div style={{ fontWeight: 800, marginBottom: 16 }}>
             🔴 LIVE WITH ME NOW
@@ -109,10 +113,9 @@ export default function FeedPage() {
           </div>
         </div>
 
-        {/* PUSH ADS TO BOTTOM */}
         <div style={{ flex: 1 }} />
 
-        {/* STACKED RIGHT ADS */}
+        {/* RIGHT STACKED ADS */}
         <AdStack>
           <VerticalAd src="/ads/ad-right-1.jpg" />
           <VerticalAd src="/ads/ad-right-2.jpg" />
@@ -122,7 +125,7 @@ export default function FeedPage() {
   )
 }
 
-/* ---------- HELPERS ---------- */
+/* ---------- COMPONENTS ---------- */
 
 function NavItem({ label }: { label: string }) {
   return (
@@ -141,13 +144,7 @@ function NavItem({ label }: { label: string }) {
 
 function AdStack({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 12,
-      }}
-    >
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {children}
     </div>
   )
