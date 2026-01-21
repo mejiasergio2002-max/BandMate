@@ -3,7 +3,9 @@
 
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import LeftSidebar from '@/app/components/sidebar/LeftSidebar'
+import LeftSidebar from '../components/sidebar/LeftSidebar'
+
+
 
 /* ===== AD SLOT SIZE ===== */
 const AD_SLOT_HEIGHT = 360
