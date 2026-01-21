@@ -1,18 +1,20 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
-export default function ProfilePage() {
-  const [isFollowing, setIsFollowing] = useState(false)
+export default function MyProfilePage() {
+  const router = useRouter()
+  const [isEditing, setIsEditing] = useState(false)
 
-  const profile = {
-    name: 'Ariana Grande',
-    username: '@ariana',
-    avatar: '/feed/ariana.jpg',
-    bio: 'Singer • Songwriter • Performer',
-    genres: ['Pop', 'R&B'],
-    followers: '98M',
-    following: '1.2K',
+  // mock user data (replace later with real data)
+  const user = {
+    name: 'Your Name',
+    username: '@bandmateuser',
+    avatar: '/feed/ariana.jpg', // placeholder
+    bio: 'Artist • Music Lover • BandMate Creator',
+    followers: 1280,
+    following: 312,
   }
 
   return (
@@ -33,19 +35,22 @@ export default function ProfilePage() {
         {/* HEADER */}
         <div
           style={{
+            background: '#fff',
+            borderRadius: 16,
+            padding: 32,
             display: 'flex',
             gap: 32,
             alignItems: 'center',
-            marginBottom: 32,
+            boxShadow: '0 12px 30px rgba(0,0,0,0.08)',
           }}
         >
           {/* AVATAR */}
           <img
-            src={profile.avatar}
-            alt={profile.name}
+            src={user.avatar}
+            alt="Profile avatar"
             style={{
-              width: 160,
-              height: 160,
+              width: 140,
+              height: 140,
               borderRadius: '50%',
               objectFit: 'cover',
               background: '#ddd',
@@ -54,85 +59,95 @@ export default function ProfilePage() {
 
           {/* INFO */}
           <div style={{ flex: 1 }}>
-            <h1 style={{ margin: 0 }}>{profile.name}</h1>
+            <h1 style={{ margin: 0 }}>{user.name}</h1>
+            <div style={{ opacity: 0.6 }}>{user.username}</div>
 
-            <div style={{ opacity: 0.6, marginTop: 4 }}>
-              {profile.username}
-            </div>
-
-            <p style={{ marginTop: 12 }}>{profile.bio}</p>
-
-            {/* GENRES */}
-            <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-              {profile.genres.map((genre) => (
-                <span
-                  key={genre}
-                  style={{
-                    padding: '4px 10px',
-                    borderRadius: 999,
-                    background: '#eaeaea',
-                    fontSize: 13,
-                    fontWeight: 600,
-                  }}
-                >
-                  {genre}
-                </span>
-              ))}
-            </div>
+            <p style={{ marginTop: 12 }}>{user.bio}</p>
 
             {/* STATS */}
-            <div style={{ display: 'flex', gap: 24, marginTop: 16 }}>
-              <strong>{profile.followers} followers</strong>
-              <span>{profile.following} following</span>
-            </div>
-
-            {/* ACTION */}
-            <button
-              onClick={() => setIsFollowing(!isFollowing)}
+            <div
               style={{
-                marginTop: 20,
-                padding: '10px 22px',
-                borderRadius: 999,
-                border: 'none',
-                background: isFollowing ? '#ddd' : '#000',
-                color: isFollowing ? '#000' : '#fff',
+                display: 'flex',
+                gap: 24,
+                marginTop: 16,
                 fontWeight: 600,
-                cursor: 'pointer',
               }}
             >
-              {isFollowing ? 'Following' : 'Follow'}
-            </button>
+              <div>{user.followers} followers</div>
+              <div>{user.following} following</div>
+            </div>
+
+            {/* ACTIONS */}
+            <div style={{ marginTop: 20, display: 'flex', gap: 12 }}>
+              <button
+                onClick={() => setIsEditing(!isEditing)}
+                style={primaryButton}
+              >
+                {isEditing ? 'Save Profile' : 'Edit Profile'}
+              </button>
+
+              <button
+                onClick={() => router.push('/feed')}
+                style={secondaryButton}
+              >
+                Back to Feed
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* CONTENT */}
-        <h3 style={{ marginBottom: 16 }}>Videos</h3>
+        {/* CONTENT SECTION */}
+        <div style={{ marginTop: 40 }}>
+          <h2 style={{ marginBottom: 16 }}>My Videos</h2>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-            gap: 16,
-          }}
-        >
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              style={{
-                height: 180,
-                borderRadius: 12,
-                background: '#ddd',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 600,
-              }}
-            >
-              Video {i}
-            </div>
-          ))}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+              gap: 16,
+            }}
+          >
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div
+                key={i}
+                style={{
+                  height: 180,
+                  borderRadius: 12,
+                  background: '#ddd',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 600,
+                }}
+              >
+                Video {i}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   )
 }
+
+/* ===== BUTTON STYLES ===== */
+
+const primaryButton = {
+  padding: '10px 20px',
+  borderRadius: 999,
+  border: 'none',
+  background: '#000',
+  color: '#fff',
+  fontWeight: 600,
+  cursor: 'pointer',
+}
+
+const secondaryButton = {
+  padding: '10px 20px',
+  borderRadius: 999,
+  border: '1px solid #ddd',
+  background: '#fff',
+  fontWeight: 600,
+  cursor: 'pointer',
+}
+
