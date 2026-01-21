@@ -31,7 +31,7 @@ export default function FeedPage() {
       {/* LEFT SIDEBAR */}
       <aside
         style={{
-          width: 240,
+          width: 260,
           background: '#fff',
           borderRight: '1px solid #eee',
           padding: 20,
@@ -39,6 +39,7 @@ export default function FeedPage() {
           flexDirection: 'column',
         }}
       >
+        {/* NAV */}
         <div>
           <div
             onClick={() => router.push('/feed')}
@@ -60,9 +61,11 @@ export default function FeedPage() {
           </nav>
         </div>
 
+        {/* SPACER */}
         <div style={{ flex: 1 }} />
 
-        <AdGif src="/ads/ad-left.gif" />
+        {/* LEFT AD BANNER */}
+        <VerticalAd src="/ads/ad-left-vertical.jpg" />
       </aside>
 
       {/* CENTER FEED */}
@@ -82,7 +85,7 @@ export default function FeedPage() {
       {/* RIGHT SIDEBAR */}
       <aside
         style={{
-          width: 280,
+          width: 300,
           background: '#fff',
           borderLeft: '1px solid #eee',
           padding: 24,
@@ -90,6 +93,7 @@ export default function FeedPage() {
           flexDirection: 'column',
         }}
       >
+        {/* LIVE LIST */}
         <div>
           <div style={{ fontWeight: 800, marginBottom: 16 }}>
             🔴 LIVE WITH ME NOW
@@ -102,9 +106,11 @@ export default function FeedPage() {
           </div>
         </div>
 
+        {/* SPACER */}
         <div style={{ flex: 1 }} />
 
-        <AdGif src="/ads/ad-right.gif" />
+        {/* RIGHT AD BANNER */}
+        <VerticalAd src="/ads/ad-right-vertical.jpg" />
       </aside>
     </div>
   )
@@ -114,20 +120,28 @@ export default function FeedPage() {
 
 function NavItem({ label }: { label: string }) {
   return (
-    <div style={{ padding: '10px 12px', borderRadius: 10, fontWeight: 600 }}>
+    <div
+      style={{
+        padding: '10px 12px',
+        borderRadius: 10,
+        cursor: 'pointer',
+        fontWeight: 600,
+      }}
+    >
       {label}
     </div>
   )
 }
 
-function AdGif({ src }: { src: string }) {
+function VerticalAd({ src }: { src: string }) {
   return (
     <img
       src={src}
       alt="Advertisement"
       style={{
         width: '100%',
-        maxHeight: 320,
+        maxWidth: 260,
+        height: 'auto',
         borderRadius: 12,
         objectFit: 'cover',
       }}
@@ -208,7 +222,6 @@ function FeedCard({ artist }: any) {
                 background: '#000',
               }}
             />
-
             <div
               onClick={togglePlay}
               style={{
@@ -290,7 +303,6 @@ function FeedCard({ artist }: any) {
                   fontSize: 14,
                   fontWeight: 600,
                   color: '#0a7',
-                  transition: 'opacity 0.3s',
                 }}
               >
                 💛 Thanks for tipping ${tip}!
