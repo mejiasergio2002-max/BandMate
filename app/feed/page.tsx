@@ -62,7 +62,6 @@ export default function FeedPage() {
 
         <div style={{ flex: 1 }} />
 
-        {/* LEFT AD */}
         <AdGif src="/ads/ad-left.gif" />
       </aside>
 
@@ -105,7 +104,6 @@ export default function FeedPage() {
 
         <div style={{ flex: 1 }} />
 
-        {/* RIGHT AD */}
         <AdGif src="/ads/ad-right.gif" />
       </aside>
     </div>
@@ -116,14 +114,7 @@ export default function FeedPage() {
 
 function NavItem({ label }: { label: string }) {
   return (
-    <div
-      style={{
-        padding: '10px 12px',
-        borderRadius: 10,
-        cursor: 'pointer',
-        fontWeight: 600,
-      }}
-    >
+    <div style={{ padding: '10px 12px', borderRadius: 10, fontWeight: 600 }}>
       {label}
     </div>
   )
@@ -179,11 +170,17 @@ function LiveProfile({ user }: any) {
 function FeedCard({ artist }: any) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [playing, setPlaying] = useState(false)
+  const [tip, setTip] = useState<number | null>(null)
 
   const togglePlay = () => {
     if (!videoRef.current) return
     playing ? videoRef.current.pause() : videoRef.current.play()
     setPlaying(!playing)
+  }
+
+  const handleTip = (amount: number) => {
+    setTip(amount)
+    setTimeout(() => setTip(null), 3000)
   }
 
   return (
@@ -211,6 +208,7 @@ function FeedCard({ artist }: any) {
                 background: '#000',
               }}
             />
+
             <div
               onClick={togglePlay}
               style={{
@@ -235,7 +233,6 @@ function FeedCard({ artist }: any) {
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: 26,
-                  fontWeight: 700,
                 }}
               >
                 {playing ? '⏸' : '▶'}
@@ -262,13 +259,7 @@ function FeedCard({ artist }: any) {
 
         {!artist.locked && (
           <div style={{ marginTop: 14 }}>
-            <div
-              style={{
-                fontSize: 13,
-                opacity: 0.7,
-                marginBottom: 8,
-              }}
-            >
+            <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 8 }}>
               Tip the artist
             </div>
 
@@ -276,7 +267,7 @@ function FeedCard({ artist }: any) {
               {[10, 20, 50, 100].map((amount) => (
                 <button
                   key={amount}
-                  onClick={() => alert(`Tipped $${amount}`)}
+                  onClick={() => handleTip(amount)}
                   style={{
                     flex: 1,
                     padding: '8px 0',
@@ -291,9 +282,24 @@ function FeedCard({ artist }: any) {
                 </button>
               ))}
             </div>
+
+            {tip && (
+              <div
+                style={{
+                  marginTop: 10,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: '#0a7',
+                  transition: 'opacity 0.3s',
+                }}
+              >
+                💛 Thanks for tipping ${tip}!
+              </div>
+            )}
           </div>
         )}
       </div>
     </div>
   )
 }
+
