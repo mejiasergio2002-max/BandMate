@@ -9,61 +9,50 @@ export default function LeftSidebar() {
     <aside
       style={{
         width: 260,
-        background: '#fff',
-        borderRight: '1px solid #eee',
+        background: '#ffffff',
+        borderRight: '1px solid #e5e5e5',
         padding: 20,
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
         position: 'sticky',
         top: 0,
+        boxSizing: 'border-box',
       }}
     >
-      {/* LOGO / HOME */}
+      {/* LOGO */}
       <div
         onClick={() => router.push('/feed')}
         style={{
           fontSize: 22,
           fontWeight: 800,
-          marginBottom: 28,
+          marginBottom: 32,
           cursor: 'pointer',
+          userSelect: 'none',
         }}
       >
         🎵 BandMate
       </div>
 
       {/* NAVIGATION */}
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <NavItem
-          label="🏠 Home"
-          onClick={() => router.push('/feed')}
-        />
-
-        <NavItem
-          label="👤 My Profile"
-          onClick={() => router.push('/profile')}
-        />
-
-        <NavItem
-          label="💰 My Wallet"
-          onClick={() => router.push('/wallet')}
-        />
-
-        <NavItem
-          label="⚙️ Settings"
-          onClick={() => router.push('/settings')}
-        />
-
-        <NavItem
-          label="🚪 Log out"
-          onClick={() => router.push('/')}
-        />
+      <nav
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 12,
+        }}
+      >
+        <SidebarItem label="🏠 Home" onClick={() => router.push('/feed')} />
+        <SidebarItem label="👤 My Profile" onClick={() => router.push('/profile')} />
+        <SidebarItem label="💰 My Wallet" onClick={() => router.push('/wallet')} />
+        <SidebarItem label="⚙️ Settings" onClick={() => router.push('/settings')} />
+        <SidebarItem label="🚪 Log out" onClick={() => router.push('/')} />
       </nav>
     </aside>
   )
 }
 
-function NavItem({
+function SidebarItem({
   label,
   onClick,
 }: {
@@ -75,16 +64,16 @@ function NavItem({
       onClick={onClick}
       style={{
         padding: '10px 14px',
-        borderRadius: 10,
+        borderRadius: 8,
         fontWeight: 600,
         cursor: 'pointer',
-        transition: 'background 0.15s',
+        transition: 'background-color 0.15s ease',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.background = '#f2f2f2'
+        e.currentTarget.style.backgroundColor = '#f2f2f2'
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'transparent'
+        e.currentTarget.style.backgroundColor = 'transparent'
       }}
     >
       {label}
