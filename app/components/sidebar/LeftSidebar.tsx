@@ -21,35 +21,27 @@ export default function LeftSidebar() {
       }}
     >
       {/* LOGO */}
-    <div
+  <div
   onClick={() => router.push('/feed')}
   style={{
-    display: 'flex',
-    alignItems: 'center',
-    gap: 10,
     marginBottom: 32,
     cursor: 'pointer',
     userSelect: 'none',
+    display: 'flex',
+    alignItems: 'center',
   }}
 >
   <img
     src="/logo.png"
     alt="BandMate"
     style={{
-      width: 32,
-      height: 32,
+      height: 22,   // matches old text height
+      width: 'auto',
       objectFit: 'contain',
     }}
   />
-  <span
-    style={{
-      fontSize: 22,
-      fontWeight: 800,
-    }}
-  >
-    BandMate
-  </span>
 </div>
+
 
 
       {/* NAVIGATION */}
