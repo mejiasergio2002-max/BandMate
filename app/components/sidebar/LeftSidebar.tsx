@@ -31,15 +31,16 @@ export default function LeftSidebar() {
     alignItems: 'center',
   }}
 >
-  <img
-    src="/logo.png"
-    alt="BandMate"
-    style={{
-      height: 132,   // 🔥 3x size
-      width: 'auto',
-      objectFit: 'contain',
-    }}
-  />
+<img
+  src="/logo.png"
+  alt="BandMate"
+  style={{
+    height: 66,   // ✅ half of 132
+    width: 'auto',
+    objectFit: 'contain',
+  }}
+/>
+
 </div>
 
 
