@@ -29,19 +29,20 @@ export default function LeftSidebar() {
     userSelect: 'none',
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
   }}
 >
   <img
     src="/logo.png"
     alt="BandMate"
     style={{
-      height: 100,        // ✅ 3/4 size
+      height: 99,        // ✅ 3/4 size
       width: 'auto',
       objectFit: 'contain',
+      display: 'block',
     }}
   />
 </div>
-
 
 
       {/* NAVIGATION */}
