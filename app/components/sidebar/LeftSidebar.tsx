@@ -1,9 +1,16 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function LeftSidebar() {
   const router = useRouter()
+  const [tipped, setTipped] = useState<number | null>(null)
+
+  const handleTip = (amount: number) => {
+    setTipped(amount)
+    setTimeout(() => setTipped(null), 2500)
+  }
 
   return (
     <aside
@@ -21,45 +28,88 @@ export default function LeftSidebar() {
       }}
     >
       {/* LOGO */}
-<div
-  onClick={() => router.push('/feed')}
-  style={{
-    marginBottom: 32,
-    cursor: 'pointer',
-    userSelect: 'none',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }}
->
-  <img
-    src="/logo.png"
-    alt="BandMate"
-    style={{
-      height: 125,      // ✅ updated size
-      width: 'auto',
-      objectFit: 'contain',
-      display: 'block',
-    }}
-  />
-</div>
-
-
-
-      {/* NAVIGATION */}
-      <nav
+      <div
+        onClick={() => router.push('/feed')}
         style={{
+          marginBottom: 28,
+          cursor: 'pointer',
           display: 'flex',
-          flexDirection: 'column',
-          gap: 12,
+          justifyContent: 'center',
         }}
       >
+        <img
+          src="/logo.png"
+          alt="BandMate"
+          style={{
+            height: 125,
+            width: 'auto',
+            objectFit: 'contain',
+          }}
+        />
+      </div>
+
+      {/* NAVIGATION */}
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <SidebarItem label="🏠 Home" onClick={() => router.push('/feed')} />
         <SidebarItem label="👤 My Profile" onClick={() => router.push('/profile')} />
         <SidebarItem label="💰 My Wallet" onClick={() => router.push('/wallet')} />
         <SidebarItem label="⚙️ Settings" onClick={() => router.push('/settings')} />
         <SidebarItem label="🚪 Log out" onClick={() => router.push('/')} />
       </nav>
+
+      {/* SPACER */}
+      <div style={{ flex: 1 }} />
+
+      {/* TIP JAR */}
+      <div
+        style={{
+          borderTop: '1px solid #eee',
+          paddingTop: 16,
+        }}
+      >
+        <div
+          style={{
+            fontWeight: 700,
+            marginBottom: 10,
+            fontSize: 14,
+          }}
+        >
+          💛 Tip the Artist
+        </div>
+
+        <div style={{ display: 'flex', gap: 8 }}>
+          {[5, 10, 20].map((amount) => (
+            <button
+              key={amount}
+              onClick={() => handleTip(amount)}
+              style={{
+                flex: 1,
+                padding: '6px 0',
+                borderRadius: 8,
+                border: '1px solid #ddd',
+                background: '#fff',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              ${amount}
+            </button>
+          ))}
+        </div>
+
+        {tipped && (
+          <div
+            style={{
+              marginTop: 8,
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#0a7',
+            }}
+          >
+            Thanks for tipping ${tipped}! 💚
+          </div>
+        )}
+      </div>
     </aside>
   )
 }
