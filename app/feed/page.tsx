@@ -11,7 +11,12 @@ export default function FeedPage() {
     { name: 'theBeebs', video: '/feed/thebeebs.mp4', locked: false },
     { name: 'Gaga', video: '/feed/gaga.mp4', locked: false },
     { name: 'Unc Snoop', video: '/feed/snoop.mp4', locked: false },
-    { name: 'Bob Marley', image: '/feed/artist4.jpg', locked: true },
+    {
+      name: 'Bob Marley',
+      image: '/feed/artist4.jpg',
+      locked: true,
+      doorCharge: 4.99,
+    },
   ]
 
   const liveNow = [
@@ -90,10 +95,117 @@ export default function FeedPage() {
         </div>
 
         <div style={{ flex: 1 }} />
-<AdSlot src="/ads/ad-right-0.jpg" />
+
         <AdSlot src="/ads/ad-right-1.jpg" />
         <AdSlot src="/ads/ad-right-2.jpg" />
+        <AdSlot src="/ads/ad-right-3.jpg" />
       </aside>
+    </div>
+  )
+}
+
+/* ===== FEED CARD ===== */
+
+function FeedCard({ artist }: any) {
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const [playing, setPlaying] = useState(false)
+  const [tip, setTip] = useState<number | null>(null)
+
+  const togglePlay = () => {
+    if (!videoRef.current) return
+    playing ? videoRef.current.pause() : videoRef.current.play()
+    setPlaying(!playing)
+  }
+
+  const handleTip = (amount: number) => {
+    setTip(amount)
+    setTimeout(() => setTip(null), 3000)
+  }
+
+  return (
+    <div style={feedCardStyle}>
+      {/* MEDIA */}
+      <div style={{ position: 'relative' }}>
+        {artist.locked ? (
+          <>
+            <img src={artist.image} alt={artist.name} style={videoStyle} />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'rgba(0,0,0,0.55)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontSize: 18,
+                fontWeight: 700,
+              }}
+            >
+              🔒 Locked Room
+            </div>
+          </>
+        ) : (
+          <>
+            <video ref={videoRef} src={artist.video} style={videoStyle} />
+            <div onClick={togglePlay} style={overlayStyle}>
+              {playing ? '⏸' : '▶'}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* CONTENT */}
+      <div style={{ padding: 18 }}>
+        <strong>{artist.name}</strong>
+
+        {artist.locked ? (
+          <div style={{ marginTop: 14 }}>
+            <div style={{ fontWeight: 600, marginBottom: 10 }}>
+              🚪 Door Charge: ${artist.doorCharge}
+            </div>
+
+            <button
+              style={{
+                width: '100%',
+                padding: '10px 0',
+                borderRadius: 10,
+                border: 'none',
+                background: '#000',
+                color: '#fff',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              Unlock Room
+            </button>
+          </div>
+        ) : (
+          <>
+            <div style={{ fontSize: 13, opacity: 0.7, marginTop: 12 }}>
+              Tip the artist
+            </div>
+
+            <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
+              {[10, 20, 50, 100].map((amount) => (
+                <button
+                  key={amount}
+                  onClick={() => handleTip(amount)}
+                  style={tipButtonStyle}
+                >
+                  ${amount}
+                </button>
+              ))}
+            </div>
+
+            {tip && (
+              <div style={tipThanksStyle}>
+                💛 Thanks for tipping ${tip}!
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   )
 }
@@ -125,72 +237,6 @@ function AdSlot({ src }: { src: string }) {
           borderRadius: 12,
         }}
       />
-    </div>
-  )
-}
-
-/* ===== FEED CARD (TIP JAR WORKING) ===== */
-
-function FeedCard({ artist }: any) {
-  const videoRef = useRef<HTMLVideoElement | null>(null)
-  const [playing, setPlaying] = useState(false)
-  const [tip, setTip] = useState<number | null>(null)
-
-  const togglePlay = () => {
-    if (!videoRef.current) return
-    playing ? videoRef.current.pause() : videoRef.current.play()
-    setPlaying(!playing)
-  }
-
-  const handleTip = (amount: number) => {
-    setTip(amount)
-    setTimeout(() => setTip(null), 3000)
-  }
-
-  return (
-    <div style={feedCardStyle}>
-      <div style={{ position: 'relative' }}>
-        {!artist.locked ? (
-          <>
-            <video ref={videoRef} src={artist.video} style={videoStyle} />
-            <div onClick={togglePlay} style={overlayStyle}>
-              {playing ? '⏸' : '▶'}
-            </div>
-          </>
-        ) : (
-          <img src={artist.image} alt={artist.name} style={videoStyle} />
-        )}
-      </div>
-
-      <div style={{ padding: 18 }}>
-        <strong>{artist.name}</strong>
-
-        {!artist.locked && (
-          <>
-            <div style={{ fontSize: 13, opacity: 0.7, marginTop: 12 }}>
-              Tip the artist
-            </div>
-
-            <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
-              {[10, 20, 50, 100].map((amount) => (
-                <button
-                  key={amount}
-                  onClick={() => handleTip(amount)}
-                  style={tipButtonStyle}
-                >
-                  ${amount}
-                </button>
-              ))}
-            </div>
-
-            {tip && (
-              <div style={tipThanksStyle}>
-                💛 Thanks for tipping ${tip}!
-              </div>
-            )}
-          </>
-        )}
-      </div>
     </div>
   )
 }
@@ -256,4 +302,3 @@ const tipThanksStyle = {
   fontWeight: 600,
   color: '#0a7',
 }
-
