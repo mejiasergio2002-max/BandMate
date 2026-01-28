@@ -1,16 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 
 export default function LeftSidebar() {
   const router = useRouter()
-  const [tipped, setTipped] = useState<number | null>(null)
-
-  const handleTip = (amount: number) => {
-    setTipped(amount)
-    setTimeout(() => setTipped(null), 2500)
-  }
 
   return (
     <aside
@@ -31,7 +24,7 @@ export default function LeftSidebar() {
       <div
         onClick={() => router.push('/feed')}
         style={{
-          marginBottom: 28,
+          marginBottom: 32,
           cursor: 'pointer',
           display: 'flex',
           justifyContent: 'center',
@@ -44,6 +37,7 @@ export default function LeftSidebar() {
             height: 125,
             width: 'auto',
             objectFit: 'contain',
+            display: 'block',
           }}
         />
       </div>
@@ -54,69 +48,37 @@ export default function LeftSidebar() {
         <SidebarItem label="👤 My Profile" onClick={() => router.push('/profile')} />
         <SidebarItem label="💰 My Wallet" onClick={() => router.push('/wallet')} />
         <SidebarItem label="⚙️ Settings" onClick={() => router.push('/settings')} />
-        <SidebarItem label="🚪 Log out" onClick={() => router.push('/')} />
       </nav>
 
       {/* SPACER */}
       <div style={{ flex: 1 }} />
 
-    {/* TIP JAR NAV */}
-<div
-  onClick={() => router.push('/tip-jar')}
-  style={{
-    marginTop: 20,
-    paddingTop: 16,
-    borderTop: '1px solid #eee',
-    cursor: 'pointer',
-  }}
->
-  <div
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 8,
-      fontWeight: 800,
-      fontSize: 15,
-    }}
-  >
-    <span style={{ fontSize: 20 }}>🫙</span>
-    <span>Tip Jar</span>
-  </div>
-</div>
-
-
-        <div style={{ display: 'flex', gap: 8 }}>
-          {[5, 10, 20].map((amount) => (
-            <button
-              key={amount}
-              onClick={() => handleTip(amount)}
-              style={{
-                flex: 1,
-                padding: '6px 0',
-                borderRadius: 8,
-                border: '1px solid #ddd',
-                background: '#fff',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
-            >
-              ${amount}
-            </button>
-          ))}
+      {/* TIP JAR LINK */}
+      <div
+        onClick={() => router.push('/tip-jar')}
+        style={{
+          borderTop: '1px solid #eee',
+          paddingTop: 16,
+          cursor: 'pointer',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            fontWeight: 700,
+            fontSize: 15,
+          }}
+        >
+          <span style={{ fontSize: 20 }}>🫙</span>
+          <span>Tip Jar</span>
         </div>
+      </div>
 
-        {tipped && (
-          <div
-            style={{
-              marginTop: 8,
-              fontSize: 13,
-              fontWeight: 600,
-              color: '#0a7',
-            }}
-          >
-            Thanks for tipping ${tipped}! 💚
-          </div>
-        )}
+      {/* LOG OUT */}
+      <div style={{ marginTop: 20 }}>
+        <SidebarItem label="🚪 Log out" onClick={() => router.push('/')} />
       </div>
     </aside>
   )
