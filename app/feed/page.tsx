@@ -96,9 +96,10 @@ export default function FeedPage() {
 
         <div style={{ flex: 1 }} />
 
+        {/* ADS */}
         <AdSlot src="/ads/ad-right-1.jpg" />
         <AdSlot src="/ads/ad-right-2.jpg" />
-        <AdSlot src="/ads/ad-right-3.jpg" />
+        <AdSlot src="/ads/ad-right-0.jpg" />
       </aside>
     </div>
   )
