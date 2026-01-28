@@ -133,17 +133,9 @@ function FeedCard({ artist }: any) {
               style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'rgba(0,0,0,0.55)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontSize: 18,
-                fontWeight: 700,
+                background: 'rgba(0,0,0,0.45)',
               }}
-            >
-              🔒 Locked Room
-            </div>
+            />
           </>
         ) : (
           <>
