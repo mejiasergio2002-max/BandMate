@@ -34,57 +34,37 @@ export default function LeftSidebar() {
           src="/logo.png"
           alt="BandMate"
           style={{
-            height: 125,
+            height: 100, // 3/4 size (stable)
             width: 'auto',
             objectFit: 'contain',
-            display: 'block',
+            userSelect: 'none',
           }}
         />
       </div>
 
       {/* NAVIGATION */}
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <SidebarItem label="🏠 Home" onClick={() => router.push('/feed')} />
-        <SidebarItem label="👤 My Profile" onClick={() => router.push('/profile')} />
-        <SidebarItem label="💰 My Wallet" onClick={() => router.push('/wallet')} />
-        <SidebarItem label="⚙️ Settings" onClick={() => router.push('/settings')} />
-      </nav>
-
-      {/* SPACER */}
-      <div style={{ flex: 1 }} />
-
-      {/* TIP JAR LINK */}
-      <div
-        onClick={() => router.push('/tip-jar')}
+      <nav
         style={{
-          borderTop: '1px solid #eee',
-          paddingTop: 16,
-          cursor: 'pointer',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 12,
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            fontWeight: 700,
-            fontSize: 15,
-          }}
-        >
-          <span style={{ fontSize: 20 }}>🫙</span>
-          <span>Tip Jar</span>
-        </div>
-      </div>
+        <Item label="🏠 Home" onClick={() => router.push('/feed')} />
+        <Item label="👤 My Profile" onClick={() => router.push('/profile')} />
+        <Item label="💰 My Wallet" onClick={() => router.push('/wallet')} />
+        <Item label="⚙️ Settings" onClick={() => router.push('/settings')} />
 
-      {/* LOG OUT */}
-      <div style={{ marginTop: 20 }}>
-        <SidebarItem label="🚪 Log out" onClick={() => router.push('/')} />
-      </div>
+        {/* 👇 TIP JAR UNDER SETTINGS */}
+        <Item label="🫙 Tip Jar" onClick={() => router.push('/tip-jar')} />
+
+        <Item label="🚪 Log out" onClick={() => router.push('/')} />
+      </nav>
     </aside>
   )
 }
 
-function SidebarItem({
+function Item({
   label,
   onClick,
 }: {
