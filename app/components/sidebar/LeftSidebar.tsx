@@ -60,22 +60,30 @@ export default function LeftSidebar() {
       {/* SPACER */}
       <div style={{ flex: 1 }} />
 
-      {/* TIP JAR */}
-      <div
-        style={{
-          borderTop: '1px solid #eee',
-          paddingTop: 16,
-        }}
-      >
-        <div
-          style={{
-            fontWeight: 700,
-            marginBottom: 10,
-            fontSize: 14,
-          }}
-        >
-          💛 Tip the Artist
-        </div>
+    {/* TIP JAR NAV */}
+<div
+  onClick={() => router.push('/tip-jar')}
+  style={{
+    marginTop: 20,
+    paddingTop: 16,
+    borderTop: '1px solid #eee',
+    cursor: 'pointer',
+  }}
+>
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      fontWeight: 800,
+      fontSize: 15,
+    }}
+  >
+    <span style={{ fontSize: 20 }}>🫙</span>
+    <span>Tip Jar</span>
+  </div>
+</div>
+
 
         <div style={{ display: 'flex', gap: 8 }}>
           {[5, 10, 20].map((amount) => (
@@ -142,4 +150,3 @@ function SidebarItem({
     </div>
   )
 }
-
