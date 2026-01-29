@@ -11,45 +11,80 @@ export default function FeedPage() {
     { name: 'Gaga', video: '/feed/gaga.mp4', locked: false },
     { name: 'Unc Snoop', video: '/feed/snoop.mp4', locked: false },
     {
-  name: 'Amazon Music',
-  image: '/feed/artist4.jpg',
-  locked: true,
-  doorCharge: 4.99,
-  unlockRoute: '/groupie/billie-eilish',
-},
-
+      name: 'Amazon Music',
+      image: '/feed/artist4.jpg',
+      locked: true,
+      doorCharge: 4.99,
+      unlockRoute: '/groupie/billie-eilish',
+    },
   ]
 
   const liveNow = [
     { name: 'Drake', avatar: '/feed/drake.jpg' },
     { name: 'Billie', avatar: '/feed/billie.jpg' },
     { name: 'Posty', avatar: '/feed/posty.jpg' },
+    { name: 'The Weeknd', avatar: '/feed/weeknd.jpg' },
+    { name: 'Doja Cat', avatar: '/feed/doja.jpg' },
+    { name: 'Bruno Mars', avatar: '/feed/bruno.jpg' },
+    { name: 'Ariana', avatar: '/feed/ariana.jpg' },
+    { name: 'Ed Sheeran', avatar: '/feed/ed.jpg' },
+    { name: 'Rihanna', avatar: '/feed/rihanna.jpg' },
   ]
 
   return (
     <div style={layoutStyle}>
       <LeftSidebar />
 
+      {/* CENTER FEED */}
       <main style={feedStyle}>
-        {artists.map((artist, i) => (
-          <FeedCard key={i} artist={artist} />
+        {artists.map((artist, index) => (
+          <FeedCard key={index} artist={artist} />
         ))}
       </main>
 
+      {/* RIGHT SIDEBAR */}
       <aside style={rightSidebarStyle}>
         <div style={{ fontWeight: 800, marginBottom: 16 }}>
           🔴 LIVE WITH ME NOW
         </div>
 
-        {liveNow.map((u, i) => (
-          <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 14 }}>
-            <img
-              src={u.avatar}
-              style={{ width: 48, height: 48, borderRadius: '50%' }}
-            />
-            <div style={{ fontWeight: 600 }}>{u.name}</div>
-          </div>
-        ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {liveNow.map((user, index) => (
+            <div
+              key={index}
+              style={{ display: 'flex', alignItems: 'center', gap: 12 }}
+            >
+              <div style={{ position: 'relative', width: 48, height: 48 }}>
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                  }}
+                />
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: -1,
+                    right: -1,
+                    width: 12,
+                    height: 12,
+                    backgroundColor: '#ff2d2d',
+                    borderRadius: '50%',
+                    border: '2px solid white',
+                  }}
+                />
+              </div>
+
+              <div style={{ fontSize: 14, fontWeight: 600 }}>
+                {user.name}
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div style={{ flex: 1 }} />
 
@@ -102,12 +137,12 @@ function FeedCard({ artist }: any) {
       <div style={{ padding: 18 }}>
         <strong>{artist.name}</strong>
 
-        {/* LOCKED ROOM */}
         {artist.locked ? (
           <div style={{ marginTop: 14 }}>
             <div style={{ fontWeight: 600, marginBottom: 10 }}>
               🚪 Door Charge: ${artist.doorCharge}
             </div>
+
             <a href={artist.unlockRoute}>
               <button style={unlockBtn}>Unlock Room</button>
             </a>
