@@ -1,8 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function GroupiePage() {
+  const router = useRouter()
+
   const [comments, setComments] = useState<string[]>([
     'this is insane 🔥',
     'worth the unlock 💯',
@@ -36,12 +39,33 @@ export default function GroupiePage() {
       <div
         style={{
           flex: 7,
+          position: 'relative',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           padding: 24,
         }}
       >
+        {/* HOME BUTTON */}
+        <button
+          onClick={() => router.push('/feed')}
+          style={{
+            position: 'absolute',
+            top: 20,
+            left: 20,
+            padding: '8px 14px',
+            borderRadius: 999,
+            border: 'none',
+            background: 'rgba(0,0,0,0.6)',
+            color: '#fff',
+            fontWeight: 600,
+            cursor: 'pointer',
+            zIndex: 10,
+          }}
+        >
+          ← Home
+        </button>
+
         <video
           src="/feed/billie.mp4"
           controls
