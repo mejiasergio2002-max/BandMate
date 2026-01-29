@@ -11,12 +11,14 @@ export default function FeedPage() {
     { name: 'theBeebs', video: '/feed/thebeebs.mp4', locked: false },
     { name: 'Gaga', video: '/feed/gaga.mp4', locked: false },
     { name: 'Unc Snoop', video: '/feed/snoop.mp4', locked: false },
-    {
-      name: 'Bob Marley',
-      image: '/feed/artist4.jpg',
-      locked: true,
-      doorCharge: 4.99,
-    },
+   {
+  name: 'Amazon Music',
+  image: '/feed/artist4.jpg',
+  locked: true,
+  doorCharge: 4.99,
+  unlockRoute: '/groupie/billie-eilish',
+},
+
   ]
 
   const liveNow = [
