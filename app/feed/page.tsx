@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react'
 import LeftSidebar from '../components/sidebar/LeftSidebar'
 
-/* ===== AD SLOT SIZE ===== */
 const AD_SLOT_HEIGHT = 360
 
 export default function FeedPage() {
@@ -11,94 +10,48 @@ export default function FeedPage() {
     { name: 'theBeebs', video: '/feed/thebeebs.mp4', locked: false },
     { name: 'Gaga', video: '/feed/gaga.mp4', locked: false },
     { name: 'Unc Snoop', video: '/feed/snoop.mp4', locked: false },
-   {
-  name: 'Amazon Music',
-  image: '/feed/artist4.jpg',
-  locked: true,
-  doorCharge: 4.99,
-  unlockRoute: '/groupie/billie-eilish',
-},
-
+    {
+      name: 'Amazon Music',
+      image: '/feed/artist4.jpg',
+      locked: true,
+      doorCharge: 4.99,
+      unlockRoute: '/groupie',
+    },
   ]
 
   const liveNow = [
     { name: 'Drake', avatar: '/feed/drake.jpg' },
     { name: 'Billie', avatar: '/feed/billie.jpg' },
     { name: 'Posty', avatar: '/feed/posty.jpg' },
-    { name: 'The Weeknd', avatar: '/feed/weeknd.jpg' },
-    { name: 'Doja Cat', avatar: '/feed/doja.jpg' },
-    { name: 'Bruno Mars', avatar: '/feed/bruno.jpg' },
-    { name: 'Ariana', avatar: '/feed/ariana.jpg' },
-    { name: 'Ed Sheeran', avatar: '/feed/ed.jpg' },
-    { name: 'Rihanna', avatar: '/feed/rihanna.jpg' },
   ]
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        minHeight: '100vh',
-        background: '#f6f6f6',
-        fontFamily: 'system-ui, -apple-system',
-      }}
-    >
-      {/* LEFT SIDEBAR */}
+    <div style={layoutStyle}>
       <LeftSidebar />
 
-      {/* CENTER FEED */}
       <main style={feedStyle}>
-        {artists.map((artist, index) => (
-          <FeedCard key={index} artist={artist} />
+        {artists.map((artist, i) => (
+          <FeedCard key={i} artist={artist} />
         ))}
       </main>
 
-      {/* RIGHT SIDEBAR */}
       <aside style={rightSidebarStyle}>
         <div style={{ fontWeight: 800, marginBottom: 16 }}>
           🔴 LIVE WITH ME NOW
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {liveNow.map((user, index) => (
-            <div
-              key={index}
-              style={{ display: 'flex', alignItems: 'center', gap: 12 }}
-            >
-              <div style={{ position: 'relative', width: 48, height: 48 }}>
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                  }}
-                />
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: -1,
-                    right: -1,
-                    width: 12,
-                    height: 12,
-                    backgroundColor: '#ff2d2d',
-                    borderRadius: '50%',
-                    border: '2px solid white',
-                  }}
-                />
-              </div>
-
-              <div style={{ fontSize: 14, fontWeight: 600 }}>
-                {user.name}
-              </div>
-            </div>
-          ))}
-        </div>
+        {liveNow.map((u, i) => (
+          <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 14 }}>
+            <img
+              src={u.avatar}
+              style={{ width: 48, height: 48, borderRadius: '50%' }}
+            />
+            <div style={{ fontWeight: 600 }}>{u.name}</div>
+          </div>
+        ))}
 
         <div style={{ flex: 1 }} />
 
-        {/* ADS */}
         <AdSlot src="/ads/ad-right-1.jpg" />
         <AdSlot src="/ads/ad-right-2.jpg" />
         <AdSlot src="/ads/ad-right-0.jpg" />
@@ -113,6 +66,8 @@ function FeedCard({ artist }: any) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [playing, setPlaying] = useState(false)
   const [tip, setTip] = useState<number | null>(null)
+  const [comments, setComments] = useState<string[]>([])
+  const [commentInput, setCommentInput] = useState('')
 
   const togglePlay = () => {
     if (!videoRef.current) return
@@ -122,23 +77,16 @@ function FeedCard({ artist }: any) {
 
   const handleTip = (amount: number) => {
     setTip(amount)
-    setTimeout(() => setTip(null), 3000)
+    setTimeout(() => setTip(null), 2000)
   }
 
   return (
     <div style={feedCardStyle}>
-      {/* MEDIA */}
       <div style={{ position: 'relative' }}>
         {artist.locked ? (
           <>
-            <img src={artist.image} alt={artist.name} style={videoStyle} />
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'rgba(0,0,0,0.45)',
-              }}
-            />
+            <img src={artist.image} style={videoStyle} />
+            <div style={lockedOverlay} />
           </>
         ) : (
           <>
@@ -150,54 +98,79 @@ function FeedCard({ artist }: any) {
         )}
       </div>
 
-      {/* CONTENT */}
       <div style={{ padding: 18 }}>
         <strong>{artist.name}</strong>
 
+        {/* LOCKED ROOM */}
         {artist.locked ? (
           <div style={{ marginTop: 14 }}>
             <div style={{ fontWeight: 600, marginBottom: 10 }}>
               🚪 Door Charge: ${artist.doorCharge}
             </div>
-
-            <button
-              style={{
-                width: '100%',
-                padding: '10px 0',
-                borderRadius: 10,
-                border: 'none',
-                background: '#000',
-                color: '#fff',
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}
-            >
-              Unlock Room
-            </button>
+            <a href={artist.unlockRoute}>
+              <button style={unlockBtn}>Unlock Room</button>
+            </a>
           </div>
         ) : (
           <>
-            <div style={{ fontSize: 13, opacity: 0.7, marginTop: 12 }}>
+            {/* TIP JAR */}
+            <div style={{ marginTop: 12, fontSize: 13, opacity: 0.7 }}>
               Tip the artist
             </div>
 
-            <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
-              {[10, 20, 50, 100].map((amount) => (
+            <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+              {[10, 20, 50].map((amt) => (
                 <button
-                  key={amount}
-                  onClick={() => handleTip(amount)}
-                  style={tipButtonStyle}
+                  key={amt}
+                  onClick={() => handleTip(amt)}
+                  style={tipBtn}
                 >
-                  ${amount}
+                  ${amt}
                 </button>
               ))}
             </div>
 
             {tip && (
-              <div style={tipThanksStyle}>
-                💛 Thanks for tipping ${tip}!
-              </div>
+              <div style={tipThanksStyle}>💛 Thanks for tipping ${tip}</div>
             )}
+
+            {/* COMMENTS */}
+            <div style={{ marginTop: 20 }}>
+              <div style={{ fontWeight: 600, marginBottom: 6 }}>
+                Comments
+              </div>
+
+              {comments.map((c, i) => (
+                <div key={i} style={commentRow}>
+                  <span>{c}</span>
+                  <button
+                    onClick={() => handleTip(5)}
+                    style={commentTipBtn}
+                  >
+                    Tip $5
+                  </button>
+                </div>
+              ))}
+
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <input
+                  value={commentInput}
+                  onChange={(e) => setCommentInput(e.target.value)}
+                  placeholder="Write a comment..."
+                  style={commentInputStyle}
+                />
+                <button
+                  onClick={() => {
+                    if (!commentInput.trim()) return
+                    setComments([commentInput, ...comments])
+                    setCommentInput('')
+                  }}
+                  style={sendBtn}
+                >
+                  Send
+                </button>
+              </div>
+            </div>
           </>
         )}
       </div>
@@ -209,46 +182,30 @@ function FeedCard({ artist }: any) {
 
 function AdSlot({ src }: { src: string }) {
   return (
-    <div
-      style={{
-        width: '100%',
-        height: AD_SLOT_HEIGHT,
-        borderRadius: 16,
-        background: '#111',
-        padding: 12,
-        marginTop: 18,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <img
-        src={src}
-        alt="Advertisement"
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'contain',
-          borderRadius: 12,
-        }}
-      />
+    <div style={adStyle}>
+      <img src={src} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
     </div>
   )
 }
 
 /* ===== STYLES ===== */
 
+const layoutStyle = {
+  display: 'flex',
+  minHeight: '100vh',
+  background: '#f6f6f6',
+}
+
 const feedStyle = {
   flex: 1,
-  padding: '32px 24px',
   maxWidth: 720,
+  padding: 24,
   margin: '0 auto',
 }
 
 const rightSidebarStyle = {
   width: 300,
   background: '#fff',
-  borderLeft: '1px solid #eee',
   padding: 24,
   display: 'flex',
   flexDirection: 'column' as const,
@@ -258,7 +215,6 @@ const feedCardStyle = {
   background: '#fff',
   borderRadius: 16,
   marginBottom: 32,
-  overflow: 'hidden',
   boxShadow: '0 12px 30px rgba(0,0,0,0.08)',
 }
 
@@ -266,7 +222,6 @@ const videoStyle = {
   width: '100%',
   height: 320,
   objectFit: 'cover' as const,
-  background: '#000',
 }
 
 const overlayStyle = {
@@ -277,23 +232,81 @@ const overlayStyle = {
   justifyContent: 'center',
   fontSize: 32,
   color: '#fff',
-  cursor: 'pointer',
   background: 'rgba(0,0,0,0.3)',
+  cursor: 'pointer',
 }
 
-const tipButtonStyle = {
+const lockedOverlay = {
+  position: 'absolute' as const,
+  inset: 0,
+  background: 'rgba(0,0,0,0.45)',
+}
+
+const unlockBtn = {
+  width: '100%',
+  padding: '10px 0',
+  borderRadius: 10,
+  border: 'none',
+  background: '#000',
+  color: '#fff',
+  fontWeight: 700,
+  cursor: 'pointer',
+}
+
+const tipBtn = {
   flex: 1,
   padding: '8px 0',
   borderRadius: 10,
   border: '1px solid #ddd',
   background: '#fff',
-  fontWeight: 600,
   cursor: 'pointer',
 }
 
 const tipThanksStyle = {
-  marginTop: 10,
-  fontSize: 14,
+  marginTop: 8,
   fontWeight: 600,
   color: '#0a7',
+}
+
+const commentRow = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  fontSize: 14,
+  marginTop: 6,
+}
+
+const commentTipBtn = {
+  fontSize: 12,
+  padding: '4px 8px',
+  borderRadius: 6,
+  border: '1px solid #ddd',
+  background: '#fff',
+  cursor: 'pointer',
+}
+
+const commentInputStyle = {
+  flex: 1,
+  padding: 8,
+  borderRadius: 8,
+  border: '1px solid #ddd',
+}
+
+const sendBtn = {
+  padding: '8px 14px',
+  borderRadius: 8,
+  border: 'none',
+  background: '#000',
+  color: '#fff',
+  fontWeight: 600,
+  cursor: 'pointer',
+}
+
+const adStyle = {
+  width: '100%',
+  height: AD_SLOT_HEIGHT,
+  background: '#111',
+  borderRadius: 16,
+  padding: 12,
+  marginTop: 18,
 }
