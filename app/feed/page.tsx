@@ -36,6 +36,7 @@ export default function FeedPage() {
 
   return (
     <div style={layout}>
+      {/* LEFT SIDEBAR */}
       <LeftSidebar />
 
       {/* CENTER FEED */}
@@ -94,6 +95,28 @@ export default function FeedPage() {
         <AdSlot src="/ads/ad-right-2.jpg" />
         <AdSlot src="/ads/ad-right-0.jpg" />
       </aside>
+
+      {/* RECORD SESSION BUTTON */}
+      <button
+        onClick={() => router.push('/record')}
+        style={{
+          position: 'fixed',
+          bottom: 24,
+          right: 24,
+          padding: '14px 20px',
+          borderRadius: 999,
+          border: 'none',
+          background: '#ff2d2d',
+          color: '#fff',
+          fontSize: 16,
+          fontWeight: 800,
+          cursor: 'pointer',
+          boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
+          zIndex: 1000,
+        }}
+      >
+        🔴 Record Session
+      </button>
     </div>
   )
 }
@@ -212,7 +235,10 @@ function FeedCard({ artist, router }: any) {
 function AdSlot({ src }: { src: string }) {
   return (
     <div style={ad}>
-      <img src={src} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      <img
+        src={src}
+        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+      />
     </div>
   )
 }
