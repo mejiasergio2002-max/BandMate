@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 export default function WalletPage() {
   const router = useRouter()
 
-  // mock balance for now
+  // mock balance
   const balance = 128.45
 
   return (
@@ -27,6 +27,21 @@ export default function WalletPage() {
           boxShadow: '0 12px 30px rgba(0,0,0,0.08)',
         }}
       >
+        {/* HOME BUTTON */}
+        <button
+          onClick={() => router.push('/feed')}
+          style={{
+            marginBottom: 16,
+            background: 'none',
+            border: 'none',
+            color: '#555',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          ← Home
+        </button>
+
         <h1 style={{ marginBottom: 16 }}>My Wallet</h1>
 
         {/* BALANCE */}
@@ -41,12 +56,7 @@ export default function WalletPage() {
         </div>
 
         {/* ACTION BUTTONS */}
-        <div
-          style={{
-            display: 'flex',
-            gap: 12,
-          }}
-        >
+        <div style={{ display: 'flex', gap: 12 }}>
           {/* TOP UP */}
           <button
             onClick={() => router.push('/wallet/topup')}
