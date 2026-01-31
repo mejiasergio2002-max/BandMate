@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 
-export default function WithdrawPage() {
+export default function TopUpPage() {
   const router = useRouter()
 
   return (
@@ -24,14 +24,14 @@ export default function WithdrawPage() {
           boxShadow: '0 12px 30px rgba(0,0,0,0.08)',
         }}
       >
-        <h1>Withdraw Funds</h1>
+        <h1>Top Up Wallet</h1>
 
-        <p style={{ opacity: 0.7 }}>
-          Withdraw your balance to your linked payment method.
+        <p style={{ opacity: 0.7, marginBottom: 24 }}>
+          Add funds to your BandMate wallet.
         </p>
 
         <button
-          onClick={() => alert('Withdraw flow coming next')}
+          onClick={() => alert('Payment flow coming next')}
           style={{
             width: '100%',
             padding: '14px 0',
@@ -41,10 +41,9 @@ export default function WithdrawPage() {
             color: '#fff',
             fontWeight: 700,
             cursor: 'pointer',
-            marginTop: 20,
           }}
         >
-          Continue
+          Continue to Payment
         </button>
 
         <button
