@@ -18,9 +18,9 @@ const THEME = {
 
 export default function LandingPage() {
   const router = useRouter()
+
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
-
   const [first, setFirst] = useState('')
   const [last, setLast] = useState('')
   const [regEmail, setRegEmail] = useState('')
@@ -35,7 +35,7 @@ export default function LandingPage() {
         <div style={left}>
           <div style={logoRow}>
             <img
-              src="/bandmate-landing.jpg"
+              src="/logo.png"
               alt="BandMate"
               style={logoImg}
             />
@@ -48,7 +48,8 @@ export default function LandingPage() {
           </h1>
 
           <p style={sub}>
-            Go live, drop sessions, get tipped, and unlock exclusive rooms. Built for music — designed to feel premium and fast.
+            Go live, drop sessions, get tipped, and unlock exclusive rooms.
+            Built for music — designed to feel premium and fast.
           </p>
 
           <div style={pillRow}>
@@ -74,102 +75,93 @@ export default function LandingPage() {
 
         {/* RIGHT AUTH */}
         <div style={right}>
-          {/* SIGN IN */}
-          <div style={card}>
-            <div style={cardTitle}>Sign In</div>
-
+          <AuthCard
+            title="Sign In"
+            button="Sign In"
+            accent
+            onClick={() => router.push('/feed')}
+          >
             <input
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
               style={input}
             />
             <input
+              placeholder="Password"
+              type="password"
               value={pass}
               onChange={(e) => setPass(e.target.value)}
-              placeholder="Password"
-              type="password"
               style={input}
             />
+          </AuthCard>
 
-            <button
-              style={signInBtn}
-              onClick={() => router.push('/feed')}
-            >
-              Sign In
-            </button>
-
-            <div style={tinyLink} onClick={() => alert('Forgot password flow next')}>
-              Forgot password? (next)
-            </div>
-          </div>
-
-          {/* SIGN UP */}
-          <div style={card}>
-            <div style={cardTitle}>Sign Up</div>
-            <div style={cardSub}>It’s free. Fans and artists welcome.</div>
-
+          <AuthCard
+            title="Sign Up"
+            subtitle="It’s free. Fans and artists welcome."
+            button="Create Account"
+            onClick={() => router.push('/feed')}
+          >
             <div style={{ display: 'flex', gap: 10 }}>
               <input
+                placeholder="First name"
                 value={first}
                 onChange={(e) => setFirst(e.target.value)}
-                placeholder="First name"
                 style={input}
               />
               <input
+                placeholder="Last name"
                 value={last}
                 onChange={(e) => setLast(e.target.value)}
-                placeholder="Last name"
                 style={input}
               />
             </div>
 
             <input
+              placeholder="Email"
               value={regEmail}
               onChange={(e) => setRegEmail(e.target.value)}
-              placeholder="Email"
               style={input}
             />
             <input
-              value={regPass}
-              onChange={(e) => setRegPass(e.target.value)}
               placeholder="Password"
               type="password"
+              value={regPass}
+              onChange={(e) => setRegPass(e.target.value)}
               style={input}
             />
-
-            <button
-              style={createBtn}
-              onClick={() => router.push('/feed')}
-            >
-              Create Account
-            </button>
-
-            <div style={cardFoot}>
-              By signing up, you agree to BandMate Terms. (later)
-            </div>
-          </div>
-
-          {/* BOTTOM INFO */}
-          <div style={infoCard}>
-            <div style={infoIcon}>🎵</div>
-            <div>
-              <div style={infoTitle}>Tip-powered creator economy</div>
-              <div style={infoSub}>Fans tip directly, artists earn instantly (payments next).</div>
-            </div>
-          </div>
+          </AuthCard>
         </div>
       </div>
     </div>
   )
 }
 
-/* ===== SMALL COMPONENTS ===== */
+/* ===== COMPONENTS ===== */
 
 function Pill({ label }: { label: string }) {
+  return <div style={pill}>{label}</div>
+}
+
+function AuthCard({
+  title,
+  subtitle,
+  button,
+  accent,
+  onClick,
+  children,
+}: any) {
   return (
-    <div style={pill}>
-      {label}
+    <div style={card}>
+      <div style={cardTitle}>{title}</div>
+      {subtitle && <div style={cardSub}>{subtitle}</div>}
+      {children}
+      <button
+        style={accent ? signInBtn : createBtn}
+        onClick={onClick}
+      >
+        {button}
+      </button>
     </div>
   )
 }
@@ -196,55 +188,46 @@ const glowBg: React.CSSProperties = {
 const container: React.CSSProperties = {
   position: 'relative',
   zIndex: 1,
-  maxWidth: 1240,
+  maxWidth: 1200,
   margin: '0 auto',
-  padding: '56px 28px',
+  padding: '60px 28px',
   display: 'grid',
   gridTemplateColumns: '1.1fr 0.9fr',
-  gap: 36,
-  alignItems: 'start',
+  gap: 40,
 }
 
-const left: React.CSSProperties = {
-  paddingTop: 10,
-}
+const left: React.CSSProperties = {}
 
 const logoRow: React.CSSProperties = {
-  width: 140,
-  height: 90,
+  width: 160,
+  height: 100,
   borderRadius: 14,
-  background: 'rgba(255,255,255,0.95)',
+  background: '#ffffff',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  marginBottom: 20,
-  border: '1px solid rgba(0,0,0,0.06)',
+  marginBottom: 24,
 }
 
 const logoImg: React.CSSProperties = {
-  // ✅ BIGGER LOGO (your request)
-  width: 110, // bump this up/down anytime (110–160 looks great)
+  width: 140, // 🔥 Bigger logo now
   height: 'auto',
   objectFit: 'contain',
-  userSelect: 'none',
-  filter: 'drop-shadow(0 10px 26px rgba(255,45,45,0.18))',
 }
 
 const headline: React.CSSProperties = {
   fontSize: 56,
+  fontWeight: 900,
   lineHeight: 1.05,
   margin: '0 0 14px 0',
-  fontWeight: 950,
-  letterSpacing: '-0.02em',
 }
 
 const sub: React.CSSProperties = {
-  margin: 0,
-  maxWidth: 560,
   fontSize: 16,
   lineHeight: 1.6,
   color: THEME.subtext,
-  fontWeight: 700,
+  fontWeight: 600,
+  maxWidth: 540,
 }
 
 const pillRow: React.CSSProperties = {
@@ -260,15 +243,13 @@ const pill: React.CSSProperties = {
   background: 'rgba(255,255,255,0.05)',
   padding: '8px 12px',
   fontSize: 13,
-  fontWeight: 850,
-  color: THEME.text,
+  fontWeight: 700,
 }
 
 const ctaRow: React.CSSProperties = {
   display: 'flex',
   gap: 12,
   marginTop: 18,
-  alignItems: 'center',
 }
 
 const primaryBtn: React.CSSProperties = {
@@ -277,9 +258,8 @@ const primaryBtn: React.CSSProperties = {
   border: 'none',
   background: THEME.accent,
   color: '#fff',
-  fontWeight: 1000,
+  fontWeight: 900,
   cursor: 'pointer',
-  boxShadow: '0 14px 34px rgba(255,45,45,0.20)',
 }
 
 const secondaryBtn: React.CSSProperties = {
@@ -288,14 +268,13 @@ const secondaryBtn: React.CSSProperties = {
   border: `1px solid ${THEME.border}`,
   background: 'rgba(255,255,255,0.06)',
   color: THEME.text,
-  fontWeight: 1000,
+  fontWeight: 900,
   cursor: 'pointer',
 }
 
 const note: React.CSSProperties = {
   marginTop: 10,
   fontSize: 12,
-  fontWeight: 750,
   color: THEME.muted,
 }
 
@@ -310,19 +289,16 @@ const card: React.CSSProperties = {
   border: `1px solid ${THEME.border}`,
   background: THEME.panel,
   padding: 18,
-  boxShadow: '0 18px 50px rgba(0,0,0,0.35)',
   backdropFilter: 'blur(10px)',
 }
 
 const cardTitle: React.CSSProperties = {
-  fontSize: 18,
-  fontWeight: 1000,
+  fontWeight: 900,
   marginBottom: 10,
 }
 
 const cardSub: React.CSSProperties = {
   fontSize: 12,
-  fontWeight: 800,
   color: THEME.muted,
   marginBottom: 10,
 }
@@ -335,81 +311,27 @@ const input: React.CSSProperties = {
   background: 'rgba(0,0,0,0.30)',
   color: THEME.text,
   outline: 'none',
-  fontWeight: 800,
   marginBottom: 10,
 }
 
 const signInBtn: React.CSSProperties = {
   width: '100%',
-  padding: '12px 14px',
+  padding: '12px',
   borderRadius: 12,
   border: 'none',
   background: THEME.accent,
   color: '#fff',
-  fontWeight: 1000,
+  fontWeight: 900,
   cursor: 'pointer',
-  marginTop: 4,
 }
 
 const createBtn: React.CSSProperties = {
   width: '100%',
-  padding: '12px 14px',
+  padding: '12px',
   borderRadius: 12,
   border: `1px solid ${THEME.border}`,
   background: 'rgba(255,255,255,0.06)',
   color: THEME.text,
-  fontWeight: 1000,
+  fontWeight: 900,
   cursor: 'pointer',
-  marginTop: 4,
-}
-
-const tinyLink: React.CSSProperties = {
-  marginTop: 10,
-  fontSize: 12,
-  fontWeight: 850,
-  color: THEME.muted,
-  textAlign: 'center',
-  cursor: 'pointer',
-}
-
-const cardFoot: React.CSSProperties = {
-  marginTop: 10,
-  fontSize: 11,
-  fontWeight: 750,
-  color: THEME.muted,
-}
-
-const infoCard: React.CSSProperties = {
-  borderRadius: 18,
-  border: `1px solid ${THEME.border}`,
-  background: THEME.panel2,
-  padding: 16,
-  display: 'flex',
-  gap: 12,
-  alignItems: 'center',
-  backdropFilter: 'blur(10px)',
-}
-
-const infoIcon: React.CSSProperties = {
-  width: 40,
-  height: 40,
-  borderRadius: 12,
-  border: `1px solid ${THEME.border}`,
-  background: 'rgba(255,255,255,0.06)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: 18,
-}
-
-const infoTitle: React.CSSProperties = {
-  fontWeight: 1000,
-  fontSize: 14,
-}
-
-const infoSub: React.CSSProperties = {
-  fontWeight: 800,
-  fontSize: 12,
-  color: THEME.muted,
-  marginTop: 2,
 }
