@@ -1,13 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-// ===== THEME (LOCAL) =====
 const THEME = {
   bg: '#0b0b10',
   glow1: 'rgba(255,45,45,0.22)',
   glow2: 'rgba(126,87,255,0.18)',
   panel: 'rgba(255,255,255,0.06)',
+  panel2: 'rgba(255,255,255,0.04)',
   border: 'rgba(255,255,255,0.10)',
   text: '#ffffff',
   subtext: 'rgba(255,255,255,0.72)',
@@ -17,120 +18,144 @@ const THEME = {
 
 export default function LandingPage() {
   const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [pass, setPass] = useState('')
+
+  const [first, setFirst] = useState('')
+  const [last, setLast] = useState('')
+  const [regEmail, setRegEmail] = useState('')
+  const [regPass, setRegPass] = useState('')
 
   return (
     <div style={wrap}>
       <div style={glowBg} />
 
-      <div style={grid}>
-        {/* LEFT */}
-        <div style={{ padding: 18, position: 'relative', zIndex: 1 }}>
-          <img
-            src="/logo.png"
-            alt="BandMate"
-            style={{
-              height: 64,
-              width: 'auto',
-              objectFit: 'contain',
-              display: 'block',
-              marginBottom: 16,
-              filter: 'drop-shadow(0 14px 30px rgba(0,0,0,0.18))',
-            }}
-          />
-
-          <h1 style={h1}>
-            The social stage for bands, artists, and fans.
-          </h1>
-
-          <p style={p}>
-            Go live, drop sessions, get tipped, and unlock exclusive rooms.
-            Built for music — designed to feel premium and fast.
-          </p>
-
-          <div style={{ marginTop: 18, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <Pill>🎥 Live sessions</Pill>
-            <Pill>💸 Tips + Wallet</Pill>
-            <Pill>🚪 Groupie rooms</Pill>
-            <Pill>🗨️ Live chat</Pill>
+      <div style={container}>
+        {/* LEFT HERO */}
+        <div style={left}>
+          <div style={logoRow}>
+            <img
+              src="/bandmate-landing.jpg"
+              alt="BandMate"
+              style={logoImg}
+            />
           </div>
 
-          <div style={{ marginTop: 22, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <button onClick={() => router.push('/feed')} style={btnPrimary}>
+          <h1 style={headline}>
+            The social stage for bands,
+            <br />
+            artists, and fans.
+          </h1>
+
+          <p style={sub}>
+            Go live, drop sessions, get tipped, and unlock exclusive rooms. Built for music — designed to feel premium and fast.
+          </p>
+
+          <div style={pillRow}>
+            <Pill label="🎥 Live sessions" />
+            <Pill label="💸 Tips + Wallet" />
+            <Pill label="🚪 Groupie rooms" />
+            <Pill label="💬 Live chat" />
+          </div>
+
+          <div style={ctaRow}>
+            <button style={primaryBtn} onClick={() => router.push('/feed')}>
               Enter Feed
             </button>
-            <button onClick={() => router.push('/register')} style={btnGhost}>
+            <button style={secondaryBtn} onClick={() => router.push('/register')}>
               Create Account
             </button>
           </div>
 
-          <div style={{ marginTop: 12, color: THEME.muted, fontSize: 12 }}>
+          <div style={note}>
             Demo navigation for now — auth wiring later.
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div style={{ display: 'grid', gap: 14, position: 'relative', zIndex: 1 }}>
+        {/* RIGHT AUTH */}
+        <div style={right}>
+          {/* SIGN IN */}
           <div style={card}>
             <div style={cardTitle}>Sign In</div>
 
-            <div style={{ display: 'grid', gap: 10 }}>
-              <Input placeholder="Email" />
-              <Input placeholder="Password" type="password" />
-              <button onClick={() => router.push('/feed')} style={{ ...btnPrimary, width: '100%' }}>
-                Sign In
-              </button>
-              <div style={{ fontSize: 12, color: THEME.muted, textAlign: 'center' }}>
-                Forgot password? (next)
-              </div>
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              style={input}
+            />
+            <input
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+              placeholder="Password"
+              type="password"
+              style={input}
+            />
+
+            <button
+              style={signInBtn}
+              onClick={() => router.push('/feed')}
+            >
+              Sign In
+            </button>
+
+            <div style={tinyLink} onClick={() => alert('Forgot password flow next')}>
+              Forgot password? (next)
             </div>
           </div>
 
+          {/* SIGN UP */}
           <div style={card}>
             <div style={cardTitle}>Sign Up</div>
-            <div style={{ color: THEME.subtext, fontSize: 12, marginBottom: 12 }}>
-              It’s free. Fans and artists welcome.
+            <div style={cardSub}>It’s free. Fans and artists welcome.</div>
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              <input
+                value={first}
+                onChange={(e) => setFirst(e.target.value)}
+                placeholder="First name"
+                style={input}
+              />
+              <input
+                value={last}
+                onChange={(e) => setLast(e.target.value)}
+                placeholder="Last name"
+                style={input}
+              />
             </div>
 
-            <div style={{ display: 'grid', gap: 10 }}>
-              <div style={{ display: 'flex', gap: 10 }}>
-                <Input placeholder="First name" />
-                <Input placeholder="Last name" />
-              </div>
+            <input
+              value={regEmail}
+              onChange={(e) => setRegEmail(e.target.value)}
+              placeholder="Email"
+              style={input}
+            />
+            <input
+              value={regPass}
+              onChange={(e) => setRegPass(e.target.value)}
+              placeholder="Password"
+              type="password"
+              style={input}
+            />
 
-              <Input placeholder="Email" />
-              <Input placeholder="Password" type="password" />
+            <button
+              style={createBtn}
+              onClick={() => router.push('/feed')}
+            >
+              Create Account
+            </button>
 
-              <button onClick={() => router.push('/register')} style={{ ...btnGhost, width: '100%' }}>
-                Create Account
-              </button>
-
-              <div style={{ fontSize: 12, color: THEME.muted }}>
-                By signing up, you agree to BandMate Terms. (later)
-              </div>
+            <div style={cardFoot}>
+              By signing up, you agree to BandMate Terms. (later)
             </div>
           </div>
 
-          <div style={{ ...card, padding: 16, display: 'flex', gap: 12, alignItems: 'center' }}>
-            <div
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 12,
-                background: 'rgba(255,255,255,0.06)',
-                border: `1px solid ${THEME.border}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 1000,
-              }}
-            >
-              🎵
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 900, color: THEME.text }}>Tip-powered creator economy</div>
-              <div style={{ color: THEME.subtext, fontSize: 12 }}>
-                Fans tip directly, artists earn instantly (payments next).
-              </div>
+          {/* BOTTOM INFO */}
+          <div style={infoCard}>
+            <div style={infoIcon}>🎵</div>
+            <div>
+              <div style={infoTitle}>Tip-powered creator economy</div>
+              <div style={infoSub}>Fans tip directly, artists earn instantly (payments next).</div>
             </div>
           </div>
         </div>
@@ -139,39 +164,13 @@ export default function LandingPage() {
   )
 }
 
-function Pill({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        padding: '8px 12px',
-        borderRadius: 999,
-        border: `1px solid ${THEME.border}`,
-        background: 'rgba(255,255,255,0.06)',
-        color: THEME.text,
-        fontWeight: 800,
-        fontSize: 12,
-      }}
-    >
-      {children}
-    </div>
-  )
-}
+/* ===== SMALL COMPONENTS ===== */
 
-function Input(props: any) {
+function Pill({ label }: { label: string }) {
   return (
-    <input
-      {...props}
-      style={{
-        width: '100%',
-        padding: '12px 12px',
-        borderRadius: 12,
-        border: `1px solid ${THEME.border}`,
-        background: 'rgba(0,0,0,0.35)',
-        color: THEME.text,
-        outline: 'none',
-        fontWeight: 650,
-      }}
-    />
+    <div style={pill}>
+      {label}
+    </div>
   )
 }
 
@@ -183,62 +182,96 @@ const wrap: React.CSSProperties = {
   position: 'relative',
   overflow: 'hidden',
   fontFamily: 'system-ui, -apple-system',
+  color: THEME.text,
 }
 
 const glowBg: React.CSSProperties = {
   position: 'absolute',
   inset: 0,
-  background: `radial-gradient(900px 600px at 15% 20%, ${THEME.glow2}, transparent 60%),
-              radial-gradient(900px 600px at 85% 10%, ${THEME.glow1}, transparent 55%)`,
+  background: `radial-gradient(900px 600px at 18% 35%, ${THEME.glow2}, transparent 60%),
+              radial-gradient(900px 600px at 92% 20%, ${THEME.glow1}, transparent 55%)`,
   zIndex: 0,
 }
 
-const grid: React.CSSProperties = {
+const container: React.CSSProperties = {
   position: 'relative',
   zIndex: 1,
-  minHeight: '100vh',
-  display: 'grid',
-  gridTemplateColumns: '1.25fr 1fr',
-  gap: 28,
-  padding: 32,
-  alignItems: 'center',
-  maxWidth: 1200,
+  maxWidth: 1240,
   margin: '0 auto',
+  padding: '56px 28px',
+  display: 'grid',
+  gridTemplateColumns: '1.1fr 0.9fr',
+  gap: 36,
+  alignItems: 'start',
 }
 
-const h1: React.CSSProperties = {
-  margin: 0,
-  fontSize: 46,
+const left: React.CSSProperties = {
+  paddingTop: 10,
+}
+
+const logoRow: React.CSSProperties = {
+  width: 140,
+  height: 90,
+  borderRadius: 14,
+  background: 'rgba(255,255,255,0.95)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: 20,
+  border: '1px solid rgba(0,0,0,0.06)',
+}
+
+const logoImg: React.CSSProperties = {
+  // ✅ BIGGER LOGO (your request)
+  width: 110, // bump this up/down anytime (110–160 looks great)
+  height: 'auto',
+  objectFit: 'contain',
+  userSelect: 'none',
+  filter: 'drop-shadow(0 10px 26px rgba(255,45,45,0.18))',
+}
+
+const headline: React.CSSProperties = {
+  fontSize: 56,
   lineHeight: 1.05,
-  fontWeight: 1000,
-  letterSpacing: -0.8,
-  color: THEME.text,
+  margin: '0 0 14px 0',
+  fontWeight: 950,
+  letterSpacing: '-0.02em',
 }
 
-const p: React.CSSProperties = {
-  marginTop: 14,
+const sub: React.CSSProperties = {
+  margin: 0,
+  maxWidth: 560,
+  fontSize: 16,
+  lineHeight: 1.6,
   color: THEME.subtext,
-  fontSize: 16,
-  maxWidth: 520,
+  fontWeight: 700,
 }
 
-const card: React.CSSProperties = {
-  borderRadius: 18,
+const pillRow: React.CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 10,
+  marginTop: 18,
+}
+
+const pill: React.CSSProperties = {
+  borderRadius: 999,
   border: `1px solid ${THEME.border}`,
-  background: THEME.panel,
-  padding: 18,
-  boxShadow: '0 16px 40px rgba(0,0,0,0.35)',
-  backdropFilter: 'blur(10px)',
-}
-
-const cardTitle: React.CSSProperties = {
-  fontWeight: 1000,
-  fontSize: 16,
-  marginBottom: 10,
+  background: 'rgba(255,255,255,0.05)',
+  padding: '8px 12px',
+  fontSize: 13,
+  fontWeight: 850,
   color: THEME.text,
 }
 
-const btnPrimary: React.CSSProperties = {
+const ctaRow: React.CSSProperties = {
+  display: 'flex',
+  gap: 12,
+  marginTop: 18,
+  alignItems: 'center',
+}
+
+const primaryBtn: React.CSSProperties = {
   padding: '12px 16px',
   borderRadius: 12,
   border: 'none',
@@ -246,10 +279,10 @@ const btnPrimary: React.CSSProperties = {
   color: '#fff',
   fontWeight: 1000,
   cursor: 'pointer',
-  boxShadow: '0 12px 30px rgba(255,45,45,0.22)',
+  boxShadow: '0 14px 34px rgba(255,45,45,0.20)',
 }
 
-const btnGhost: React.CSSProperties = {
+const secondaryBtn: React.CSSProperties = {
   padding: '12px 16px',
   borderRadius: 12,
   border: `1px solid ${THEME.border}`,
@@ -257,4 +290,126 @@ const btnGhost: React.CSSProperties = {
   color: THEME.text,
   fontWeight: 1000,
   cursor: 'pointer',
+}
+
+const note: React.CSSProperties = {
+  marginTop: 10,
+  fontSize: 12,
+  fontWeight: 750,
+  color: THEME.muted,
+}
+
+const right: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+}
+
+const card: React.CSSProperties = {
+  borderRadius: 18,
+  border: `1px solid ${THEME.border}`,
+  background: THEME.panel,
+  padding: 18,
+  boxShadow: '0 18px 50px rgba(0,0,0,0.35)',
+  backdropFilter: 'blur(10px)',
+}
+
+const cardTitle: React.CSSProperties = {
+  fontSize: 18,
+  fontWeight: 1000,
+  marginBottom: 10,
+}
+
+const cardSub: React.CSSProperties = {
+  fontSize: 12,
+  fontWeight: 800,
+  color: THEME.muted,
+  marginBottom: 10,
+}
+
+const input: React.CSSProperties = {
+  width: '100%',
+  padding: '12px 12px',
+  borderRadius: 12,
+  border: `1px solid ${THEME.border}`,
+  background: 'rgba(0,0,0,0.30)',
+  color: THEME.text,
+  outline: 'none',
+  fontWeight: 800,
+  marginBottom: 10,
+}
+
+const signInBtn: React.CSSProperties = {
+  width: '100%',
+  padding: '12px 14px',
+  borderRadius: 12,
+  border: 'none',
+  background: THEME.accent,
+  color: '#fff',
+  fontWeight: 1000,
+  cursor: 'pointer',
+  marginTop: 4,
+}
+
+const createBtn: React.CSSProperties = {
+  width: '100%',
+  padding: '12px 14px',
+  borderRadius: 12,
+  border: `1px solid ${THEME.border}`,
+  background: 'rgba(255,255,255,0.06)',
+  color: THEME.text,
+  fontWeight: 1000,
+  cursor: 'pointer',
+  marginTop: 4,
+}
+
+const tinyLink: React.CSSProperties = {
+  marginTop: 10,
+  fontSize: 12,
+  fontWeight: 850,
+  color: THEME.muted,
+  textAlign: 'center',
+  cursor: 'pointer',
+}
+
+const cardFoot: React.CSSProperties = {
+  marginTop: 10,
+  fontSize: 11,
+  fontWeight: 750,
+  color: THEME.muted,
+}
+
+const infoCard: React.CSSProperties = {
+  borderRadius: 18,
+  border: `1px solid ${THEME.border}`,
+  background: THEME.panel2,
+  padding: 16,
+  display: 'flex',
+  gap: 12,
+  alignItems: 'center',
+  backdropFilter: 'blur(10px)',
+}
+
+const infoIcon: React.CSSProperties = {
+  width: 40,
+  height: 40,
+  borderRadius: 12,
+  border: `1px solid ${THEME.border}`,
+  background: 'rgba(255,255,255,0.06)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: 18,
+}
+
+const infoTitle: React.CSSProperties = {
+  fontWeight: 1000,
+  fontSize: 14,
+}
+
+const infoSub: React.CSSProperties = {
+  fontWeight: 800,
+  fontSize: 12,
+  color: THEME.muted,
+  marginTop: 2,
 }
