@@ -2,6 +2,15 @@
 
 import { useRouter } from 'next/navigation'
 
+const SIDEBAR_THEME = {
+  bg: '#0f0f16',
+  panel: 'rgba(255,255,255,0.04)',
+  border: 'rgba(255,255,255,0.08)',
+  text: '#ffffff',
+  muted: 'rgba(255,255,255,0.65)',
+  accent: '#ff2d2d',
+}
+
 export default function LeftSidebar() {
   const router = useRouter()
 
@@ -9,8 +18,8 @@ export default function LeftSidebar() {
     <aside
       style={{
         width: 260,
-        background: '#ffffff',
-        borderRight: '1px solid #e5e5e5',
+        background: SIDEBAR_THEME.bg,
+        borderRight: `1px solid ${SIDEBAR_THEME.border}`,
         padding: 20,
         display: 'flex',
         flexDirection: 'column',
@@ -34,10 +43,11 @@ export default function LeftSidebar() {
           src="/logo.png"
           alt="BandMate"
           style={{
-            height: 100, // 3/4 size (stable)
+            height: 100,
             width: 'auto',
             objectFit: 'contain',
             userSelect: 'none',
+            filter: 'drop-shadow(0 6px 18px rgba(255,45,45,0.25))',
           }}
         />
       </div>
@@ -47,18 +57,18 @@ export default function LeftSidebar() {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 12,
+          gap: 10,
         }}
       >
         <Item label="🏠 Home" onClick={() => router.push('/feed')} />
         <Item label="👤 My Profile" onClick={() => router.push('/profile')} />
         <Item label="💰 My Wallet" onClick={() => router.push('/wallet')} />
         <Item label="⚙️ Settings" onClick={() => router.push('/settings')} />
-
-        {/* 👇 TIP JAR UNDER SETTINGS */}
         <Item label="🫙 Tip Jar" onClick={() => router.push('/tip-jar')} />
 
-        <Item label="🚪 Log out" onClick={() => router.push('/')} />
+        <div style={{ flex: 1 }} />
+
+        <Item label="🚪 Log out" onClick={() => router.push('/')} danger />
       </nav>
     </aside>
   )
@@ -67,25 +77,32 @@ export default function LeftSidebar() {
 function Item({
   label,
   onClick,
+  danger = false,
 }: {
   label: string
   onClick: () => void
+  danger?: boolean
 }) {
   return (
     <div
       onClick={onClick}
       style={{
-        padding: '10px 14px',
-        borderRadius: 8,
-        fontWeight: 600,
+        padding: '12px 16px',
+        borderRadius: 12,
+        fontWeight: 700,
         cursor: 'pointer',
-        transition: 'background-color 0.15s ease',
+        transition: 'all 0.15s ease',
+        color: danger ? '#ff4d4d' : SIDEBAR_THEME.text,
+        border: `1px solid ${SIDEBAR_THEME.border}`,
+        background: SIDEBAR_THEME.panel,
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = '#f2f2f2'
+        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'
+        e.currentTarget.style.transform = 'translateX(4px)'
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = 'transparent'
+        e.currentTarget.style.backgroundColor = SIDEBAR_THEME.panel
+        e.currentTarget.style.transform = 'translateX(0px)'
       }}
     >
       {label}
