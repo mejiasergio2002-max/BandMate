@@ -1,379 +1,477 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import LeftSidebar from './components/sidebar/LeftSidebar'
+import { BM, glassCard, pageWrap, glowBg, btnPrimary, btnDark, btnGhost } from './components/ui/theme'
+const AD_SLOT_HEIGHT = 360
 
-export default function LandingPage() {
+export default function FeedPage() {
   const router = useRouter()
 
-  const [loginEmail, setLoginEmail] = useState('')
-  const [loginPassword, setLoginPassword] = useState('')
+  const artists = [
+    { name: 'theBeebs', video: '/feed/thebeebs.mp4', locked: false },
+    { name: 'Gaga', video: '/feed/gaga.mp4', locked: false },
+    { name: 'Unc Snoop', video: '/feed/snoop.mp4', locked: false },
+    {
+      name: 'Amazon Music',
+      image: '/feed/artist4.jpg',
+      locked: true,
+      doorCharge: 4.99,
+      unlockRoute: '/groupie',
+    },
+  ]
 
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [signupEmail, setSignupEmail] = useState('')
-  const [signupPassword, setSignupPassword] = useState('')
-
-  const onLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    router.push('/feed')
-  }
-
-  const onSignup = (e: React.FormEvent) => {
-    e.preventDefault()
-    router.push('/register')
-  }
+  const liveNow = [
+    { name: 'Drake', avatar: '/feed/drake.jpg' },
+    { name: 'Billie', avatar: '/feed/billie.jpg' },
+    { name: 'Posty', avatar: '/feed/posty.jpg' },
+    { name: 'The Weeknd', avatar: '/feed/weeknd.jpg' },
+    { name: 'Doja Cat', avatar: '/feed/doja.jpg' },
+    { name: 'Bruno Mars', avatar: '/feed/bruno.jpg' },
+    { name: 'Ariana', avatar: '/feed/ariana.jpg' },
+    { name: 'Ed Sheeran', avatar: '/feed/ed.jpg' },
+    { name: 'Rihanna', avatar: '/feed/rihanna.jpg' },
+  ]
 
   return (
-    <div style={page}>
-      {/* BACKGROUND GLOW */}
-      <div style={glowA} />
-      <div style={glowB} />
+    <div style={{ ...pageWrap, display: 'flex' }}>
+      <div style={glowBg} />
 
-      <header style={header}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <img
-            src="/logo.png"
-            alt="BandMate"
-            style={{ height: 38, width: 'auto', objectFit: 'contain' }}
-          />
-          <div style={{ lineHeight: 1.05 }}>
-            <div style={{ fontWeight: 900, letterSpacing: 0.2 }}>BandMate</div>
-            <div style={{ fontSize: 12, opacity: 0.75 }}>
-              Live sessions • Tips • Groupie rooms
+      {/* LEFT SIDEBAR */}
+      <LeftSidebar />
+
+      {/* CENTER FEED */}
+      <main style={feedStyle}>
+        <div style={feedHeader}>
+          <div>
+            <div style={h1}>Live Feed</div>
+            <div style={sub}>
+              Tip artists, comment live, and unlock exclusive rooms.
             </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 10 }}>
+            <span style={pillActive}>Most Recent</span>
+            <span style={pill}>All</span>
+            <span style={pill}>Popular</span>
           </div>
         </div>
 
-        <button
-          onClick={() => router.push('/feed')}
-          style={ghostBtn}
-          type="button"
-        >
-          Explore Feed →
-        </button>
-      </header>
-
-      <main style={main}>
-        {/* LEFT HERO */}
-        <section style={hero}>
-          <h1 style={heroTitle}>
-            Your stage.
-            <br />
-            Your crowd.
-            <br />
-            Your money.
-          </h1>
-
-          <p style={heroSub}>
-            BandMate is where bands go live, fans tip in real-time, and exclusive
-            rooms unlock the best moments.
-          </p>
-
-          {/* IMAGE - GUARANTEED NOT CROPPED */}
-          <div style={heroMedia}>
-            <img
-              src="/landing.jpg"
-              alt="BandMate Landing"
-              style={heroImg}
-              onError={(e) => {
-                // if the image path is wrong, show an obvious fallback
-                ;(e.currentTarget as HTMLImageElement).style.display = 'none'
-              }}
-            />
-            <div style={heroMediaHint}>
-              If you don’t see the image, confirm it’s at <b>public/landing.jpg</b>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <button
-              onClick={() => router.push('/register')}
-              style={primaryBtn}
-              type="button"
-            >
-              Create account
-            </button>
-            <button
-              onClick={() => router.push('/feed')}
-              style={secondaryBtn}
-              type="button"
-            >
-              Watch sessions
-            </button>
-          </div>
-        </section>
-
-        {/* RIGHT AUTH */}
-        <section style={authCol}>
-          {/* SIGN IN */}
-          <div style={card}>
-            <div style={cardTitle}>Sign In</div>
-            <div style={cardSub}>Welcome back. Let’s get you in.</div>
-
-            <form onSubmit={onLogin} style={{ marginTop: 14 }}>
-              <label style={label}>Email</label>
-              <input
-                value={loginEmail}
-                onChange={(e) => setLoginEmail(e.target.value)}
-                style={input}
-                placeholder="you@example.com"
-              />
-
-              <label style={{ ...label, marginTop: 10 }}>Password</label>
-              <input
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                style={input}
-                type="password"
-                placeholder="••••••••"
-              />
-
-              <button type="submit" style={{ ...primaryBtn, width: '100%', marginTop: 12 }}>
-                Sign In
-              </button>
-            </form>
-          </div>
-
-          {/* SIGN UP */}
-          <div style={card}>
-            <div style={cardTitle}>Sign Up</div>
-            <div style={cardSub}>It’s free. Start performing today.</div>
-
-            <form onSubmit={onSignup} style={{ marginTop: 14 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                <div>
-                  <label style={label}>First name</label>
-                  <input
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    style={input}
-                    placeholder="Sergio"
-                  />
-                </div>
-                <div>
-                  <label style={label}>Last name</label>
-                  <input
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    style={input}
-                    placeholder="Mejia"
-                  />
-                </div>
-              </div>
-
-              <label style={{ ...label, marginTop: 10 }}>Email</label>
-              <input
-                value={signupEmail}
-                onChange={(e) => setSignupEmail(e.target.value)}
-                style={input}
-                placeholder="you@example.com"
-              />
-
-              <label style={{ ...label, marginTop: 10 }}>Password</label>
-              <input
-                value={signupPassword}
-                onChange={(e) => setSignupPassword(e.target.value)}
-                style={input}
-                type="password"
-                placeholder="Create a password"
-              />
-
-              <button type="submit" style={{ ...primaryBtn, width: '100%', marginTop: 12 }}>
-                Create account
-              </button>
-
-              <div style={{ marginTop: 10, fontSize: 12, opacity: 0.75 }}>
-                By signing up, you agree to BandMate’s Terms.
-              </div>
-            </form>
-          </div>
-        </section>
+        {artists.map((artist, index) => (
+          <FeedCard key={index} artist={artist} router={router} />
+        ))}
       </main>
+
+      {/* RIGHT SIDEBAR */}
+      <aside style={rightSidebarStyle}>
+        <div style={{ ...glassCard, padding: 16, position: 'relative', zIndex: 1 }}>
+          <div style={rightTitleRow}>
+            <span style={dot} />
+            <div style={{ fontWeight: 900, letterSpacing: 0.2 }}>LIVE WITH ME NOW</div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
+            {liveNow.map((user, index) => (
+              <div
+                key={index}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                  padding: '10px 10px',
+                  borderRadius: 14,
+                  background: BM.panel2,
+                  border: `1px solid ${BM.border}`,
+                }}
+              >
+                <div style={{ position: 'relative', width: 42, height: 42, flexShrink: 0 }}>
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: `2px solid ${BM.border2}`,
+                    }}
+                  />
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: -1,
+                      right: -1,
+                      width: 11,
+                      height: 11,
+                      backgroundColor: BM.danger,
+                      borderRadius: '50%',
+                      border: `2px solid ${BM.bg}`,
+                    }}
+                  />
+                </div>
+
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontWeight: 800, fontSize: 14 }}>{user.name}</div>
+                  <div style={{ fontSize: 12, color: BM.muted }}>Live session</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ flex: 1 }} />
+
+        <AdSlot src="/ads/ad-right-1.jpg" />
+        <AdSlot src="/ads/ad-right-2.jpg" />
+        <AdSlot src="/ads/ad-right-0.jpg" />
+      </aside>
+
+      {/* RECORD SESSION BUTTON */}
+      <button onClick={() => router.push('/record')} style={recordBtn}>
+        🔴 Record Session
+      </button>
+    </div>
+  )
+}
+
+/* ===== FEED CARD ===== */
+
+function FeedCard({ artist, router }: any) {
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const [playing, setPlaying] = useState(false)
+  const [tip, setTip] = useState<number | null>(null)
+
+  const [comments, setComments] = useState<string[]>([])
+  const [commentInput, setCommentInput] = useState('')
+
+  const togglePlay = () => {
+    if (!videoRef.current) return
+    playing ? videoRef.current.pause() : videoRef.current.play()
+    setPlaying(!playing)
+  }
+
+  const sendComment = () => {
+    if (!commentInput.trim()) return
+    setComments([commentInput, ...comments])
+    setCommentInput('')
+  }
+
+  const handleTip = (amount: number) => {
+    setTip(amount)
+    setTimeout(() => setTip(null), 2500)
+  }
+
+  return (
+    <div style={{ ...glassCard, overflow: 'hidden', marginBottom: 20, position: 'relative', zIndex: 1 }}>
+      <div style={{ position: 'relative' }}>
+        {artist.locked ? (
+          <>
+            <img src={artist.image} alt={artist.name} style={videoStyle} />
+            <div style={lockedOverlay} />
+          </>
+        ) : (
+          <>
+            <video ref={videoRef} src={artist.video} style={videoStyle} />
+            <div onClick={togglePlay} style={overlayStyle}>
+              <div style={playCircle}>{playing ? '⏸' : '▶'}</div>
+            </div>
+          </>
+        )}
+
+        {artist.locked && (
+          <div style={lockedBadge}>GROUPIES ONLY</div>
+        )}
+      </div>
+
+      <div style={{ padding: 18 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 }}>
+          <strong style={{ fontSize: 16 }}>{artist.name}</strong>
+          <span style={{ fontSize: 12, color: BM.muted }}>BandMate</span>
+        </div>
+
+        {artist.locked ? (
+          <div style={{ marginTop: 12 }}>
+            <div style={{ fontWeight: 800, marginBottom: 10 }}>
+              🚪 Door Charge: ${artist.doorCharge}
+            </div>
+
+            <button
+              style={{ ...btnPrimary, width: '100%' }}
+              onClick={() => router.push(artist.unlockRoute)}
+            >
+              Unlock Room
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* TIP */}
+            <div style={{ marginTop: 12, fontSize: 13, color: BM.subtext }}>
+              Tip the artist
+            </div>
+
+            <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+              {[10, 20, 50].map((amt) => (
+                <button key={amt} onClick={() => handleTip(amt)} style={tipBtn}>
+                  ${amt}
+                </button>
+              ))}
+            </div>
+
+            {tip && <div style={tipThanks}>💛 Thanks for tipping ${tip}</div>}
+
+            {/* COMMENTS */}
+            <div style={{ marginTop: 18 }}>
+              <div style={{ fontWeight: 800, marginBottom: 8 }}>Comments</div>
+
+              {comments.length === 0 && (
+                <div style={{ fontSize: 13, color: BM.muted, marginBottom: 10 }}>
+                  Be the first to comment ✨
+                </div>
+              )}
+
+              {comments.slice(0, 6).map((c, i) => (
+                <div key={i} style={commentRow}>
+                  <span style={{ color: BM.subtext }}>{c}</span>
+                  <button style={commentTip}>Tip $5</button>
+                </div>
+              ))}
+
+              <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                <input
+                  value={commentInput}
+                  onChange={(e) => setCommentInput(e.target.value)}
+                  placeholder="Write a comment..."
+                  style={commentInputStyle}
+                />
+                <button style={sendBtn} onClick={sendComment}>
+                  Send
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
+/* ===== ADS ===== */
+
+function AdSlot({ src }: { src: string }) {
+  return (
+    <div style={adStyle}>
+      <img src={src} alt="Advertisement" style={adImg} />
     </div>
   )
 }
 
 /* ===== STYLES ===== */
 
-const page: React.CSSProperties = {
-  minHeight: '100vh',
-  background: '#070A12',
+const feedStyle = {
+  flex: 1,
+  padding: '28px 22px',
+  maxWidth: 760,
+  margin: '0 auto',
+  position: 'relative' as const,
+  zIndex: 1,
+}
+
+const rightSidebarStyle = {
+  width: 320,
+  padding: 18,
+  display: 'flex',
+  flexDirection: 'column' as const,
+  position: 'relative' as const,
+  zIndex: 1,
+  boxSizing: 'border-box' as const,
+}
+
+const feedHeader = {
+  display: 'flex',
+  alignItems: 'flex-end',
+  justifyContent: 'space-between',
+  gap: 16,
+  marginBottom: 18,
+}
+
+const h1 = { fontSize: 28, fontWeight: 950, letterSpacing: -0.2 }
+const sub = { fontSize: 13, color: BM.subtext, marginTop: 6 }
+
+const pill = {
+  padding: '8px 12px',
+  borderRadius: 999,
+  border: `1px solid ${BM.border}`,
+  background: BM.panel2,
+  color: BM.text,
+  fontSize: 12,
+  fontWeight: 800,
+}
+
+const pillActive = {
+  ...pill,
+  background: 'linear-gradient(135deg, rgba(124,92,255,0.55), rgba(0,229,255,0.22))',
+  border: `1px solid ${BM.border2}`,
+}
+
+const rightTitleRow = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 10,
+}
+
+const dot = {
+  width: 10,
+  height: 10,
+  borderRadius: '50%',
+  background: BM.danger,
+  boxShadow: '0 0 0 6px rgba(255,45,45,0.12)',
+}
+
+const videoStyle = {
+  width: '100%',
+  height: 340,
+  objectFit: 'cover' as const,
+  background: '#000',
+}
+
+const overlayStyle = {
+  position: 'absolute' as const,
+  inset: 0,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+  background: 'linear-gradient(to top, rgba(0,0,0,0.60), rgba(0,0,0,0.15))',
+}
+
+const playCircle = {
+  width: 66,
+  height: 66,
+  borderRadius: '50%',
+  background: 'rgba(255,255,255,0.92)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: 26,
+  color: '#0A0A0F',
+  fontWeight: 900,
+  border: '1px solid rgba(0,0,0,0.08)',
+}
+
+const lockedOverlay = {
+  position: 'absolute' as const,
+  inset: 0,
+  background:
+    'linear-gradient(to top, rgba(0,0,0,0.80), rgba(0,0,0,0.25))',
+}
+
+const lockedBadge = {
+  position: 'absolute' as const,
+  top: 14,
+  left: 14,
+  padding: '8px 10px',
+  borderRadius: 999,
+  background: 'rgba(0,0,0,0.55)',
+  border: `1px solid ${BM.border}`,
   color: '#fff',
-  fontFamily: 'system-ui, -apple-system',
-  position: 'relative',
-  overflow: 'hidden',
+  fontWeight: 900,
+  fontSize: 12,
+  letterSpacing: 0.3,
 }
 
-const glowA: React.CSSProperties = {
-  position: 'absolute',
-  width: 700,
-  height: 700,
-  borderRadius: 999,
-  background: 'rgba(0, 255, 170, 0.18)',
-  filter: 'blur(90px)',
-  top: -240,
-  left: -220,
-  pointerEvents: 'none',
+const tipBtn = {
+  flex: 1,
+  padding: '10px 0',
+  borderRadius: 12,
+  border: `1px solid ${BM.border}`,
+  background: 'rgba(255,255,255,0.04)',
+  color: BM.text,
+  fontWeight: 900,
+  cursor: 'pointer',
 }
 
-const glowB: React.CSSProperties = {
-  position: 'absolute',
-  width: 760,
-  height: 760,
-  borderRadius: 999,
-  background: 'rgba(110, 70, 255, 0.22)',
-  filter: 'blur(95px)',
-  bottom: -300,
-  right: -260,
-  pointerEvents: 'none',
+const tipThanks = {
+  marginTop: 10,
+  fontSize: 13,
+  fontWeight: 800,
+  color: BM.good,
 }
 
-const header: React.CSSProperties = {
-  height: 76,
+const commentRow = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '0 22px',
-  borderBottom: '1px solid rgba(255,255,255,0.08)',
-  background: 'rgba(7,10,18,0.7)',
-  backdropFilter: 'blur(10px)',
-  position: 'sticky',
-  top: 0,
-  zIndex: 5,
-}
-
-const main: React.CSSProperties = {
-  maxWidth: 1100,
-  margin: '0 auto',
-  padding: '34px 18px 54px',
-  display: 'grid',
-  gridTemplateColumns: '1.2fr 1fr',
-  gap: 18,
-  boxSizing: 'border-box',
-}
-
-const hero: React.CSSProperties = {
-  padding: 22,
-}
-
-const heroTitle: React.CSSProperties = {
-  margin: 0,
-  fontSize: 44,
-  lineHeight: 1.02,
-  fontWeight: 950,
-  letterSpacing: -0.8,
-}
-
-const heroSub: React.CSSProperties = {
-  marginTop: 12,
-  marginBottom: 18,
-  maxWidth: 520,
-  opacity: 0.82,
-  lineHeight: 1.45,
-}
-
-const heroMedia: React.CSSProperties = {
-  marginTop: 14,
-  marginBottom: 18,
-  width: '100%',
-  maxWidth: 640,
-  borderRadius: 16,
-  border: '1px solid rgba(255,255,255,0.10)',
-  background: 'rgba(255,255,255,0.05)',
-  overflow: 'hidden',
-  padding: 14,
-  boxSizing: 'border-box',
-}
-
-const heroImg: React.CSSProperties = {
-  width: '100%',
-  height: 320,
-  objectFit: 'contain', // ✅ NO CROPPING
+  gap: 10,
+  marginTop: 8,
+  padding: '8px 10px',
   borderRadius: 12,
-  background: 'rgba(0,0,0,0.22)',
+  background: 'rgba(255,255,255,0.04)',
+  border: `1px solid ${BM.border}`,
 }
 
-const heroMediaHint: React.CSSProperties = {
-  marginTop: 10,
-  fontSize: 12,
-  opacity: 0.75,
-}
-
-const authCol: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 14,
-  padding: 22,
-}
-
-const card: React.CSSProperties = {
-  borderRadius: 16,
-  padding: 18,
-  border: '1px solid rgba(255,255,255,0.10)',
-  background: 'rgba(255,255,255,0.06)',
-  boxShadow: '0 18px 55px rgba(0,0,0,0.35)',
-}
-
-const cardTitle: React.CSSProperties = {
-  fontSize: 18,
-  fontWeight: 900,
-}
-
-const cardSub: React.CSSProperties = {
-  marginTop: 6,
-  fontSize: 13,
-  opacity: 0.78,
-}
-
-const label: React.CSSProperties = {
-  display: 'block',
-  fontSize: 12,
-  opacity: 0.78,
-  marginBottom: 6,
-}
-
-const input: React.CSSProperties = {
-  width: '100%',
-  height: 40,
+const commentTip = {
+  padding: '7px 10px',
   borderRadius: 10,
-  border: '1px solid rgba(255,255,255,0.12)',
-  background: 'rgba(0,0,0,0.25)',
-  color: '#fff',
-  padding: '0 12px',
-  outline: 'none',
-  boxSizing: 'border-box',
-}
-
-const primaryBtn: React.CSSProperties = {
-  height: 44,
-  padding: '0 16px',
-  borderRadius: 999,
-  border: 'none',
-  cursor: 'pointer',
+  border: `1px solid ${BM.border2}`,
+  background: 'rgba(255,255,255,0.06)',
+  color: BM.text,
   fontWeight: 900,
-  background: 'linear-gradient(90deg, #00ffad, #6e46ff)',
-  color: '#0b0f1a',
+  fontSize: 12,
+  cursor: 'pointer',
+  whiteSpace: 'nowrap' as const,
 }
 
-const secondaryBtn: React.CSSProperties = {
-  height: 44,
-  padding: '0 16px',
-  borderRadius: 999,
-  border: '1px solid rgba(255,255,255,0.16)',
-  cursor: 'pointer',
-  fontWeight: 800,
-  background: 'rgba(255,255,255,0.06)',
-  color: '#fff',
+const commentInputStyle = {
+  flex: 1,
+  padding: '10px 12px',
+  borderRadius: 12,
+  border: `1px solid ${BM.border}`,
+  background: 'rgba(255,255,255,0.04)',
+  color: BM.text,
+  outline: 'none',
 }
 
-const ghostBtn: React.CSSProperties = {
-  height: 40,
-  padding: '0 14px',
+const sendBtn = {
+  ...btnDark,
+  padding: '10px 14px',
+  borderRadius: 12,
+}
+
+const adStyle = {
+  width: '100%',
+  height: AD_SLOT_HEIGHT,
+  borderRadius: 18,
+  background: 'rgba(255,255,255,0.04)',
+  border: `1px solid ${BM.border}`,
+  padding: 12,
+  marginTop: 16,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  boxSizing: 'border-box' as const,
+}
+
+const adImg = {
+  width: '100%',
+  height: '100%',
+  objectFit: 'contain' as const,
+  borderRadius: 14,
+}
+
+const recordBtn = {
+  position: 'fixed' as const,
+  bottom: 22,
+  right: 22,
+  padding: '14px 18px',
   borderRadius: 999,
-  border: '1px solid rgba(255,255,255,0.16)',
-  background: 'rgba(255,255,255,0.06)',
+  border: `1px solid ${BM.border2}`,
+  background:
+    'linear-gradient(135deg, rgba(255,45,45,1), rgba(255,45,45,0.65))',
   color: '#fff',
-  fontWeight: 800,
+  fontSize: 15,
+  fontWeight: 950,
   cursor: 'pointer',
+  boxShadow: '0 18px 50px rgba(0,0,0,0.55)',
+  zIndex: 1000,
 }
