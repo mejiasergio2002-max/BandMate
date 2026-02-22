@@ -110,6 +110,7 @@ export default function FeedPage() {
         <AdSlot src="/ads/ad-right-1.jpg" />
         <AdSlot src="/ads/ad-right-2.jpg" />
         <AdSlot src="/ads/ad-right-0.jpg" />
+        <AdSlot src="/ads/ad-right-3.jpg" /> {/* ✅ NEW 4TH AD */}
       </aside>
 
       {/* RECORD SESSION BUTTON */}
@@ -158,10 +159,7 @@ function FeedCard({ artist, router }: any) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
           <div style={{ fontWeight: 1000, fontSize: 16, color: THEME.text }}>{artist.name}</div>
 
-          <button
-            onClick={() => alert('Share flow next')}
-            style={shareBtn}
-          >
+          <button onClick={() => alert('Share flow next')} style={shareBtn}>
             Share
           </button>
         </div>
