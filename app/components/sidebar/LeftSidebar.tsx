@@ -39,17 +39,29 @@ export default function LeftSidebar() {
           justifyContent: 'center',
         }}
       >
-        <img
-          src="/logo.png"
-          alt="BandMate"
+        <div
           style={{
-            height: 100,
-            width: 'auto',
-            objectFit: 'contain',
-            userSelect: 'none',
-            filter: 'drop-shadow(0 6px 18px rgba(255,45,45,0.25))',
+            background: '#ffffff',
+            borderRadius: 22, // 🔥 smoother rounded corners
+            padding: '18px 22px',
+            boxShadow: '0 14px 40px rgba(255,45,45,0.15)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.2s ease',
           }}
-        />
+        >
+          <img
+            src="/logo.png"
+            alt="BandMate"
+            style={{
+              width: 120,
+              height: 'auto',
+              objectFit: 'contain',
+              borderRadius: 14, // 🔥 smooth the actual image edges too
+            }}
+          />
+        </div>
       </div>
 
       {/* NAVIGATION */}
@@ -88,7 +100,7 @@ function Item({
       onClick={onClick}
       style={{
         padding: '12px 16px',
-        borderRadius: 12,
+        borderRadius: 14,
         fontWeight: 700,
         cursor: 'pointer',
         transition: 'all 0.15s ease',
